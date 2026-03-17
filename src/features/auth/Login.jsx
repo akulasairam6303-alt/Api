@@ -10,7 +10,7 @@ function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, error } = useSelector(state => state.auth);
+  const { loading, error } = useSelector(state => state.auth);   
 
   const [form, setForm] = useState({
     email: "",
@@ -39,7 +39,7 @@ function Login() {
     setLocalError(null);
 
     dispatch(loginUser(form)).then(res => {
-      if (res.meta.requestStatus === "fulfilled") {
+      if (res.meta.requestStatus === "fulfilled") {    
         setPopup({
           message: "Login successful",
           type: "success"

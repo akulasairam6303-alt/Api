@@ -4,6 +4,7 @@ import { fetchProducts } from "./productSlice";
 import { addToCart } from "../cart/cartSlice";
 import { addToWishlist } from "../wishlist/wishlistSlice";
 import useDebounce from "./useDebounce";
+import ProductSkeleton from "./ProductSkeleton";
 import "../products/Home.css";
 
 const ITEMS_PER_PAGE = 12;
@@ -64,7 +65,7 @@ function HomePage() {
 
   return (
     <div className="home-container">
-      
+
       <div className="sidebar">
         <h3>Filter by Price</h3>
 
@@ -92,7 +93,7 @@ function HomePage() {
       </div>
 
       <div className="content">
-        
+
         <div className="searchbar">
           <input
             placeholder="Search products..."
@@ -107,25 +108,29 @@ function HomePage() {
         {loading && <p>Loading...</p>}
 
         <div className="grid">
-          {paginatedProducts.map(product => (
-            <div key={product.id} className="card">
-              <img src={product.thumbnail} alt={product.title} />
+          {loading
+            ? [...Array(ITEMS_PER_PAGE)].map((_, i) => (
+              <ProductSkeleton key={i} />
+            ))
+            : paginatedProducts.map(product => (
+              <div key={product.id} className="card">
+                <img src={product.thumbnail} alt={product.title} />
 
-              <h4>{product.title}</h4>
+                <h4>{product.title}</h4>
 
-              <p>₹{product.price}</p>
+                <p>₹{product.price}</p>
 
-              <div className="card-actions">
-                <button onClick={() => dispatch(addToCart(product))}>
-                  Add to Cart
-                </button>
+                <div className="card-actions">
+                  <button onClick={() => dispatch(addToCart(product))}>
+                    Add to Cart
+                  </button>
 
-                <button onClick={() => dispatch(addToWishlist(product))}>
-                  Wishlist
-                </button>
+                  <button onClick={() => dispatch(addToWishlist(product))}>
+                    Wishlist
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
 
         <div className="pagination">

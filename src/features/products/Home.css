@@ -34,7 +34,6 @@
 }
 
 
-
 .clear-filter {
   margin-top: 15px;
   width: 50%;
@@ -150,6 +149,51 @@
 .pagination button.active {
   background: #4f46e5;
   color: white;
+}
+
+.skeleton {
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-img {
+  width: 100%;
+  height: 160px;
+  background: #e5e5e5;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.skeleton-text {
+  height: 12px;
+  background: #e5e5e5;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.skeleton-text.title {
+  width: 80%;
+}
+
+.skeleton-text.price {
+  width: 40%;
+}
+
+.skeleton-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.skeleton-btn {
+  flex: 1;
+  height: 32px;
+  background: #e5e5e5;
+  border-radius: 6px;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
 }
 
 

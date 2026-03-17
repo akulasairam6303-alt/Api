@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "axios";   
 
-const AUTH_KEY = "auth_user";
-const API = axios.create({
-  baseURL: "http://65.0.29.192:5000/api/auth",
+const AUTH_KEY = "auth_user";   
+const API = axios.create({        // Custom Api to reuse API urls 
+  baseURL: "https://ecommerce-backend-umber-seven.vercel.app",
   headers: {
     "Content-Type": "application/json"           
   }
@@ -13,7 +13,7 @@ const API = axios.create({
 const loadUser = () => {
   try {
     const data = localStorage.getItem(AUTH_KEY);
-    return data ? JSON.parse(data) : null;
+    return data ? JSON.parse(data) : null;  
   } catch {
     return null;
   }
@@ -24,16 +24,16 @@ const saveUser = user => {
 };
 
 const clearUser = () => {
-  localStorage.removeItem(AUTH_KEY);
+  localStorage.removeItem(AUTH_KEY);             
 };
 
 
 export const signupUser = createAsyncThunk(
   "auth/signupUser",
-  async (formData, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {     // Allows custom error handling
     try {
-      const res = await API.post("/signup", {
-        firstName: formData.firstName,
+      const res = await API.post("/api/auth/seller/signup", {                                  
+        firstName: formData.firstName,  
         lastName: formData.lastName,
         username: formData.username,
         email: formData.email,
@@ -42,10 +42,10 @@ export const signupUser = createAsyncThunk(
         joinAsSeller: true
       });
 
-      return res.data;
-    } catch (err) {
-      return rejectWithValue(
-        err.response?.data?.message || "Signup failed"
+      return res.data;  
+    } catch (err) {   
+      return rejectWithValue(   
+        err.response?.data?.message || "Signup failed"  
       );
     }
   }
@@ -54,13 +54,13 @@ export const signupUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
-  async (credentials, { rejectWithValue }) => {
+  async (credentials, { rejectWithValue }) => {                                            
     try {
-      const res = await API.post("/login", credentials);
+      const res = await API.post("/api/auth/seller/login", credentials);
       return res.data;
     } catch (err) {
       return rejectWithValue(
-        err.response?.data?.message || "Invalid credentials"
+        err.response?.data?.message || "Invalid credentials"  
       );
     }
   }
@@ -121,7 +121,7 @@ const authSlice = createSlice({
 
        
         const userData = {
-          token: action.payload.token || null,
+          token: action.payload.token || null,        // It will store token if available(returned from login Api) otherwise it will return null.
           user: action.payload.user || action.payload
         };
 
