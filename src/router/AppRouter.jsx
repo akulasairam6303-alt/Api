@@ -9,7 +9,7 @@ import ProtectedRoute from "../router/ProtectedRoute";
 const HomePage = lazy(() => import("../features/layout/HomePage"));
 const CartPage = lazy(() => import("../features/cart/CartPage"));
 const WishlistPage = lazy(() => import("../features/wishlist/WishlistPage"));
-const ProductTable = lazy(() => import("../features/products/ProductTable")); // ✅ added
+const ProductTable = lazy(() => import("../features/products/ProductTable")); 
 
 function AppRouter() {
   return (
@@ -25,7 +25,7 @@ function AppRouter() {
             <Route index element={<HomePage />} />
             <Route path="cart" element={<CartPage />} />
             <Route path="wishlist" element={<WishlistPage />} />
-            <Route path="products-table" element={<ProductTable />} /> {/* ✅ added */}
+            <Route path="products-table" element={<ProductTable />} /> 
 
           </Route>
         </Route>

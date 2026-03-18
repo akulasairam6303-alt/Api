@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux"; // ✅ ADDED
-import { addToCart } from "../cart/cartSlice"; // ✅ ADDED
+import { useDispatch } from "react-redux"; 
+import { addToCart } from "../cart/cartSlice"; 
 import "./ProductTable.css";
 
 function ProductTable() {
@@ -9,7 +9,7 @@ function ProductTable() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // ✅ ADDED
+  const dispatch = useDispatch(); // 
 
   const [search, setSearch] = useState("");
   const [minPrice, setMinPrice] = useState("");
@@ -69,7 +69,7 @@ function ProductTable() {
   return (
     <div className="table-container">
 
-      {/* BACK BUTTON */}
+      
       <div className="back-nav">
         <button onClick={() => navigate("/")}>
           ← Back to Home
@@ -78,7 +78,7 @@ function ProductTable() {
 
       <h2>Product Table</h2>
 
-      {/* FILTERS */}
+      
       <div className="filters">
         <input
           type="text"
