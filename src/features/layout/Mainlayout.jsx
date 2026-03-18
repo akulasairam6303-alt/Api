@@ -1,7 +1,7 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { FaShoppingCart, FaHeart } from "react-icons/fa";
-import { logout } from "../features/auth/authSlice";
+import { logout } from "../auth/authSlice";
 import "./layout.css";
 
 function MainLayout() {

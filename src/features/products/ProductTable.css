@@ -1,0 +1,120 @@
+/* Container */
+.table-container {
+  padding: 20px;
+}
+
+/* Title */
+.table-container h2 {
+  margin-bottom: 15px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* Filters section */
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+/* Inputs */
+.filters input {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
+  transition: border 0.2s ease;
+}
+
+.filters input:focus {
+  border-color: #2563eb;
+}
+
+/* Table */
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Header */
+.product-table thead {
+  background-color: #2563eb;
+  color: #fff;
+}
+
+.product-table th {
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+}
+
+/* Rows */
+.product-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+/* Zebra striping */
+.product-table tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+/* Hover effect */
+.product-table tbody tr:hover {
+  background-color: #eef2ff;
+}
+
+/* Image */
+.product-table img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* Button */
+.product-table button {
+  background-color: #16a34a;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s ease;
+}
+
+.product-table button:hover {
+  background-color: #15803d;
+}
+
+/* Empty state */
+.no-data {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.back-nav {
+  margin-bottom: 10px;
+}
+
+.back-nav button {
+  background-color: #374151;
+  color: #fff;
+  border: none;
+  padding: 7px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.back-nav button:hover {
+  background-color: #1f2937;
+}

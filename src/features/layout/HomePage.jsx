@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "./productSlice";
+import { fetchProducts } from "../products/productSlice";
 import { addToCart } from "../cart/cartSlice";
 import { addToWishlist } from "../wishlist/wishlistSlice";
 import useDebounce from "./useDebounce";
-import ProductSkeleton from "./ProductSkeleton";
-import "../products/Home.css";
+import ProductSkeleton from "../products/ProductSkeleton";
+import "./Home.css";
+import { useNavigate } from "react-router-dom"; // ✅ ADDED
 
 const ITEMS_PER_PAGE = 12;
 
@@ -18,6 +19,8 @@ const priceRanges = [
 
 function HomePage() {
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // ✅ ADDED
+
   const { items, loading } = useSelector(state => state.products);
 
   const [searchText, setSearchText] = useState("");
@@ -93,6 +96,13 @@ function HomePage() {
       </div>
 
       <div className="content">
+
+        {/* ✅ ADDED NAV BUTTON */}
+        <div className="table-nav" style={{ marginBottom: "10px" }}>
+          <button onClick={() => navigate("/products-table")}>
+            View Table
+          </button>
+        </div>
 
         <div className="searchbar">
           <input

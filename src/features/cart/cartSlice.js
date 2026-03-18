@@ -31,7 +31,7 @@ const cartSlice = createSlice({
         existing.quantity += 1;
       } else {
         state.items.push({
-          ...item,
+          ...item,  
           quantity: 1
         });
       }

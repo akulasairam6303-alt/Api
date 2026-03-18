@@ -151,6 +151,35 @@
   color: white;
 }
 
+/* Container for table navigation */
+.table-nav {
+  display: flex;
+  justify-content: flex-end; /* push button to right */
+  margin-bottom: 10px;
+}
+
+/* Button styling */
+.table-nav button {
+  background-color: #2563eb; /* blue */
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.table-nav button:hover {
+  background-color: #1e4ed8;
+}
+
+/* Active click */
+.table-nav button:active {
+  transform: scale(0.97);
+}
+
 .skeleton {
   animation: pulse 1.5s infinite ease-in-out;
 }
