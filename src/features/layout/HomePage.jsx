@@ -6,7 +6,7 @@ import { addToWishlist } from "../wishlist/wishlistSlice";
 import useDebounce from "./useDebounce";
 import ProductSkeleton from "../products/ProductSkeleton";
 import "./Home.css";
-import { useNavigate } from "react-router-dom"; // ✅ ADDED
+import { useNavigate } from "react-router-dom"; 
 
 const ITEMS_PER_PAGE = 12;
 
@@ -19,7 +19,7 @@ const priceRanges = [
 
 function HomePage() {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // ✅ ADDED
+  const navigate = useNavigate(); 
 
   const { items, loading } = useSelector(state => state.products);
 
@@ -97,7 +97,7 @@ function HomePage() {
 
       <div className="content">
 
-        {/* ✅ ADDED NAV BUTTON */}
+        
         <div className="table-nav" style={{ marginBottom: "10px" }}>
           <button onClick={() => navigate("/products-table")}>
             View Table

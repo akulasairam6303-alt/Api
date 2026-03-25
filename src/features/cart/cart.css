@@ -22,7 +22,10 @@
   gap: 20px;
   cursor: pointer;
 }
-
+.nav-buttons {
+  display: flex;
+  gap: 12px; 
+}
 .cart-summary {
   margin-top: 25px;
   font-size: 18px;

@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux"; 
-import { addToCart } from "../cart/cartSlice"; 
+import { useDispatch } from "react-redux";
+import { addToCart } from "../cart/cartSlice";
 import "./ProductTable.css";
+import useDebounce from "../layout/useDebounce";
+
 
 function ProductTable() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // 
+  const dispatch = useDispatch();
 
   const [search, setSearch] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-
   const [category, setCategory] = useState("");
   const [brand, setBrand] = useState("");
   const [minRating, setMinRating] = useState("");
+  const debouncedSearch = useDebounce(search, 500);
 
-  // FETCH
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -39,15 +41,15 @@ function ProductTable() {
     fetchProducts();
   }, []);
 
-  // UNIQUE VALUES
+
   const categories = [...new Set(products.map(p => p.category))];
   const brands = [...new Set(products.map(p => p.brand))];
 
-  // FILTER LOGIC
+
   const filteredProducts = products.filter((item) => {
     const matchesSearch = item.title
       .toLowerCase()
-      .includes(search.toLowerCase());
+      .includes(debouncedSearch.toLowerCase());
 
     const matchesMin = minPrice ? item.price >= Number(minPrice) : true;
     const matchesMax = maxPrice ? item.price <= Number(maxPrice) : true;
@@ -69,16 +71,16 @@ function ProductTable() {
   return (
     <div className="table-container">
 
-      
+
       <div className="back-nav">
         <button onClick={() => navigate("/")}>
-          ← Back to Home
+          Back to Homepage
         </button>
       </div>
 
       <h2>Product Table</h2>
 
-      
+
       <div className="filters">
         <input
           type="text"
@@ -101,7 +103,7 @@ function ProductTable() {
           onChange={(e) => setMaxPrice(e.target.value)}
         />
 
-        {/* CATEGORY */}
+
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
           <option value="">All Categories</option>
           {categories.map((c, i) => (
@@ -109,7 +111,7 @@ function ProductTable() {
           ))}
         </select>
 
-        {/* BRAND */}
+
         <select value={brand} onChange={(e) => setBrand(e.target.value)}>
           <option value="">All Brands</option>
           {brands.map((b, i) => (
@@ -117,7 +119,7 @@ function ProductTable() {
           ))}
         </select>
 
-        {/* RATING */}
+
         <input
           type="number"
           placeholder="Min Rating (e.g. 4)"
@@ -126,7 +128,7 @@ function ProductTable() {
         />
       </div>
 
-      {/* TABLE */}
+
       {loading ? (
         <p>Loading...</p>
       ) : (

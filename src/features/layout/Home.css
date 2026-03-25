@@ -82,6 +82,7 @@
   text-align: center;
   box-shadow: 0 8px 20px rgba(0,0,0,0.06);
   transition: 0.25s ease;
+  cursor: pointer;
 }
 
 .card:hover {
@@ -151,16 +152,16 @@
   color: white;
 }
 
-/* Container for table navigation */
+
 .table-nav {
   display: flex;
-  justify-content: flex-end; /* push button to right */
+  justify-content: flex-end; 
   margin-bottom: 10px;
 }
 
-/* Button styling */
+
 .table-nav button {
-  background-color: #2563eb; /* blue */
+  background-color: #2563eb;
   color: #fff;
   border: none;
   padding: 8px 14px;
@@ -170,12 +171,12 @@
   transition: all 0.2s ease;
 }
 
-/* Hover effect */
+
 .table-nav button:hover {
   background-color: #1e4ed8;
 }
 
-/* Active click */
+
 .table-nav button:active {
   transform: scale(0.97);
 }

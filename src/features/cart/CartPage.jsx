@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart } from "./cartSlice";
-import {selectCartArray,selectCartTotalPrice} from "./cartSelectors";
+import { selectCartArray, selectCartTotalPrice } from "./cartSelectors";
 import { useNavigate } from "react-router-dom";
 import "./cart.css";
 
@@ -13,9 +13,15 @@ function CartPage() {
 
   return (
     <div className="cart-container">
-      <button className="back-btn" onClick={() => navigate("/")}>
-        ← Back
-      </button>
+      <div className="nav-buttons">
+        <button className="back-btn" onClick={() => navigate("/")}>
+          Back to HomePage
+        </button>
+
+        <button className="back-btn" onClick={() => navigate("/Products-table")}>
+          Back to Products Table
+        </button>
+      </div>
 
       <h2 className="cart-title">Your Cart</h2>
 

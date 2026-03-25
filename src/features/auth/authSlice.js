@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";   
 
 const AUTH_KEY = "auth_user";   
-const API = axios.create({        // Custom Api to reuse API urls 
+const API = axios.create({        
   baseURL: "https://ecommerce-backend-umber-seven.vercel.app",
   headers: {
     "Content-Type": "application/json"           
@@ -30,7 +30,7 @@ const clearUser = () => {
 
 export const signupUser = createAsyncThunk(
   "auth/signupUser",
-  async (formData, { rejectWithValue }) => {     // Allows custom error handling
+  async (formData, { rejectWithValue }) => {     
     try {
       const res = await API.post("/api/auth/seller/signup", {                                  
         firstName: formData.firstName,  
@@ -121,7 +121,7 @@ const authSlice = createSlice({
 
        
         const userData = {
-          token: action.payload.token || null,        // It will store token if available(returned from login Api) otherwise it will return null.
+          token: action.payload.token || null,       
           user: action.payload.user || action.payload
         };
 
