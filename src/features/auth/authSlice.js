@@ -3,9 +3,6 @@ import axios from "axios";
 
 const AUTH_KEY = "auth_user";
 
-
-const USE_MOCK = true;
-
 const API = axios.create({
   baseURL: "https://ecommerce-backend-umber-seven.vercel.app",
   headers: {
@@ -30,14 +27,11 @@ const clearUser = () => {
   localStorage.removeItem(AUTH_KEY);
 };
 
+
 export const signupUser = createAsyncThunk(
   "auth/signupUser",
   async (formData, { rejectWithValue }) => {
     try {
-      if (USE_MOCK) {
-        return { message: "Mock signup success" };
-      }
-
       const res = await API.post("/api/auth/seller/signup", {
         ...formData,
         joinAsSeller: true
@@ -45,8 +39,6 @@ export const signupUser = createAsyncThunk(
 
       return res.data;
     } catch (err) {
-      console.error("Signup Error:", err.response || err.message);
-
       return rejectWithValue(
         err.response?.data?.message || "Signup failed"
       );
@@ -59,31 +51,13 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (credentials, { rejectWithValue }) => {
     try {
-
-      if (USE_MOCK) {
-        return {
-          token: "dev-token-123",
-          user: {
-            id: 1,
-            name: "Dev User",
-            email: credentials.email
-          }
-        };
-      }
-
-      console.log("Sending login:", credentials);
-
       const res = await API.post(
         "/api/auth/seller/login",
         credentials
       );
 
-      console.log("Response:", res.data);
-
       return res.data;
     } catch (err) {
-      console.error("Login Error:", err.response || err.message);
-
       return rejectWithValue(
         err.response?.data?.message || "Invalid credentials"
       );
@@ -118,7 +92,6 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      
       .addCase(signupUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -135,7 +108,6 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;

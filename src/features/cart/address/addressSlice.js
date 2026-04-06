@@ -1,8 +1,11 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 
+const savedAddresses = JSON.parse(localStorage.getItem("addresses")) || [];
+const savedSelectedId = JSON.parse(localStorage.getItem("selectedAddressId"));
+
 const initialState = {
-  addresses: [],
-  selectedAddressId: null
+  addresses: savedAddresses,
+  selectedAddressId: savedSelectedId || null
 };
 
 const addressSlice = createSlice({
@@ -12,6 +15,11 @@ const addressSlice = createSlice({
     addAddress: {
       reducer: (state, action) => {
         state.addresses.push(action.payload);
+
+        localStorage.setItem(
+          "addresses",
+          JSON.stringify(state.addresses)
+        );
       },
       prepare: (address) => ({
         payload: {
@@ -25,10 +33,20 @@ const addressSlice = createSlice({
       state.addresses = state.addresses.filter(
         a => a.id !== action.payload
       );
+
+      localStorage.setItem(
+        "addresses",
+        JSON.stringify(state.addresses)
+      );
     },
 
     selectAddress: (state, action) => {
       state.selectedAddressId = action.payload;
+
+      localStorage.setItem(
+        "selectedAddressId",
+        JSON.stringify(state.selectedAddressId)
+      );
     },
 
     updateAddress: (state, action) => {
@@ -42,6 +60,11 @@ const addressSlice = createSlice({
           ...action.payload
         };
       }
+
+      localStorage.setItem(
+        "addresses",
+        JSON.stringify(state.addresses)
+      );
     }
   }
 });
