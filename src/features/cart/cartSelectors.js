@@ -4,7 +4,7 @@ export const selectCartItems = state => state.cart.items;
 
 export const selectCartArray = createSelector(
   [selectCartItems],
-  items => Object.values(items)
+  items => items
 );
 
 export const selectCartTotalPrice = createSelector(
@@ -12,6 +12,6 @@ export const selectCartTotalPrice = createSelector(
   items =>
     items.reduce(
       (total, item) => total + item.price * item.quantity,
-      0  
+      0
     )
 );

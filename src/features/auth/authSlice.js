@@ -1,51 +1,54 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";   
+import axios from "axios";
 
-const AUTH_KEY = "auth_user";   
-const API = axios.create({        
+const AUTH_KEY = "auth_user";
+
+
+const USE_MOCK = true;
+
+const API = axios.create({
   baseURL: "https://ecommerce-backend-umber-seven.vercel.app",
   headers: {
-    "Content-Type": "application/json"           
+    "Content-Type": "application/json"
   }
 });
-
 
 const loadUser = () => {
   try {
     const data = localStorage.getItem(AUTH_KEY);
-    return data ? JSON.parse(data) : null;  
+    return data ? JSON.parse(data) : null;
   } catch {
     return null;
   }
 };
 
-const saveUser = user => {
+const saveUser = (user) => {
   localStorage.setItem(AUTH_KEY, JSON.stringify(user));
 };
 
 const clearUser = () => {
-  localStorage.removeItem(AUTH_KEY);             
+  localStorage.removeItem(AUTH_KEY);
 };
-
 
 export const signupUser = createAsyncThunk(
   "auth/signupUser",
-  async (formData, { rejectWithValue }) => {     
+  async (formData, { rejectWithValue }) => {
     try {
-      const res = await API.post("/api/auth/seller/signup", {                                  
-        firstName: formData.firstName,  
-        lastName: formData.lastName,
-        username: formData.username,
-        email: formData.email,
-        password: formData.password,
-        confirmPassword: formData.confirmPassword,
+      if (USE_MOCK) {
+        return { message: "Mock signup success" };
+      }
+
+      const res = await API.post("/api/auth/seller/signup", {
+        ...formData,
         joinAsSeller: true
       });
 
-      return res.data;  
-    } catch (err) {   
-      return rejectWithValue(   
-        err.response?.data?.message || "Signup failed"  
+      return res.data;
+    } catch (err) {
+      console.error("Signup Error:", err.response || err.message);
+
+      return rejectWithValue(
+        err.response?.data?.message || "Signup failed"
       );
     }
   }
@@ -54,13 +57,35 @@ export const signupUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
-  async (credentials, { rejectWithValue }) => {                                            
+  async (credentials, { rejectWithValue }) => {
     try {
-      const res = await API.post("/api/auth/seller/login", credentials);
+
+      if (USE_MOCK) {
+        return {
+          token: "dev-token-123",
+          user: {
+            id: 1,
+            name: "Dev User",
+            email: credentials.email
+          }
+        };
+      }
+
+      console.log("Sending login:", credentials);
+
+      const res = await API.post(
+        "/api/auth/seller/login",
+        credentials
+      );
+
+      console.log("Response:", res.data);
+
       return res.data;
     } catch (err) {
+      console.error("Login Error:", err.response || err.message);
+
       return rejectWithValue(
-        err.response?.data?.message || "Invalid credentials"  
+        err.response?.data?.message || "Invalid credentials"
       );
     }
   }
@@ -77,30 +102,30 @@ const authSlice = createSlice({
   },
 
   reducers: {
-    logout: state => {
+    logout: (state) => {
       state.user = null;
       state.error = null;
       state.success = null;
       clearUser();
     },
 
-    clearMessages: state => {
+    clearMessages: (state) => {
       state.error = null;
       state.success = null;
     }
   },
 
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
 
       
-      .addCase(signupUser.pending, state => {
+      .addCase(signupUser.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.success = null;
       })
 
-      .addCase(signupUser.fulfilled, state => {
+      .addCase(signupUser.fulfilled, (state) => {
         state.loading = false;
         state.success = "Signup successful";
       })
@@ -110,7 +135,8 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(loginUser.pending, state => {
+      
+      .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.success = null;
@@ -119,9 +145,8 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
 
-       
         const userData = {
-          token: action.payload.token || null,       
+          token: action.payload.token || null,
           user: action.payload.user || action.payload
         };
 

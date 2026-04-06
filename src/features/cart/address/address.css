@@ -1,0 +1,144 @@
+.address-page {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+}
+
+.nav-top {
+  margin-bottom: 10px;
+}
+
+.nav-top button {
+  background: linear-gradient(to right, purple, black);
+  color: white;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+  
+.page-title {
+  margin-bottom: 15px;
+}
+
+.address-card-ui {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.address-card-ui h4 {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.address-card-ui input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.row input {
+  flex: 1;
+}
+
+.type-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.type-buttons button {
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+}
+
+.type-buttons button.active-type {
+  background: purple;
+  color: white;
+  border: none;
+}
+
+.save-btn {
+  margin-top: 10px;
+  background: linear-gradient(to right, purple, black);
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.saved-title {
+  margin-top: 25px;
+}
+
+.saved-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.delete-btn {
+  background: red;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.continue-btn {
+  margin-top: 10px;
+  
+}
+
+.order-summary {
+  margin-top: 30px;
+  border-top: 2px solid #eee;
+  padding-top: 20px;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.item-title {
+  font-weight: bold;
+}
+
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qty-controls button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: black;
+  color: white;
+  cursor: pointer;
+}
+
+.total {
+  margin-top: 20px;
+}

@@ -86,7 +86,7 @@
   border-radius: 5px;
   cursor: pointer;
   font-size: 13px;
-  transition: background 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .product-table button:hover {
@@ -116,4 +116,48 @@
 
 .back-nav button:hover {
   background-color: #1f2937;
+}
+
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+
+.filters button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+
+.filters button:first-of-type {
+  background-color: #5f56ac;
+  color: white;
+}
+
+.filters button:first-of-type:hover {
+  background-color: #218838;
+}
+
+
+.filters button:last-of-type {
+  background-color: #dc3545;
+  color: white;
+}
+
+.filters button:last-of-type:hover {
+  background-color: #c82333;
+}
+
+
+.filters button:active {
+  transform: scale(0.96);
 }

@@ -5,12 +5,12 @@ function Popup({ message, type, onClose }) {
     <div
       style={{
         position: "fixed",
-        inset: 0,
+        top: 0, left: 0, right: 0, bottom: 0,
         background: "rgba(0,0,0,0.5)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        zIndex: 9999
+        zIndex: 9999,
       }}
     >
       <div
@@ -26,7 +26,9 @@ function Popup({ message, type, onClose }) {
         }}
       >
         <p style={{ marginBottom: "20px" }}>{message}</p>
-        <button onClick={onClose}>OK</button>
+        <button onClick={onClose}
+        style={{ cursor: "pointer" }}
+        >OK</button>
       </div>
     </div>
   );

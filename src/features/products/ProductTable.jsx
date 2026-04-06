@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../cart/cartSlice";
 import "./ProductTable.css";
-import useDebounce from "../layout/useDebounce";
-
 
 function ProductTable() {
   const [products, setProducts] = useState([]);
@@ -13,14 +11,23 @@ function ProductTable() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  
   const [search, setSearch] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [category, setCategory] = useState("");
   const [brand, setBrand] = useState("");
   const [minRating, setMinRating] = useState("");
-  const debouncedSearch = useDebounce(search, 500);
 
+  
+  const [appliedFilters, setAppliedFilters] = useState({
+    search: "",
+    minPrice: "",
+    maxPrice: "",
+    category: "",
+    brand: "",
+    minRating: ""
+  });
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -38,27 +45,71 @@ function ProductTable() {
       }
     };
 
-    fetchProducts();
+    fetchProducts();  
   }, []);
 
-
+  
   const categories = [...new Set(products.map(p => p.category))];
   const brands = [...new Set(products.map(p => p.brand))];
 
+  
+  const handleApplyFilters = () => {
+    setAppliedFilters({
+      search,
+      minPrice,
+      maxPrice,
+      category,
+      brand,
+      minRating
+    });
+  };
 
+  
+  const handleClearFilters = () => {
+    setSearch("");
+    setMinPrice("");
+    setMaxPrice("");
+    setCategory("");
+    setBrand("");
+    setMinRating("");
+
+    setAppliedFilters({
+      search: "",
+      minPrice: "",
+      maxPrice: "",
+      category: "",
+      brand: "",
+      minRating: ""
+    });
+  };
+
+  
   const filteredProducts = products.filter((item) => {
     const matchesSearch = item.title
       .toLowerCase()
-      .includes(debouncedSearch.toLowerCase());
+      .includes(appliedFilters.search.toLowerCase());
 
-    const matchesMin = minPrice ? item.price >= Number(minPrice) : true;
-    const matchesMax = maxPrice ? item.price <= Number(maxPrice) : true;
+    const matchesMin = appliedFilters.minPrice
+      ? item.price >= Number(appliedFilters.minPrice)
+      : true;
 
-    const matchesCategory = category ? item.category === category : true;
-    const matchesBrand = brand ? item.brand === brand : true;
-    const matchesRating = minRating ? item.rating >= Number(minRating) : true;
+    const matchesMax = appliedFilters.maxPrice
+      ? item.price <= Number(appliedFilters.maxPrice)
+      : true;
 
-    return (
+    const matchesCategory = appliedFilters.category
+      ? item.category === appliedFilters.category
+      : true;
+
+    const matchesBrand = appliedFilters.brand
+      ? item.brand === appliedFilters.brand
+      : true;
+
+    const matchesRating = appliedFilters.minRating
+      ? item.rating >= Number(appliedFilters.minRating)
+      : true;
+
+    return (   
       matchesSearch &&
       matchesMin &&
       matchesMax &&
@@ -71,7 +122,6 @@ function ProductTable() {
   return (
     <div className="table-container">
 
-
       <div className="back-nav">
         <button onClick={() => navigate("/")}>
           Back to Homepage
@@ -79,7 +129,6 @@ function ProductTable() {
       </div>
 
       <h2>Product Table</h2>
-
 
       <div className="filters">
         <input
@@ -103,22 +152,19 @@ function ProductTable() {
           onChange={(e) => setMaxPrice(e.target.value)}
         />
 
-
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
           <option value="">All Categories</option>
-          {categories.map((c, i) => (
-            <option key={i} value={c}>{c}</option>
+          {categories.map((c) => (
+            <option key={c} value={c}>{c}</option>
           ))}
         </select>
-
 
         <select value={brand} onChange={(e) => setBrand(e.target.value)}>
           <option value="">All Brands</option>
-          {brands.map((b, i) => (
-            <option key={i} value={b}>{b}</option>
+          {brands.map((b) => (
+            <option key={b} value={b}>{b}</option>
           ))}
         </select>
-
 
         <input
           type="number"
@@ -126,8 +172,16 @@ function ProductTable() {
           value={minRating}
           onChange={(e) => setMinRating(e.target.value)}
         />
-      </div>
 
+        
+        <button onClick={handleApplyFilters}>
+          Apply Filters
+        </button>
+
+        <button onClick={handleClearFilters}>
+          Clear Filters
+        </button>
+      </div>
 
       {loading ? (
         <p>Loading...</p>

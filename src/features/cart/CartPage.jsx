@@ -1,5 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
-import { removeFromCart } from "./cartSlice";
+import {
+  removeFromCart,
+  incrementQuantity,
+  decrementQuantity
+} from "./cartSlice";
 import { selectCartArray, selectCartTotalPrice } from "./cartSelectors";
 import { useNavigate } from "react-router-dom";
 import "./cart.css";
@@ -13,12 +17,16 @@ function CartPage() {
 
   return (
     <div className="cart-container">
+
       <div className="nav-buttons">
         <button className="back-btn" onClick={() => navigate("/")}>
           Back to HomePage
         </button>
 
-        <button className="back-btn" onClick={() => navigate("/Products-table")}>
+        <button
+          className="back-btn"
+          onClick={() => navigate("/Products-table")}
+        >
           Back to Products Table
         </button>
       </div>
@@ -28,35 +36,62 @@ function CartPage() {
       {cartItems.length === 0 ? (
         <div className="empty-cart">Your cart is empty</div>
       ) : (
-        <>
-          <div className="cart-list">
-            {cartItems.map(item => (
-              <div key={item.id} className="cart-card">
-                <div className="cart-info">
-                  <h4>{item.title}</h4>
-                  <p>Quantity: {item.quantity}</p>
-                  <p className="price">₹ {item.price}</p>
-                </div>
+        <div className="checkout-layout">
 
-                <button
-                  className="remove-btn"
-                  onClick={() => dispatch(removeFromCart(item.id))}
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
+          <div className="left-section">
+            <div className="cart-list">
+              {cartItems.map(item => (
+                <div key={item.id} className="cart-card">
+
+                  <div className="cart-info">
+                    <h4>{item.title}</h4>
+                    <p className="price">₹ {item.price}</p>
+
+                    {/* 🔥 Quantity Controls */}
+                    <div className="qty-controls">
+                      <button
+                        onClick={() => dispatch(decrementQuantity(item.id))}
+                      >
+                        -
+                      </button>
+
+                      <span>{item.quantity}</span>
+
+                      <button
+                        onClick={() => dispatch(incrementQuantity(item.id))}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    className="remove-btn"
+                    onClick={() => dispatch(removeFromCart(item.id))}
+                  >
+                    Remove
+                  </button>
+
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="cart-summary">
-            Total: ₹ {total.toFixed(2)}
+            <h3>Total: ₹ {total.toFixed(2)}</h3>
+
+            <button
+              className="continue-btn"
+              onClick={() => navigate("/address")}
+            >
+              Continue
+            </button>
           </div>
-        </>
+
+        </div>
       )}
     </div>
   );
 }
 
 export default CartPage;
-
-
