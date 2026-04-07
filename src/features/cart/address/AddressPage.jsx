@@ -1,323 +1,134 @@
 import { useSelector, useDispatch } from "react-redux";
-import {
-  addAddress,
-  deleteAddress,
-  selectAddress,
-  updateAddress
-} from "./addressSlice";
-import {
-  incrementQuantity,
-  decrementQuantity
-} from "../cartSlice";
+import { deleteAddress, selectAddress } from "./addressSlice";
 import {
   selectCartArray,
   selectCartTotalPrice
 } from "../cartSelectors";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useId } from "react";
 import "./address.css";
-
-const stateDistrictMap = {
-  "Andhra Pradesh": [
-    "Alluri Sitharama Raju","Anakapalli","Ananthapuramu","Annamayya","Bapatla",
-    "Chittoor","Dr. B.R. Ambedkar Konaseema","East Godavari","Eluru","Guntur",
-    "Kakinada","Krishna","Kurnool","Nandyal","NTR","Palnadu","Parvathipuram Manyam",
-    "Prakasam","Sri Potti Sriramulu Nellore","Sri Sathya Sai","Srikakulam",
-    "Tirupati","Visakhapatnam","Vizianagaram","West Godavari","YSR Kadapa"
-  ],
-  "Telangana": [
-    "Adilabad","Bhadradri Kothagudem","Hanumakonda","Hyderabad","Jagtial",
-    "Jangaon","Jayashankar Bhupalpally","Jogulamba Gadwal","Kamareddy",
-    "Karimnagar","Khammam","Komaram Bheem","Mahabubabad","Mahabubnagar",
-    "Mancherial","Medak","Medchal–Malkajgiri","Mulugu","Nagarkurnool",
-    "Nalgonda","Narayanpet","Nirmal","Nizamabad","Peddapalli",
-    "Rajanna Sircilla","Rangareddy","Sangareddy","Siddipet",
-    "Suryapet","Vikarabad","Wanaparthy","Warangal","Yadadri Bhuvanagiri"
-  ],
-  "Karnataka": [
-    "Bagalkot","Ballari","Belagavi","Bengaluru Rural","Bengaluru Urban",
-    "Bidar","Chamarajanagar","Chikkaballapur","Chikkamagaluru","Chitradurga",
-    "Dakshina Kannada","Davanagere","Dharwad","Gadag","Hassan",
-    "Haveri","Kalaburagi","Kodagu","Kolar","Koppal",
-    "Mandya","Mysuru","Raichur","Ramanagara","Shivamogga",
-    "Tumakuru","Udupi","Uttara Kannada","Vijayapura","Yadgir"
-  ]
-};
 
 function AddressPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const groupName = useId();
 
   const { addresses, selectedAddressId } = useSelector(
     state => state.address
   );
 
+  const selected = addresses.find(a => a.id === selectedAddressId);
+
   const cartItems = useSelector(selectCartArray);
-  const total = useSelector(selectCartTotalPrice);
+  const totalPrice = useSelector(selectCartTotalPrice);
 
-  const [editId, setEditId] = useState(null);
+  const discount = Math.round(totalPrice * 0.5);
+  const platformFee = totalPrice > 500 ? 0 : 40;
+  const finalTotal = totalPrice - discount + platformFee;
 
-  const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    altPhone: "",
-    flat: "",
-    area: "",
-    city: "",
-    district: "",
-    pincode: "",
-    state: "",
-    type: "Home"
-  });
+  const deliveryDate = new Date();
+  deliveryDate.setDate(deliveryDate.getDate() + 3);
 
-  const handleChange = (key, value) => {
-    setForm(prev => ({ ...prev, [key]: value }));
-  };
+  const formatAddress = (addr) => {
+    if (!addr) return "";
+    if (typeof addr === "string") return addr;
 
-  const parseAddress = (address) => {
-    const parts = address.split(",");
-
-    const statePart = parts[4]?.split("-")[0]?.trim() || "";
-    const districtPart = parts[3]?.trim() || "";
-
-    const matchedState =
-      Object.keys(stateDistrictMap).find(
-        s => s.toLowerCase() === statePart.toLowerCase()
-      ) || statePart;
-
-    const matchedDistrict =
-      stateDistrictMap[matchedState]?.find(
-        d => d.toLowerCase() === districtPart.toLowerCase()
-      ) || districtPart;
-
-    return {
-      flat: parts[0]?.trim() || "",
-      area: parts[1]?.trim() || "",
-      city: parts[2]?.trim() || "",
-      district: matchedDistrict,
-      state: matchedState,
-      pincode: parts[4]?.split("-")[1]?.trim() || ""
-    };
-  };
-
-  const handleSave = () => {
-    if (!form.name || !form.phone || !form.area || !form.city) {
-      alert("Fill required fields");
-      return;
-    }
-
-    const addressData = {
-      name: form.name,
-      phone: form.phone,
-      address: `${form.flat}, ${form.area}, ${form.city}, ${form.district}, ${form.state} - ${form.pincode}`,
-      type: form.type
-    };
-
-    if (editId) {
-      dispatch(updateAddress({ id: editId, ...addressData }));
-      setEditId(null);
-    } else {
-      dispatch(addAddress(addressData));
-    }
-
-    setForm({
-      name: "",
-      phone: "",
-      altPhone: "",
-      flat: "",
-      area: "",
-      city: "",
-      district: "",
-      pincode: "",
-      state: "",
-      type: "Home"
-    });
+    return `${addr.flat}, ${addr.area}, ${addr.city}, ${addr.district}, ${addr.state} - ${addr.pincode}${addr.landmark ? ", " + addr.landmark : ""}`;
   };
 
   return (
-    <div className="address-page">
+    <div className="checkout-container">
 
-      <div className="nav-top">
-        <button onClick={() => navigate("/cart")}>
-          Back to CartPage
-        </button>
-      </div>
+      <div className="address-section">
 
-      <h2 className="page-title">
-        {editId ? "Edit Address" : "Add New Address"}
-      </h2>
-
-      <div className="address-card-ui">
-
-        <input
-          placeholder="Full Name *"
-          value={form.name}
-          onChange={e => handleChange("name", e.target.value)}
-        />
-
-        <input
-          placeholder="Phone Number *"
-          value={form.phone}
-          onChange={e => handleChange("phone", e.target.value)}
-        />
-
-        <input
-          placeholder="Alternate Phone"
-          value={form.altPhone}
-          onChange={e => handleChange("altPhone", e.target.value)}
-        />
-
-        <input
-          placeholder="Flat / House No"
-          value={form.flat}
-          onChange={e => handleChange("flat", e.target.value)}
-        />
-
-        <input
-          placeholder="Area / Street"
-          value={form.area}
-          onChange={e => handleChange("area", e.target.value)}
-        />
-
-        <div className="row">
-          <input
-            placeholder="City"
-            value={form.city}
-            onChange={e => handleChange("city", e.target.value)}
-          />
-          <input
-            placeholder="Pincode"
-            value={form.pincode}
-            onChange={e => handleChange("pincode", e.target.value)}
-          />
-        </div>
-
-        <div className="row">
-
-          <select
-            value={form.state}
-            onChange={(e) => {
-              handleChange("state", e.target.value);
-              handleChange("district", "");
-            }}
-          >
-            <option value="">Select State</option>
-            {Object.keys(stateDistrictMap).map(state => (
-              <option key={state} value={state}>{state}</option>
-            ))}
-          </select>
-
-          <select
-            value={form.district}
-            onChange={(e) => handleChange("district", e.target.value)}
-            disabled={!form.state}
-          >
-            <option value="">Select District</option>
-            {form.state &&
-              stateDistrictMap[form.state].map(d => (
-                <option key={d} value={d}>{d}</option>
-              ))}
-          </select>
-
-        </div>
-
-        <div className="type-buttons">
-          {["Home", "Office", "Other"].map(type => (
-            <button
-              key={type}
-              type="button"
-              className={form.type === type ? "active-type" : ""}
-              onClick={() => handleChange("type", type)}
-            >
-              {type}
+        <div className="address-header">
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            <button onClick={() => navigate("/cart")}>
+              BACK TO CART
             </button>
-          ))}
-        </div>
-
-        <button className="save-btn" onClick={handleSave}>
-          {editId ? "Update Address" : "Save Address"}
-        </button>
-      </div>
-
-      <h3 className="saved-title">Saved Addresses</h3>
-
-      {addresses.map(addr => (
-        <div key={addr.id} className="saved-card">
-
-          <input
-            type="radio"
-            checked={selectedAddressId === addr.id}
-            onChange={() => dispatch(selectAddress(addr.id))}
-          />
-
-          <div>
-            <p><strong>{addr.name}</strong> ({addr.type})</p>
-            <p>{addr.address}</p>
-            <p>{addr.phone}</p>
+            <h3>Select Delivery Address</h3>
           </div>
 
-          <div style={{ display: "flex", gap: "10px" }}>
-            <button
-              onClick={() => {
-                const parsed = parseAddress(addr.address);
-
-                setEditId(addr.id);
-
-                setForm({
-                  name: addr.name,
-                  phone: addr.phone,
-                  altPhone: "",
-                  flat: parsed.flat,
-                  area: parsed.area,
-                  city: parsed.city,
-                  district: parsed.district,
-                  state: parsed.state,
-                  pincode: parsed.pincode,
-                  type: addr.type
-                });
-              }}
-            >
-              Edit
-            </button>
-
-            <button
-              className="delete-btn"
-              onClick={() => dispatch(deleteAddress(addr.id))}
-            >
-              Delete
-            </button>
-          </div>
-
+          <button onClick={() => navigate("/add-address")}>
+            ADD NEW ADDRESS
+          </button>
         </div>
-      ))}
 
-      <div className="order-summary">
-        <h3>Order Summary</h3>
-
-        {cartItems.map(item => (
-          <div key={item.id} className="order-item">
-            <div>
-              <p>{item.title}</p>
-              <p>₹ {item.price}</p>
+        {addresses.map(addr => (
+          <div
+            key={addr.id}
+            className={`address-card ${
+              selectedAddressId === addr.id ? "selected" : ""
+            }`}
+          >
+            <div className="radio-box">
+              <input
+                type="radio"
+                name={groupName}
+                checked={selectedAddressId === addr.id}
+                onChange={() => dispatch(selectAddress(addr.id))}
+              />
             </div>
 
-            <div className="qty-controls">
-              <button onClick={() => dispatch(decrementQuantity(item.id))}>-</button>
-              <span>{item.quantity}</span>
-              <button onClick={() => dispatch(incrementQuantity(item.id))}>+</button>
+            <div className="address-content">
+              <strong>{addr.name}</strong>
+
+              <p>{formatAddress(addr.address)}</p>
+
+              <p>{addr.phone}</p>
+
+              <div className="address-actions">
+                <button onClick={() => dispatch(deleteAddress(addr.id))}>
+                  REMOVE
+                </button>
+
+                <button onClick={() => navigate(`/add-address/${addr.id}`)}>
+                  EDIT
+                </button>
+              </div>
             </div>
+
           </div>
         ))}
 
-        <h3 className="total">Total: ₹ {total.toFixed(2)}</h3>
       </div>
 
-      <button
-        className="save-btn continue-btn"
-        onClick={() => navigate("/payment")}
-      >
-        Continue to Payment
-      </button>
+      <div className="summary-section">
+
+        <h4>ESTIMATED DELIVERY TIME</h4>
+        <p className="date">{deliveryDate.toDateString()}</p>
+
+        <div className="price-row">
+          <span>Price</span>
+          <span>₹{totalPrice}</span>
+        </div>
+
+        <div className="price-row green">
+          <span>Discount</span>
+          <span>-₹{discount}</span>
+        </div>
+
+        <div className="price-row">
+          <span>Platform Fee</span>
+          <span>₹{platformFee}</span>
+        </div>
+
+        <hr />
+
+        <div className="total">
+          <span>Total Amount</span>
+          <span>₹{finalTotal}</span>
+        </div>
+
+        <button
+          className="continue"
+          disabled={!selected || cartItems.length === 0}
+          onClick={() => navigate("/payment")}
+        >
+          Continue
+        </button>
+
+      </div>
 
     </div>
   );
