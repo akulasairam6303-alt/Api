@@ -36,10 +36,32 @@
   margin-bottom: 5px;
 }
 
-.address-card-ui input {
+.address-card-ui input,
+.address-card-ui select {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  font-size: 14px;
+  height: 40px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.address-card-ui select {
+  background: #fff;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  padding-right: 35px;
+}
+
+.address-card-ui input:focus,
+.address-card-ui select:focus {
+  border-color: purple;
+  box-shadow: 0 0 0 2px rgba(128, 0, 128, 0.1);
 }
 
 .row {
@@ -47,7 +69,8 @@
   gap: 10px;
 }
 
-.row input {
+.row input,
+.row select {
   flex: 1;
 }
 
@@ -104,7 +127,6 @@
 
 .continue-btn {
   margin-top: 10px;
-  
 }
 
 .order-summary {

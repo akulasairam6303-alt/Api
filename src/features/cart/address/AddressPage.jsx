@@ -17,6 +17,33 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./address.css";
 
+const stateDistrictMap = {
+  "Andhra Pradesh": [
+    "Alluri Sitharama Raju","Anakapalli","Ananthapuramu","Annamayya","Bapatla",
+    "Chittoor","Dr. B.R. Ambedkar Konaseema","East Godavari","Eluru","Guntur",
+    "Kakinada","Krishna","Kurnool","Nandyal","NTR","Palnadu","Parvathipuram Manyam",
+    "Prakasam","Sri Potti Sriramulu Nellore","Sri Sathya Sai","Srikakulam",
+    "Tirupati","Visakhapatnam","Vizianagaram","West Godavari","YSR Kadapa"
+  ],
+  "Telangana": [
+    "Adilabad","Bhadradri Kothagudem","Hanumakonda","Hyderabad","Jagtial",
+    "Jangaon","Jayashankar Bhupalpally","Jogulamba Gadwal","Kamareddy",
+    "Karimnagar","Khammam","Komaram Bheem","Mahabubabad","Mahabubnagar",
+    "Mancherial","Medak","Medchal–Malkajgiri","Mulugu","Nagarkurnool",
+    "Nalgonda","Narayanpet","Nirmal","Nizamabad","Peddapalli",
+    "Rajanna Sircilla","Rangareddy","Sangareddy","Siddipet",
+    "Suryapet","Vikarabad","Wanaparthy","Warangal","Yadadri Bhuvanagiri"
+  ],
+  "Karnataka": [
+    "Bagalkot","Ballari","Belagavi","Bengaluru Rural","Bengaluru Urban",
+    "Bidar","Chamarajanagar","Chikkaballapur","Chikkamagaluru","Chitradurga",
+    "Dakshina Kannada","Davanagere","Dharwad","Gadag","Hassan",
+    "Haveri","Kalaburagi","Kodagu","Kolar","Koppal",
+    "Mandya","Mysuru","Raichur","Ramanagara","Shivamogga",
+    "Tumakuru","Udupi","Uttara Kannada","Vijayapura","Yadgir"
+  ]
+};
+
 function AddressPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -44,19 +71,31 @@ function AddressPage() {
   });
 
   const handleChange = (key, value) => {
-    setForm({ ...form, [key]: value });
+    setForm(prev => ({ ...prev, [key]: value }));
   };
 
-  // 🔥 FIX: convert string → fields
   const parseAddress = (address) => {
     const parts = address.split(",");
+
+    const statePart = parts[4]?.split("-")[0]?.trim() || "";
+    const districtPart = parts[3]?.trim() || "";
+
+    const matchedState =
+      Object.keys(stateDistrictMap).find(
+        s => s.toLowerCase() === statePart.toLowerCase()
+      ) || statePart;
+
+    const matchedDistrict =
+      stateDistrictMap[matchedState]?.find(
+        d => d.toLowerCase() === districtPart.toLowerCase()
+      ) || districtPart;
 
     return {
       flat: parts[0]?.trim() || "",
       area: parts[1]?.trim() || "",
       city: parts[2]?.trim() || "",
-      district: parts[3]?.trim() || "",
-      state: parts[4]?.split("-")[0]?.trim() || "",
+      district: matchedDistrict,
+      state: matchedState,
       pincode: parts[4]?.split("-")[1]?.trim() || ""
     };
   };
@@ -75,12 +114,7 @@ function AddressPage() {
     };
 
     if (editId) {
-      dispatch(
-        updateAddress({
-          id: editId,
-          ...addressData
-        })
-      );
+      dispatch(updateAddress({ id: editId, ...addressData }));
       setEditId(null);
     } else {
       dispatch(addAddress(addressData));
@@ -159,16 +193,32 @@ function AddressPage() {
         </div>
 
         <div className="row">
-          <input
-            placeholder="District"
-            value={form.district}
-            onChange={e => handleChange("district", e.target.value)}
-          />
-          <input
-            placeholder="State"
+
+          <select
             value={form.state}
-            onChange={e => handleChange("state", e.target.value)}
-          />
+            onChange={(e) => {
+              handleChange("state", e.target.value);
+              handleChange("district", "");
+            }}
+          >
+            <option value="">Select State</option>
+            {Object.keys(stateDistrictMap).map(state => (
+              <option key={state} value={state}>{state}</option>
+            ))}
+          </select>
+
+          <select
+            value={form.district}
+            onChange={(e) => handleChange("district", e.target.value)}
+            disabled={!form.state}
+          >
+            <option value="">Select District</option>
+            {form.state &&
+              stateDistrictMap[form.state].map(d => (
+                <option key={d} value={d}>{d}</option>
+              ))}
+          </select>
+
         </div>
 
         <div className="type-buttons">
@@ -212,11 +262,17 @@ function AddressPage() {
                 const parsed = parseAddress(addr.address);
 
                 setEditId(addr.id);
+
                 setForm({
                   name: addr.name,
                   phone: addr.phone,
                   altPhone: "",
-                  ...parsed,
+                  flat: parsed.flat,
+                  area: parsed.area,
+                  city: parsed.city,
+                  district: parsed.district,
+                  state: parsed.state,
+                  pincode: parsed.pincode,
                   type: addr.type
                 });
               }}
