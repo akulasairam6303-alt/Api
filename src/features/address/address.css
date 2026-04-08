@@ -1,0 +1,176 @@
+.checkout-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background: #f6f6f6;
+  min-height: 100vh;
+  justify-content: center;
+  position: relative;
+}
+
+.address-section {
+  flex: 2;
+  max-width: 700px;
+}
+
+.back-btn {
+  background: transparent;
+  color: #5a2d82;
+  border: 1px solid #5a2d82;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.summary-section {
+  flex: 1;
+  max-width: 350px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e2e2e2;
+  height: fit-content;
+}
+
+.address-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.address-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.address-header button {
+  padding: 6px 12px;
+  border: none;
+  background: #5a2d82;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.address-card {
+  display: flex;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.address-card.selected {
+  border: 2px solid #5a2d82;
+}
+
+.radio-box {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 4px;
+}
+
+.address-content {
+  flex: 1;
+}
+
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.address-type {
+  background: #e6f4ea;
+  color: #2e7d32;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.address-content p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #444;
+}
+
+.address-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.address-actions button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  border: none;
+}
+
+.address-actions button:first-child {
+  background: #5a2d82;
+  color: #fff;
+}
+
+.address-actions button:last-child {
+  background: #fff;
+  border: 1px solid #5a2d82;
+  color: #5a2d82;
+}
+
+.summary-section h4 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.date {
+  font-size: 13px;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.price-row span {
+  font-size: 14px;
+}
+
+.price-row.green {
+  color: green;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.continue {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  border: none;
+  background: linear-gradient(90deg, #5a2d82, #3a1c5c);
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.continue:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}

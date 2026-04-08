@@ -3,7 +3,7 @@ import { deleteAddress, selectAddress } from "./addressSlice";
 import {
   selectCartArray,
   selectCartTotalPrice
-} from "../cartSelectors";
+} from "../cart/cartSelectors";
 import { useNavigate } from "react-router-dom";
 import { useId } from "react";
 import "./address.css";
@@ -43,7 +43,8 @@ function AddressPage() {
 
         <div className="address-header">
           <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-            <button onClick={() => navigate("/cart")}>
+            <button className="back-btn" onClick={() => navigate("/cart")}>
+
               BACK TO CART
             </button>
             <h3>Select Delivery Address</h3>
@@ -71,7 +72,13 @@ function AddressPage() {
             </div>
 
             <div className="address-content">
-              <strong>{addr.name}</strong>
+
+              <div className="name-row">
+                <strong>{addr.name}</strong>
+                <span className="address-type">
+                  {addr.type || addr.address?.type || "HOME"}
+                </span>
+              </div>
 
               <p>{formatAddress(addr.address)}</p>
 
@@ -130,7 +137,7 @@ function AddressPage() {
 
       </div>
 
-    </div>
+    </div >
   );
 }
 

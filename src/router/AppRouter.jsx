@@ -10,8 +10,8 @@ const HomePage = lazy(() => import("../features/layout/HomePage"));
 const CartPage = lazy(() => import("../features/cart/CartPage"));
 const WishlistPage = lazy(() => import("../features/wishlist/WishlistPage"));
 const ProductTable = lazy(() => import("../features/products/ProductTable"));
-const AddressPage = lazy(() => import("../features/cart/address/AddressPage"));
-const AddAddressPage = lazy(() => import("../features/cart/address/AddAddress"));
+const AddressPage = lazy(() => import("../features/address/AddressPage"));
+const AddAddressPage = lazy(() => import("../features/address/AddAddress"));
 
 function AppRouter() {
   return (

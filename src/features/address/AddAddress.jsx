@@ -42,59 +42,59 @@ function AddAddressPage() {
     type: "Home"
   });
 
- useEffect(() => {
-  if (!id || addresses.length === 0) return;
+  useEffect(() => {
+    if (!id || addresses.length === 0) return;
 
-  const existing = addresses.find(a => a.id === Number(id));
-  if (!existing) return;
+    const existing = addresses.find(a => a.id === Number(id));
+    if (!existing) return;
 
-  let flat = "", area = "", city = "", district = "", state = "", pincode = "", landmark = "";
+    let flat = "", area = "", city = "", district = "", state = "", pincode = "", landmark = "";
 
-  if (typeof existing.address === "string") {
-    const parts = existing.address.split(",");
+    if (typeof existing.address === "string") {
+      const parts = existing.address.split(",");
 
-    flat = parts[0]?.trim() || "";
-    area = parts[1]?.trim() || "";
-    city = parts[2]?.trim() || "";
-    district = parts[3]?.trim() || "";
+      flat = parts[0]?.trim() || "";
+      area = parts[1]?.trim() || "";
+      city = parts[2]?.trim() || "";
+      district = parts[3]?.trim() || "";
 
-    if (parts[4]) {
-      const [st, pin] = parts[4].split("-");
-      state = st?.trim() || "";
-      pincode = pin?.trim() || "";
+      if (parts[4]) {
+        const [st, pin] = parts[4].split("-");
+        state = st?.trim() || "";
+        pincode = pin?.trim() || "";
+      }
+
+      if (parts.length > 5) {
+        landmark = parts.slice(5).join(",").trim();
+      }
+
+    } else if (typeof existing.address === "object" && existing.address !== null && !Array.isArray(existing.address)) {
+      flat = existing.address.flat || "";
+      area = existing.address.area || "";
+      city = existing.address.city || "";
+      district = existing.address.district || "";
+      state = existing.address.state || "";
+      pincode = existing.address.pincode || "";
+      landmark = existing.address.landmark || "";
     }
 
-    if (parts.length > 5) {
-      landmark = parts.slice(5).join(",").trim();
-    }
+    setForm({
+      name: existing.name || "",
+      phone: existing.phone || "",
+      altPhone: "",
+      showAlt: false,
+      flat,
+      area,
+      city,
+      district,
+      state,
+      pincode,
+      landmark,
+      showLandmark: !!landmark,
+      type: existing.type || "Home"
+    });
 
-  } else if (typeof existing.address === "object") {
-    flat = existing.address.flat || "";
-    area = existing.address.area || "";
-    city = existing.address.city || "";
-    district = existing.address.district || "";
-    state = existing.address.state || "";
-    pincode = existing.address.pincode || "";
-    landmark = existing.address.landmark || "";
-  }
-
-  setForm({
-    name: existing.name || "",
-    phone: existing.phone || "",
-    altPhone: "",
-    showAlt: false,
-    flat,
-    area,
-    city,
-    district,
-    state,
-    pincode,
-    landmark,
-    showLandmark: !!landmark,
-    type: existing.type || "Home"
-  });
-
-}, [id, addresses]);
+  }, [id, addresses]);
 
   const handleChange = (key, value) => {
     setForm(prev => ({ ...prev, [key]: value }));
@@ -103,6 +103,19 @@ function AddAddressPage() {
   const handleSave = () => {
     if (!form.name || !form.phone || !form.area || !form.city) {
       alert("Fill required fields");
+      return;
+    }
+
+    const phoneValid = /^[0-9]{10}$/.test(form.phone);
+    const pincodeValid = /^[0-9]{6}$/.test(form.pincode);
+
+    if (!phoneValid) {
+      alert("Phone number must be exactly 10 digits");
+      return;
+    }
+
+    if (!pincodeValid) {
+      alert("Pincode must be exactly 6 digits");
       return;
     }
 
@@ -180,7 +193,7 @@ function AddAddressPage() {
             >
               <option value="">District</option>
               {form.state &&
-                stateDistrictMap[form.state]?.map(d => (
+                stateDistrictMap[form.state]?.map((d, index) => (
                   <option key={d} value={d}>{d}</option>
                 ))
               }
