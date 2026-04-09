@@ -1,17 +1,15 @@
 import { useSelector, useDispatch } from "react-redux";
 import { deleteAddress, selectAddress } from "./addressSlice";
-import {
-  selectCartArray,
-  selectCartTotalPrice
-} from "../cart/cartSelectors";
+import { selectCartArray, selectCartTotalPrice } from "../cart/cartSelectors";
 import { useNavigate } from "react-router-dom";
-import { useId } from "react";
+import { useState } from "react";
 import "./address.css";
 
 function AddressPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const groupName = useId();
+
+  const groupName = "address-group";
 
   const { addresses, selectedAddressId } = useSelector(
     state => state.address
@@ -29,6 +27,25 @@ function AddressPage() {
   const deliveryDate = new Date();
   deliveryDate.setDate(deliveryDate.getDate() + 3);
 
+  const [showPopup, setShowPopup] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setShowPopup(true);
+  };
+
+  const handleConfirm = () => {
+    dispatch(deleteAddress(deleteId));
+    setShowPopup(false);
+    setDeleteId(null);
+  };
+
+  const handleCancel = () => {
+    setShowPopup(false);
+    setDeleteId(null);
+  };
+
   const formatAddress = (addr) => {
     if (!addr) return "";
     if (typeof addr === "string") return addr;
@@ -44,7 +61,6 @@ function AddressPage() {
         <div className="address-header">
           <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
             <button className="back-btn" onClick={() => navigate("/cart")}>
-
               BACK TO CART
             </button>
             <h3>Select Delivery Address</h3>
@@ -85,8 +101,8 @@ function AddressPage() {
               <p>{addr.phone}</p>
 
               <div className="address-actions">
-                <button onClick={() => dispatch(deleteAddress(addr.id))}>
-                  REMOVE
+                <button onClick={() => handleDeleteClick(addr.id)}>
+                  DELETE
                 </button>
 
                 <button onClick={() => navigate(`/add-address/${addr.id}`)}>
@@ -136,6 +152,18 @@ function AddressPage() {
         </button>
 
       </div>
+
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup-box">
+            <p>Do you really want to delete this address?</p>
+            <div className="popup-actions">
+              <button className="no-btn" onClick={handleCancel}>NO</button>
+              <button className="yes-btn" onClick={handleConfirm}>YES</button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div >
   );

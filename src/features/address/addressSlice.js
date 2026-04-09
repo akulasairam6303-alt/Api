@@ -1,4 +1,4 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice, nanoid } from "@reduxjs/toolkit";  
 
 const savedAddresses = JSON.parse(localStorage.getItem("addresses")) || [];
 const savedSelectedId = JSON.parse(localStorage.getItem("selectedAddressId"));

@@ -4,27 +4,15 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./addAddress.css";
 
-const stateDistrictMap = {
-  AP: [
-    "Guntur", "Krishna", "Prakasam", "Nellore", "Chittoor",
-    "Kadapa", "Kurnool", "Anantapur", "East Godavari", "West Godavari"
-  ],
-  TG: [
-    "Hyderabad", "Rangareddy", "Medchal", "Warangal",
-    "Karimnagar", "Nizamabad", "Khammam"
-  ],
-  KA: [
-    "Bangalore Urban", "Bangalore Rural", "Mysore",
-    "Mangalore", "Hubli", "Belgaum", "Davangere"
-  ]
-};
-
 function AddAddressPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
 
   const { addresses } = useSelector(state => state.address);
+
+  const [loading, setLoading] = useState(false);
+  const [timer, setTimer] = useState(null);
 
   const [form, setForm] = useState({
     name: "",
@@ -67,15 +55,6 @@ function AddAddressPage() {
       if (parts.length > 5) {
         landmark = parts.slice(5).join(",").trim();
       }
-
-    } else if (typeof existing.address === "object" && existing.address !== null && !Array.isArray(existing.address)) {
-      flat = existing.address.flat || "";
-      area = existing.address.area || "";
-      city = existing.address.city || "";
-      district = existing.address.district || "";
-      state = existing.address.state || "";
-      pincode = existing.address.pincode || "";
-      landmark = existing.address.landmark || "";
     }
 
     setForm({
@@ -96,8 +75,55 @@ function AddAddressPage() {
 
   }, [id, addresses]);
 
+  const fetchPincode = async (pin) => {
+    setLoading(true);
+    try {
+      const res = await fetch(`https://api.postalpincode.in/pincode/${pin}`);
+      const data = await res.json();
+
+      if (data[0].Status === "Success") {
+        const post = data[0].PostOffice[0];
+        setForm(prev => ({
+          ...prev,
+          state: post.State,
+          district: post.District
+        }));
+      } else {
+        setForm(prev => ({
+          ...prev,
+          state: "",
+          district: ""
+        }));
+      }
+    } catch {
+      setForm(prev => ({
+        ...prev,
+        state: "",
+        district: ""
+      }));
+    }
+    setLoading(false);
+  };
+
   const handleChange = (key, value) => {
     setForm(prev => ({ ...prev, [key]: value }));
+
+    if (key === "pincode") {
+      if (timer) clearTimeout(timer);
+
+      if (value.length === 6) {
+        const newTimer = setTimeout(() => {
+          fetchPincode(value);
+        }, 500);
+        setTimer(newTimer);
+      } else {
+        setForm(prev => ({
+          ...prev,
+          state: "",
+          district: ""
+        }));
+      }
+    }
   };
 
   const handleSave = () => {
@@ -106,32 +132,44 @@ function AddAddressPage() {
       return;
     }
 
-    const phoneValid = /^[0-9]{10}$/.test(form.phone);
-    const pincodeValid = /^[0-9]{6}$/.test(form.pincode);
-
-    if (!phoneValid) {
-      alert("Phone number must be exactly 10 digits");
+    if (!/^[0-9]{10}$/.test(form.phone)) {
+      alert("Invalid phone");
       return;
     }
 
-    if (!pincodeValid) {
-      alert("Pincode must be exactly 6 digits");
+    if (!/^[0-9]{6}$/.test(form.pincode)) {
+      alert("Invalid pincode");
       return;
     }
 
-    const addressData = {
+    if (!form.state || !form.district) {
+      alert("Invalid pincode");
+      return;
+    }
+
+    if (form.type === "Home" || form.type === "Work") {
+      const exists = addresses.some(a =>
+        id
+          ? a.type === form.type && a.id !== Number(id)
+          : a.type === form.type
+      );
+
+      if (exists) {
+        alert(`${form.type} already exists`);
+        return;
+      }
+    }
+
+    const data = {
       id: id ? Number(id) : Date.now(),
       name: form.name,
       phone: form.phone,
-      address: `${form.flat}, ${form.area}, ${form.city}, ${form.district}, ${form.state} - ${form.pincode}${form.landmark ? ", " + form.landmark : ""}`,
+      address: `${form.flat}, ${form.area}, ${form.city}, ${form.district}, ${form.state} - ${form.pincode}`,
       type: form.type
     };
 
-    if (id) {
-      dispatch(updateAddress(addressData));
-    } else {
-      dispatch(addAddress(addressData));
-    }
+    if (id) dispatch(updateAddress(data));
+    else dispatch(addAddress(data));
 
     navigate("/address");
   };
@@ -153,14 +191,6 @@ function AddAddressPage() {
 
           <input value={form.name} onChange={e => handleChange("name", e.target.value)} placeholder="Full Name *" />
           <input value={form.phone} onChange={e => handleChange("phone", e.target.value)} placeholder="Phone Number *" />
-
-          {form.showAlt && (
-            <input value={form.altPhone} onChange={e => handleChange("altPhone", e.target.value)} placeholder="Alternate Phone" />
-          )}
-
-          <p className="link" onClick={() => handleChange("showAlt", true)}>
-            + Add Alternate Phone Number
-          </p>
         </div>
 
         <div className="section">
@@ -171,50 +201,19 @@ function AddAddressPage() {
           <input value={form.city} onChange={e => handleChange("city", e.target.value)} placeholder="City *" />
           <input value={form.pincode} onChange={e => handleChange("pincode", e.target.value)} placeholder="Pincode *" />
 
+          {loading && <p>Fetching location...</p>}
+
           <div className="row">
-
-            <select
-              value={form.state}
-              onChange={e => {
-                handleChange("state", e.target.value);
-                handleChange("district", "");
-              }}
-            >
-              <option value="">State</option>
-              <option value="AP">Andhra Pradesh (AP)</option>
-              <option value="TG">Telangana (TG)</option>
-              <option value="KA">Karnataka (KA)</option>
-            </select>
-
-            <select
-              value={form.district}
-              onChange={e => handleChange("district", e.target.value)}
-              disabled={!form.state}
-            >
-              <option value="">District</option>
-              {form.state &&
-                stateDistrictMap[form.state]?.map((d, index) => (
-                  <option key={d} value={d}>{d}</option>
-                ))
-              }
-            </select>
-
+            <input value={form.state} placeholder="State" readOnly />
+            <input value={form.district} placeholder="District" readOnly />
           </div>
-
-          {form.showLandmark && (
-            <input value={form.landmark} onChange={e => handleChange("landmark", e.target.value)} placeholder="Landmark" />
-          )}
-
-          <p className="link" onClick={() => handleChange("showLandmark", true)}>
-            + Add Landmark
-          </p>
         </div>
 
         <div className="section">
           <p className="section-title">Address Type</p>
 
           <div className="type-buttons">
-            {["Home", "Office", "Others"].map(type => (
+            {["Home", "Work", "Others"].map(type => (
               <button
                 key={type}
                 className={form.type === type ? "active" : ""}
