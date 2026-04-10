@@ -1,13 +1,16 @@
 import { useSelector, useDispatch } from "react-redux";
 import { addAddress, updateAddress } from "./addressSlice";
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./addAddress.css";
 
 function AddAddressPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { id } = useParams();
+
+  const pathParts = window.location.pathname.split("/");
+  const id = pathParts[pathParts.length - 1];
+  const isEdit = id && id !== "add-address";
 
   const { addresses } = useSelector(state => state.address);
 
@@ -31,7 +34,7 @@ function AddAddressPage() {
   });
 
   useEffect(() => {
-    if (!id || addresses.length === 0) return;
+    if (!isEdit || addresses.length === 0) return;
 
     const existing = addresses.find(a => a.id === Number(id));
     if (!existing) return;
@@ -73,7 +76,7 @@ function AddAddressPage() {
       type: existing.type || "Home"
     });
 
-  }, [id, addresses]);
+  }, [id, isEdit, addresses]);
 
   const fetchPincode = async (pin) => {
     setLoading(true);
@@ -149,7 +152,7 @@ function AddAddressPage() {
 
     if (form.type === "Home" || form.type === "Work") {
       const exists = addresses.some(a =>
-        id
+        isEdit
           ? a.type === form.type && a.id !== Number(id)
           : a.type === form.type
       );
@@ -161,14 +164,14 @@ function AddAddressPage() {
     }
 
     const data = {
-      id: id ? Number(id) : Date.now(),
+      id: isEdit ? Number(id) : Date.now(),
       name: form.name,
       phone: form.phone,
       address: `${form.flat}, ${form.area}, ${form.city}, ${form.district}, ${form.state} - ${form.pincode}`,
       type: form.type
     };
 
-    if (id) dispatch(updateAddress(data));
+    if (isEdit) dispatch(updateAddress(data));
     else dispatch(addAddress(data));
 
     navigate("/address");
@@ -184,7 +187,7 @@ function AddAddressPage() {
           </button>
         </div>
 
-        <h3 className="title">{id ? "EDIT ADDRESS" : "ADD NEW ADDRESS"}</h3>
+        <h3 className="title">{isEdit ? "EDIT ADDRESS" : "ADD NEW ADDRESS"}</h3>
 
         <div className="section">
           <p className="section-title">Contact details</p>
@@ -226,7 +229,7 @@ function AddAddressPage() {
         </div>
 
         <button className="save-btn" onClick={handleSave}>
-          {id ? "Update Address" : "Save Address"}
+          {isEdit ? "Update Address" : "Save Address"}
         </button>
 
       </div>
