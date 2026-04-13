@@ -105,7 +105,7 @@ function AddressPage() {
                   DELETE
                 </button>
 
-                <button onClick={() => navigate(`/add-address/${addr.id}`)}>
+                <button onClick={() => navigate("/add-address", { state: { address: addr } })}>
                   EDIT
                 </button>
               </div>
@@ -165,7 +165,7 @@ function AddressPage() {
         </div>
       )}
 
-    </div >
+    </div>
   );
 }
 

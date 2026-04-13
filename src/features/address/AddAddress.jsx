@@ -1,16 +1,16 @@
 import { useSelector, useDispatch } from "react-redux";
 import { addAddress, updateAddress } from "./addressSlice";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./addAddress.css";
 
 function AddAddressPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const pathParts = window.location.pathname.split("/");
-  const id = pathParts[pathParts.length - 1];
-  const isEdit = id && id !== "add-address";
+  const existing = location.state?.address;
+  const isEdit = Boolean(existing);   
 
   const { addresses } = useSelector(state => state.address);
 
@@ -34,9 +34,6 @@ function AddAddressPage() {
   });
 
   useEffect(() => {
-    if (!isEdit || addresses.length === 0) return;
-
-    const existing = addresses.find(a => a.id === Number(id));
     if (!existing) return;
 
     let flat = "", area = "", city = "", district = "", state = "", pincode = "", landmark = "";
@@ -76,7 +73,7 @@ function AddAddressPage() {
       type: existing.type || "Home"
     });
 
-  }, [id, isEdit, addresses]);
+  }, [existing]);
 
   const fetchPincode = async (pin) => {
     setLoading(true);
@@ -92,18 +89,10 @@ function AddAddressPage() {
           district: post.District
         }));
       } else {
-        setForm(prev => ({
-          ...prev,
-          state: "",
-          district: ""
-        }));
+        setForm(prev => ({ ...prev, state: "", district: "" }));
       }
     } catch {
-      setForm(prev => ({
-        ...prev,
-        state: "",
-        district: ""
-      }));
+      setForm(prev => ({ ...prev, state: "", district: "" }));
     }
     setLoading(false);
   };
@@ -120,11 +109,7 @@ function AddAddressPage() {
         }, 500);
         setTimer(newTimer);
       } else {
-        setForm(prev => ({
-          ...prev,
-          state: "",
-          district: ""
-        }));
+        setForm(prev => ({ ...prev, state: "", district: "" }));
       }
     }
   };
@@ -151,28 +136,32 @@ function AddAddressPage() {
     }
 
     if (form.type === "Home" || form.type === "Work") {
-      const exists = addresses.some(a =>
-        isEdit
-          ? a.type === form.type && a.id !== Number(id)
-          : a.type === form.type
-      );
+      const exists = addresses.some(a => {
+        if (isEdit) {
+          return a.type === form.type && a.id !== existing.id;
+        }
+        return a.type === form.type;
+      });
 
       if (exists) {
-        alert(`${form.type} already exists`);
+        alert(`${form.type} address already exists`);
         return;
       }
     }
 
     const data = {
-      id: isEdit ? Number(id) : Date.now(),
+      id: isEdit ? existing.id : Date.now(),
       name: form.name,
       phone: form.phone,
       address: `${form.flat}, ${form.area}, ${form.city}, ${form.district}, ${form.state} - ${form.pincode}`,
       type: form.type
     };
 
-    if (isEdit) dispatch(updateAddress(data));
-    else dispatch(addAddress(data));
+    if (isEdit) {
+      dispatch(updateAddress(data));
+    } else {
+      dispatch(addAddress(data));
+    }
 
     navigate("/address");
   };
@@ -192,17 +181,45 @@ function AddAddressPage() {
         <div className="section">
           <p className="section-title">Contact details</p>
 
-          <input value={form.name} onChange={e => handleChange("name", e.target.value)} placeholder="Full Name *" />
-          <input value={form.phone} onChange={e => handleChange("phone", e.target.value)} placeholder="Phone Number *" />
+          <input
+            value={form.name}
+            onChange={e => handleChange("name", e.target.value)}
+            placeholder="Full Name *"
+          />
+
+          <input
+            value={form.phone}
+            onChange={e => handleChange("phone", e.target.value)}
+            placeholder="Phone Number *"
+          />
         </div>
 
         <div className="section">
           <p className="section-title">Address</p>
 
-          <input value={form.flat} onChange={e => handleChange("flat", e.target.value)} placeholder="Flat / House No *" />
-          <input value={form.area} onChange={e => handleChange("area", e.target.value)} placeholder="Area / Street *" />
-          <input value={form.city} onChange={e => handleChange("city", e.target.value)} placeholder="City *" />
-          <input value={form.pincode} onChange={e => handleChange("pincode", e.target.value)} placeholder="Pincode *" />
+          <input
+            value={form.flat}
+            onChange={e => handleChange("flat", e.target.value)}
+            placeholder="Flat / House No *"
+          />
+
+          <input
+            value={form.area}
+            onChange={e => handleChange("area", e.target.value)}
+            placeholder="Area / Street *"
+          />
+
+          <input
+            value={form.city}
+            onChange={e => handleChange("city", e.target.value)}
+            placeholder="City *"
+          />
+
+          <input
+            value={form.pincode}
+            onChange={e => handleChange("pincode", e.target.value)}
+            placeholder="Pincode *"
+          />
 
           {loading && <p>Fetching location...</p>}
 
