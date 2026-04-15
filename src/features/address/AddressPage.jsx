@@ -9,7 +9,7 @@ function AddressPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const groupName = "address-group";
+  const groupName = "address-group";  
 
   const { addresses, selectedAddressId } = useSelector(
     state => state.address

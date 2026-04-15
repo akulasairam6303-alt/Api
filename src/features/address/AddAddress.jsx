@@ -10,7 +10,7 @@ function AddAddressPage() {
   const location = useLocation();
 
   const existing = location.state?.address;
-  const isEdit = Boolean(existing);   
+  const isEdit = Boolean(existing);
 
   const { addresses } = useSelector(state => state.address);
 
@@ -89,10 +89,20 @@ function AddAddressPage() {
           district: post.District
         }));
       } else {
-        setForm(prev => ({ ...prev, state: "", district: "" }));
+        setForm(prev => ({
+          ...prev,
+          state: "",
+          district: ""
+        }));
+        alert("Pincode not found");
       }
     } catch {
-      setForm(prev => ({ ...prev, state: "", district: "" }));
+      setForm(prev => ({
+        ...prev,
+        state: "",
+        district: ""
+      }));
+      alert("Pincode not found");
     }
     setLoading(false);
   };
