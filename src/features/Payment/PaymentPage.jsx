@@ -4,6 +4,7 @@ import { selectCartArray, selectCartTotalPrice } from "../cart/cartSelectors";
 import { clearCart } from "../cart/cartSlice";
 import { useNavigate } from "react-router-dom";
 import StepHeader from "../StepHeader/StepHeader";
+import UPIPayment from "./UPIPayment";
 import "./payment.css";
 
 function PaymentPage() {
@@ -14,10 +15,10 @@ function PaymentPage() {
   const totalPrice = useSelector(selectCartTotalPrice);
 
   const { addresses, selectedAddressId } = useSelector(
-    state => state.address
+    (state) => state.address
   );
 
-  const selected = addresses.find(a => a.id === selectedAddressId);
+  const selected = addresses.find((a) => a.id === selectedAddressId);
 
   const [selectedMethod, setSelectedMethod] = useState("cod");
 
@@ -28,7 +29,7 @@ function PaymentPage() {
   const deliveryDate = new Date();
   deliveryDate.setDate(deliveryDate.getDate() + 3);
 
-  const handleContinue = () => {
+  const handleCOD = () => {
     if (cartItems.length === 0 || !selected) return;
 
     const newOrder = {
@@ -36,8 +37,8 @@ function PaymentPage() {
       items: cartItems,
       address: selected,
       total: finalTotal,
-      payment: selectedMethod,
-      date: new Date().toISOString()
+      payment: "cod",
+      date: new Date().toISOString(),
     };
 
     const existingOrders =
@@ -49,18 +50,40 @@ function PaymentPage() {
     localStorage.setItem("currentOrder", JSON.stringify(newOrder));
 
     dispatch(clearCart());
+    navigate("/order-confirm");
+  };
 
+  const handleUPISuccess = (response) => {
+    if (cartItems.length === 0 || !selected) return;
+
+    const newOrder = {
+      id: Date.now(),
+      items: cartItems,
+      address: selected,
+      total: finalTotal,
+      payment: "upi",
+      razorpay_payment_id: response.razorpay_payment_id,
+      date: new Date().toISOString(),
+    };
+
+    const existingOrders =
+      JSON.parse(localStorage.getItem("orders")) || [];
+
+    existingOrders.push(newOrder);
+
+    localStorage.setItem("orders", JSON.stringify(existingOrders));
+    localStorage.setItem("currentOrder", JSON.stringify(newOrder));
+
+    dispatch(clearCart());
     navigate("/order-confirm");
   };
 
   return (
     <div className="cart-container">
-
       <StepHeader currentStep={3} />
 
       <div className="payment-box">
 
-        {/* LEFT */}
         <div className="left">
           <h3>Choose Payment Mode</h3>
 
@@ -78,52 +101,36 @@ function PaymentPage() {
             UPI (Pay Via Any App)
           </div>
 
-          <div
-            className={`method ${selectedMethod === "card" ? "active" : ""}`}
-            onClick={() => setSelectedMethod("card")}
-          >
-            Credit / Debit Cards
-          </div>
-
-          <div
-            className={`method ${selectedMethod === "emi" ? "active" : ""}`}
-            onClick={() => setSelectedMethod("emi")}
-          >
-            EMI
-          </div>
+          <div className="method disabled">Credit / Debit Cards</div>
+          <div className="method disabled">EMI</div>
         </div>
 
-        {/* MIDDLE */}
         <div className="middle">
 
-          <h3>{selectedMethod.toUpperCase()}</h3>
+          {selectedMethod === "cod" && (
+            <>
+              <h3>Cash On Delivery</h3>
 
-          <label className="radio">
-            <input
-              type="radio"
-              checked={selectedMethod === "cod"}
-              onChange={() => setSelectedMethod("cod")}
+              <p className="note">
+                A fee of ₹10 is applicable for this option.
+              </p>
+
+              <button className="continue" onClick={handleCOD}>
+                Place Order
+              </button>
+            </>
+          )}
+
+          {selectedMethod === "upi" && (
+            <UPIPayment
+              amount={finalTotal}
+              onSuccess={handleUPISuccess}
             />
-            Cash On Delivery
-          </label>
-
-          <p className="note">
-            A fee of ₹10 is applicable for this option. Online payment will help you avoid this fee.
-          </p>
-
-          <button
-            className="continue"
-            onClick={handleContinue}
-            disabled={cartItems.length === 0}
-          >
-            Continue
-          </button>
+          )}
 
         </div>
 
-        {/* RIGHT (SUMMARY BACK ADDED) */}
         <div className="summary-section">
-
           <h4>ESTIMATED DELIVERY TIME</h4>
           <p className="date">{deliveryDate.toDateString()}</p>
 
@@ -148,11 +155,9 @@ function PaymentPage() {
             <span>Total Amount</span>
             <span>₹{finalTotal}</span>
           </div>
-
         </div>
 
       </div>
-
     </div>
   );
 }

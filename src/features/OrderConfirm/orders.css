@@ -63,3 +63,29 @@
   margin-top: 5px;
 }
 
+.order-actions {
+  margin-top: 10px;
+}
+
+.cancel-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.status.red {
+  color: #dc2626;
+}
+
+.cancel-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.cancel-timer {
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+}

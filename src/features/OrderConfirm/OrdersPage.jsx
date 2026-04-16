@@ -26,7 +26,9 @@ function OrdersPage() {
     return parts.join(", ");
   };
 
-  const getStatus = (date) => {
+  const getStatus = (date, order) => {
+    if (order.cancelled) return "Cancelled";
+
     const orderTime = new Date(date).getTime();
     const now = Date.now();
     const diff = now - orderTime;
@@ -38,19 +40,21 @@ function OrdersPage() {
   };
 
   const getStatusClass = (status) => {
+    if (status === "Cancelled") return "status red";
     if (status === "Order Placed") return "status gray";
     if (status === "Processing") return "status orange";
     if (status === "Shipped") return "status blue";
     return "status green";
   };
 
-  const getCountdown = (date) => {
+  const getCountdown = (date, order) => {
+    if (order.cancelled) return "Cancelled";
+
     const orderTime = new Date(date).getTime();
-
-    let targetTime;
-
     const now = Date.now();
     const diff = now - orderTime;
+
+    let targetTime;
 
     if (diff < 10000) {
       targetTime = orderTime + 10000;
@@ -69,6 +73,40 @@ function OrdersPage() {
     const seconds = Math.floor((remaining / 1000) % 60);
 
     return `${hours}h ${minutes}m ${seconds}s`;
+  };
+
+  const canCancel = (date) => {
+    const orderTime = new Date(date).getTime();
+    const now = Date.now();
+    const diff = now - orderTime;
+
+    return diff <= 2 * 60 * 60 * 1000;
+  };
+
+  const getCancelRemaining = (date) => {
+    const orderTime = new Date(date).getTime();
+    const now = Date.now();
+    const diff = now - orderTime;
+
+    const remaining = 2 * 60 * 60 * 1000 - diff;
+
+    if (remaining <= 0) return "Cancel window closed";
+
+    const minutes = Math.floor(remaining / (1000 * 60));
+    const seconds = Math.floor((remaining / 1000) % 60);
+
+    return `Cancel available for ${minutes}m ${seconds}s`;
+  };
+
+  const handleCancel = (id) => {
+    const stored = JSON.parse(localStorage.getItem("orders")) || [];
+
+    const updated = stored.map(order =>
+      order.id === id ? { ...order, cancelled: true } : order
+    );
+
+    localStorage.setItem("orders", JSON.stringify(updated));
+    setOrders([...updated].reverse());
   };
 
   useEffect(() => {
@@ -94,7 +132,7 @@ function OrdersPage() {
       <h2>Your Orders</h2>
 
       {orders.map(order => {
-        const status = getStatus(order.date);
+        const status = getStatus(order.date, order);
 
         return (
           <div key={order.id} className="order-card">
@@ -111,7 +149,7 @@ function OrdersPage() {
                 </p>
 
                 <p className="countdown">
-                  {getCountdown(order.date)}
+                  {getCountdown(order.date, order)}
                 </p>
               </div>
 
@@ -147,6 +185,24 @@ function OrdersPage() {
               </div>
 
             </div>
+
+            {!order.cancelled && (
+              <div className="order-actions">
+
+                <button
+                  className="cancel-btn"
+                  disabled={!canCancel(order.date)}
+                  onClick={() => handleCancel(order.id)}
+                >
+                  {canCancel(order.date) ? "Cancel Order" : "Cannot Cancel"}
+                </button>
+
+                <p className="cancel-timer">
+                  {getCancelRemaining(order.date)}
+                </p>
+
+              </div>
+            )}
 
           </div>
         );
