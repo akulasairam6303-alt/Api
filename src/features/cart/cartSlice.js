@@ -9,12 +9,16 @@ const loadCartFromStorage = () => {
   }
 };
 
-const saveCartToStorage = items => {
+const saveCartToStorage = (items) => {
   localStorage.setItem("cart", JSON.stringify(items));
 };
 
 const initialState = {
   items: loadCartFromStorage()
+};
+
+const persist = (state) => {
+  saveCartToStorage(state.items);
 };
 
 const cartSlice = createSlice({
@@ -36,12 +40,12 @@ const cartSlice = createSlice({
         });
       }
 
-      saveCartToStorage(state.items);
+      persist(state);
     },
 
     removeFromCart: (state, action) => {
       state.items = state.items.filter(i => i.id !== action.payload);
-      saveCartToStorage(state.items);
+      persist(state);
     },
 
     updateQuantity: (state, action) => {
@@ -53,24 +57,22 @@ const cartSlice = createSlice({
         item.quantity = quantity;
       }
 
-      saveCartToStorage(state.items);
-    },
-
-    clearCart: state => {
-      state.items = [];
-      saveCartToStorage([]);
+      persist(state);
     },
 
     incrementQuantity: (state, action) => {
       const item = state.items.find(i => i.id === action.payload);
+
       if (item) {
         item.quantity += 1;
       }
-      saveCartToStorage(state.items);
+
+      persist(state);
     },
 
     decrementQuantity: (state, action) => {
       const item = state.items.find(i => i.id === action.payload);
+
       if (item) {
         if (item.quantity > 1) {
           item.quantity -= 1;
@@ -78,8 +80,15 @@ const cartSlice = createSlice({
           state.items = state.items.filter(i => i.id !== action.payload);
         }
       }
-      saveCartToStorage(state.items);
+
+      persist(state);
+    },
+
+    clearCart: (state) => {
+      state.items = [];
+      localStorage.removeItem("cart"); 
     }
+
   }
 });
 

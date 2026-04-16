@@ -36,40 +36,23 @@ function AddAddressPage() {
   useEffect(() => {
     if (!existing) return;
 
-    let flat = "", area = "", city = "", district = "", state = "", pincode = "", landmark = "";
-
-    if (typeof existing.address === "string") {
-      const parts = existing.address.split(",");
-
-      flat = parts[0]?.trim() || "";
-      area = parts[1]?.trim() || "";
-      city = parts[2]?.trim() || "";
-      district = parts[3]?.trim() || "";
-
-      if (parts[4]) {
-        const [st, pin] = parts[4].split("-");
-        state = st?.trim() || "";
-        pincode = pin?.trim() || "";
-      }
-
-      if (parts.length > 5) {
-        landmark = parts.slice(5).join(",").trim();
-      }
-    }
+    const addr = typeof existing.address === "string"
+      ? {}
+      : existing.address;
 
     setForm({
       name: existing.name || "",
       phone: existing.phone || "",
       altPhone: "",
       showAlt: false,
-      flat,
-      area,
-      city,
-      district,
-      state,
-      pincode,
-      landmark,
-      showLandmark: !!landmark,
+      flat: addr.flat || "",
+      area: addr.area || "",
+      city: addr.city || "",
+      district: addr.district || "",
+      state: addr.state || "",
+      pincode: addr.pincode || "",
+      landmark: addr.landmark || "",
+      showLandmark: !!addr.landmark,
       type: existing.type || "Home"
     });
 
@@ -163,7 +146,15 @@ function AddAddressPage() {
       id: isEdit ? existing.id : Date.now(),
       name: form.name,
       phone: form.phone,
-      address: `${form.flat}, ${form.area}, ${form.city}, ${form.district}, ${form.state} - ${form.pincode}`,
+      address: {
+        flat: form.flat,
+        area: form.area,
+        city: form.city,
+        district: form.district,
+        state: form.state,
+        pincode: form.pincode,
+        landmark: form.landmark
+      },
       type: form.type
     };
 

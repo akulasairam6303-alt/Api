@@ -6,6 +6,7 @@ import {
 } from "./cartSlice";
 import { selectCartArray, selectCartTotalPrice } from "./cartSelectors";
 import { useNavigate } from "react-router-dom";
+import StepHeader from "../StepHeader/StepHeader";
 import "./cart.css";
 
 function CartPage() {
@@ -18,27 +19,7 @@ function CartPage() {
   return (
     <div className="cart-container">
 
-      <div className="step-header">
-        <div className="step completed">
-          <div className="step-circle">✓</div>
-          <span className="step-label">My Cart</span>
-        </div>
-
-        <div className="step active">
-          <div className="step-circle">2</div>
-          <span className="step-label">Address</span>
-        </div>
-
-        <div className="step">
-          <div className="step-circle">3</div>
-          <span className="step-label">Payment</span>
-        </div>
-
-        <div className="step">
-          <div className="step-circle">4</div>
-          <span className="step-label">Order Confirm</span>
-        </div>
-      </div>
+      <StepHeader currentStep={1} />
 
       <div className="nav-buttons">
         <button className="back-btn" onClick={() => navigate("/")}>

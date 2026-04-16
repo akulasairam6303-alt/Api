@@ -1,3 +1,11 @@
+.cart-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 0 16px;
+  font-family: Arial, sans-serif;
+}
+
 .checkout-container {
   display: flex;
   gap: 20px;

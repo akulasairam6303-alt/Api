@@ -1,0 +1,97 @@
+.cart-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 0 16px;
+  font-family: Arial, sans-serif;
+}
+
+.payment-box {
+  display: flex;
+  gap: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.left {
+  width: 25%;
+}
+
+.middle {
+  width: 40%;
+}
+
+.right {
+  width: 30%;
+  background: #fafafa;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.method {
+  padding: 12px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.method.active {
+  background: linear-gradient(to right, #6a1b9a, #2e0a3d);
+  color: white;
+}
+
+.radio {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.note {
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.continue {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(to right, #6a1b9a, #2e0a3d);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.summary-section h4 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.date {
+  font-size: 13px;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.price-row span {
+  font-size: 14px;
+}
+
+.price-row.green {
+  color: green;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-top: 10px;
+}

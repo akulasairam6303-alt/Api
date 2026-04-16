@@ -6,58 +6,6 @@
   font-family: Arial, sans-serif;
 }
 
-/* STEP HEADER */
-
-.step-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 25px;
-  gap: 28px;
-}
-
-.step {
-  display: flex;
-  align-items: center;
-}
-
-.step:not(:last-child)::after {
-  content: "";
-  width: 50px;
-  height: 2px;
-  background: #d1d5db;
-  margin: 0 10px;
-}
-
-.step-circle {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: #e5e7eb;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.step.active .step-circle {
-  background: #7e22ce;
-  color: white;
-}
-
-.step.completed .step-circle {
-  background: #16a34a;
-  color: white;
-}
-
-.step-label {
-  margin-left: 8px;
-  font-size: 14px;
-}
-
-/* NAV */
-
 .nav-buttons {
   display: flex;
   gap: 10px;
@@ -74,15 +22,11 @@
   font-size: 14px;
 }
 
-/* TITLE */
-
 .cart-title {
   margin-bottom: 20px;
   font-size: 22px;
   font-weight: 600;
 }
-
-/* EMPTY */
 
 .empty-cart {
   text-align: center;
@@ -90,23 +34,17 @@
   font-size: 16px;
 }
 
-/* LAYOUT */
-
 .checkout-layout {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 
-/* CART LIST */
-
 .cart-list {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
-
-/* CARD */
 
 .cart-card {
   display: grid;
@@ -118,8 +56,6 @@
   border-radius: 10px;
 }
 
-/* IMAGE */
-
 .cart-card img {
   width: 65px;
   height: 65px;
@@ -128,8 +64,6 @@
   border-radius: 8px;
   padding: 5px;
 }
-
-/* INFO */
 
 .cart-info h4 {
   font-size: 15px;
@@ -141,8 +75,6 @@
   font-size: 14px;
   margin-bottom: 8px;
 }
-
-/* QTY */
 
 .qty-controls {
   display: flex;
@@ -160,8 +92,6 @@
   font-size: 14px;
 }
 
-/* REMOVE */
-
 .remove-btn {
   background: #ef4444;
   color: white;
@@ -171,8 +101,6 @@
   cursor: pointer;
   font-size: 13px;
 }
-
-/* SUMMARY */
 
 .cart-summary {
   border-radius: 10px;
@@ -197,8 +125,6 @@
   cursor: pointer;
   font-size: 14px;
 }
-
-/* MOBILE */
 
 @media (max-width: 768px) {
   .cart-card {

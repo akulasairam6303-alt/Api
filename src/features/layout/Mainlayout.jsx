@@ -1,6 +1,6 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { FaShoppingCart, FaHeart } from "react-icons/fa";
+import { FaShoppingCart, FaHeart, FaBox } from "react-icons/fa";
 import { logout } from "../auth/authSlice";
 import "./layout.css";
 
@@ -26,6 +26,12 @@ function MainLayout() {
         <h2 className="logo">ECOMMERCE</h2>
 
         <div className="icon-container">
+
+          {/* 🆕 ORDERS */}
+          <Link to="/orders" className="icon">
+            <FaBox />
+          </Link>
+
           <Link to="/cart" className="icon">
             <FaShoppingCart />
             <span className="badge">{cartCount}</span>
@@ -39,6 +45,7 @@ function MainLayout() {
           <button className="logout-btn" onClick={handleLogout}>
             Logout
           </button>
+
         </div>
       </div>
 

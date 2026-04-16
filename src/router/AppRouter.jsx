@@ -12,6 +12,9 @@ const WishlistPage = lazy(() => import("../features/wishlist/WishlistPage"));
 const ProductTable = lazy(() => import("../features/products/ProductTable"));
 const AddressPage = lazy(() => import("../features/address/AddressPage"));
 const AddAddressPage = lazy(() => import("../features/address/AddAddress"));
+const PaymentPage = lazy(() => import("../features/Payment/PaymentPage")); 
+const OrderConfirmPage = lazy(() => import("../features/OrderConfirm/OrderConfirmPage"));
+const OrdersPage = lazy(() => import("../features/OrderConfirm/OrdersPage"));
 
 function AppRouter() {
   return (
@@ -31,6 +34,9 @@ function AppRouter() {
             <Route path="address" element={<AddressPage />} />
             <Route path="add-address" element={<AddAddressPage />} />
             <Route path="add-address/:id" element={<AddAddressPage />} />
+            <Route path="payment" element={<PaymentPage />} />
+            <Route path="order-confirm" element={<OrderConfirmPage />} />
+            <Route path="orders" element={<OrdersPage />} />
 
           </Route>
         </Route>
