@@ -1,0 +1,120 @@
+.upi-container {
+  padding: 10px 0;
+}
+
+.upi-container h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.sub-text {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.upi-apps {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.upi-app {
+  width: 64px;
+  height: 52px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.upi-app img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.upi-app:hover {
+  border-color: #6a1b9a;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.upi-app.active {
+  border-color: #6a1b9a;
+  background: #f3e5f5;
+}
+
+.divider {
+  text-align: center;
+  font-size: 13px;
+  color: #999;
+  margin: 15px 0;
+}
+
+.upi-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.upi-input-row input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+.upi-input-row input:focus {
+  border-color: #6a1b9a;
+}
+
+.verify-btn {
+  padding: 9px 12px;
+  font-size: 13px;
+  border: none;
+  background: #eee;
+  border-radius: 6px;
+  cursor: pointer;
+  text-transform: lowercase;
+}
+
+.verify-btn:hover {
+  background: #ddd;
+}
+
+.error {
+  font-size: 13px;
+  margin-bottom: 10px;
+  color: rgb(23, 197, 101);
+}
+
+.pay-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #4a148c, #7b1fa2);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pay-btn:hover {
+  opacity: 0.9;
+}
+
+.pay-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

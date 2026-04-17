@@ -23,8 +23,10 @@ function PaymentPage() {
   const [selectedMethod, setSelectedMethod] = useState("cod");
 
   const discount = Math.round(totalPrice * 0.5);
-  const platformFee = totalPrice > 500 ? 0 : 20;
-  const finalTotal = totalPrice - discount + platformFee;
+  const platformFee = totalPrice > 500 ? 0 : 40;
+  const codFee = selectedMethod === "cod" && totalPrice <= 500 ? 10 : 0;
+
+  const finalTotal = totalPrice - discount + platformFee + codFee;
 
   const deliveryDate = new Date();
   deliveryDate.setDate(deliveryDate.getDate() + 3);
@@ -148,6 +150,13 @@ function PaymentPage() {
             <span>Platform Fee</span>
             <span>₹{platformFee}</span>
           </div>
+
+          {selectedMethod === "cod" && (
+            <div className="price-row">
+              <span>COD Fee</span>
+              <span>₹{codFee}</span>
+            </div>
+          )}
 
           <hr />
 
