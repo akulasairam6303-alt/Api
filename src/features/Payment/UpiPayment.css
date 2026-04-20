@@ -94,9 +94,8 @@
 .error {
   font-size: 13px;
   margin-bottom: 10px;
-  color: rgb(23, 197, 101);
+  color: #d32f2f;
 }
-
 .pay-btn {
   width: 100%;
   padding: 12px;

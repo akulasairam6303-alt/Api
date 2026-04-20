@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import "./orders.css";
 
+const DEMO_MODE = false;
+
 function OrdersPage() {
   const [orders, setOrders] = useState([]);
 
@@ -26,16 +28,23 @@ function OrdersPage() {
     return parts.join(", ");
   };
 
+  
   const getStatus = (date, order) => {
     if (order.cancelled) return "Cancelled";
 
-    const orderTime = new Date(date).getTime();
-    const now = Date.now();
-    const diff = now - orderTime;
+    const diff = Date.now() - new Date(date).getTime();
+
+    if (DEMO_MODE) {
+      if (diff < 3000) return "Order Placed";
+      if (diff < 6000) return "Processing";
+      if (diff < 9000) return "Shipped";
+      return "Delivered";
+    }
 
     if (diff < 10000) return "Order Placed";
     if (diff < 24 * 60 * 60 * 1000) return "Processing";
     if (diff < 4 * 24 * 60 * 60 * 1000) return "Shipped";
+
     return "Delivered";
   };
 
@@ -47,26 +56,34 @@ function OrdersPage() {
     return "status green";
   };
 
+  
   const getCountdown = (date, order) => {
     if (order.cancelled) return "Cancelled";
 
+    const status = getStatus(date, order);
+    if (status === "Delivered") return "Delivered";
+
     const orderTime = new Date(date).getTime();
     const now = Date.now();
-    const diff = now - orderTime;
 
     let targetTime;
 
-    if (diff < 10000) {
-      targetTime = orderTime + 10000;
-    } else if (diff < 24 * 60 * 60 * 1000) {
-      targetTime = orderTime + 24 * 60 * 60 * 1000;
-    } else if (diff < 4 * 24 * 60 * 60 * 1000) {
-      targetTime = orderTime + 4 * 24 * 60 * 60 * 1000;
+    if (DEMO_MODE) {
+      if (status === "Order Placed") targetTime = orderTime + 3000;
+      else if (status === "Processing") targetTime = orderTime + 6000;
+      else if (status === "Shipped") targetTime = orderTime + 9000;
     } else {
-      return "Delivered";
+      if (status === "Order Placed") targetTime = orderTime + 10000;
+      else if (status === "Processing") targetTime = orderTime + 24 * 60 * 60 * 1000;
+      else if (status === "Shipped") targetTime = orderTime + 4 * 24 * 60 * 60 * 1000;
     }
 
     const remaining = targetTime - now;
+
+    if (DEMO_MODE) {
+      const seconds = Math.max(0, Math.floor(remaining / 1000));
+      return `${seconds}s`;
+    }
 
     const hours = Math.floor(remaining / (1000 * 60 * 60));
     const minutes = Math.floor((remaining / (1000 * 60)) % 60);
@@ -76,26 +93,32 @@ function OrdersPage() {
   };
 
   const canCancel = (date) => {
-    const orderTime = new Date(date).getTime();
-    const now = Date.now();
-    const diff = now - orderTime;
+    const diff = Date.now() - new Date(date).getTime();
+
+    if (DEMO_MODE) return diff < 5000;
 
     return diff <= 2 * 60 * 60 * 1000;
   };
 
   const getCancelRemaining = (date) => {
-    const orderTime = new Date(date).getTime();
-    const now = Date.now();
-    const diff = now - orderTime;
+    const diff = Date.now() - new Date(date).getTime();
 
-    const remaining = 2 * 60 * 60 * 1000 - diff;
+    let remaining;
 
-    if (remaining <= 0) return "Cancel window closed";
+    if (DEMO_MODE) {
+      remaining = 5000 - diff;
+    } else {
+      remaining = 2 * 60 * 60 * 1000 - diff;
+    }
+
+    if (remaining <= 0) return "Cancellation window closed";
 
     const minutes = Math.floor(remaining / (1000 * 60));
     const seconds = Math.floor((remaining / 1000) % 60);
 
-    return `Cancel available for ${minutes}m ${seconds}s`;
+    return DEMO_MODE
+      ? `Cancel in ${seconds}s`
+      : `Cancellation available upto ${minutes}m ${seconds}s`;
   };
 
   const handleCancel = (id) => {
@@ -128,7 +151,6 @@ function OrdersPage() {
 
   return (
     <div className="orders-container">
-
       <h2>Your Orders</h2>
 
       {orders.map(order => {
@@ -171,7 +193,6 @@ function OrdersPage() {
             </div>
 
             <div className="order-details">
-
               <div>
                 <h4>Shipping</h4>
                 <p>{order.address?.name}</p>
@@ -183,10 +204,9 @@ function OrdersPage() {
                 <h4>Payment</h4>
                 <p>{order.payment?.toUpperCase()}</p>
               </div>
-
             </div>
 
-            {!order.cancelled && (
+            {!order.cancelled && status !== "Delivered" && (
               <div className="order-actions">
 
                 <button
@@ -207,7 +227,6 @@ function OrdersPage() {
           </div>
         );
       })}
-
     </div>
   );
 }

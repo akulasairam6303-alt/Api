@@ -6,6 +6,8 @@ function UPIPayment({ amount, onSuccess }) {
   const [selectedApp, setSelectedApp] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [verified, setVerified] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
 
   const validateUPI = (upi) => {
     const regex = /^[a-zA-Z0-9.\-_]{2,}@[a-zA-Z]{2,}$/;
@@ -14,17 +16,16 @@ function UPIPayment({ amount, onSuccess }) {
 
   const handleAppSelect = (app) => {
     setSelectedApp(app);
-
-    if (app === "gpay") setUpiId("user@okaxis");
-    if (app === "phonepe") setUpiId("user@ybl");
-    if (app === "paytm") setUpiId("user@paytm");
-    if (app === "bhim") setUpiId("user@upi");
-
+    setUpiId("");
     setError("");
+    setVerified(false);
+    setSuccessMsg("");
   };
 
-  const handlePay = () => {
+  const handleVerify = () => {
     setError("");
+    setSuccessMsg("");
+    setVerified(false);
 
     if (!upiId) {
       setError("Enter UPI ID");
@@ -33,6 +34,16 @@ function UPIPayment({ amount, onSuccess }) {
 
     if (!validateUPI(upiId)) {
       setError("Invalid UPI ID");
+      return;
+    }
+
+    setVerified(true);
+    setSuccessMsg("UPI ID verified successfully");
+  };
+
+  const handlePay = () => {
+    if (!verified) {
+      setError("Please verify UPI ID first");
       return;
     }
 
@@ -98,25 +109,30 @@ function UPIPayment({ amount, onSuccess }) {
           type="text"
           placeholder="example@okicici"
           value={upiId}
-          onChange={(e) => setUpiId(e.target.value)}
-        />
-        <button
-          className="verify-btn"
-          onClick={() => {
-            if (!validateUPI(upiId)) {
-              setError("Invalid UPI ID");
-            } else {
-              setError("UPI ID looks good");
-            }
+          onChange={(e) => {
+            setUpiId(e.target.value);
+            setVerified(false);
+            setSuccessMsg("");
           }}
-        >
+        />
+        <button className="verify-btn" onClick={handleVerify}>
           verify
         </button>
       </div>
 
       {error && <p className="error">{error}</p>}
 
-      <button className="pay-btn" onClick={handlePay} disabled={loading}>
+      {successMsg && (
+        <p style={{ color: "green", fontSize: "13px", marginBottom: "10px" }}>
+          {successMsg}
+        </p>
+      )}
+
+      <button
+        className="pay-btn"
+        onClick={handlePay}
+        disabled={!verified || loading}
+      >
         {loading ? "Processing..." : `Pay ₹${amount}`}
       </button>
     </div>

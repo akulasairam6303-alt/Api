@@ -1,0 +1,89 @@
+.emi-box {
+  max-width: 420px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.emi-box h3 {
+  margin-bottom: 15px;
+}
+
+/* FORM GROUP */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #555;
+  font-weight: 500;
+}
+
+/* SELECT */
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fafafa;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #4b1e6d;
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(75, 30, 109, 0.1);
+}
+
+/* SUMMARY BOX */
+.emi-summary {
+  background: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 15px 0;
+  font-size: 14px;
+}
+
+.emi-summary p {
+  margin: 5px 0;
+}
+
+/* HIGHLIGHT VALUES */
+.emi-summary strong {
+  color: #333;
+}
+
+/* BUTTON */
+.emi-btn {
+  width: 100%;
+  padding: 12px;
+  background: #4b1e6d;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.emi-btn:hover {
+  background: #3a1653;
+}
+
+.emi-btn:active {
+  transform: scale(0.98);
+}
+
+.emi-btn:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
