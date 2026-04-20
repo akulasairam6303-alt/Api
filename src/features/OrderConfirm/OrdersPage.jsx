@@ -28,7 +28,6 @@ function OrdersPage() {
     return parts.join(", ");
   };
 
-  
   const getStatus = (date, order) => {
     if (order.cancelled) return "Cancelled";
 
@@ -56,7 +55,6 @@ function OrdersPage() {
     return "status green";
   };
 
-  
   const getCountdown = (date, order) => {
     if (order.cancelled) return "Cancelled";
 
@@ -176,7 +174,7 @@ function OrdersPage() {
               </div>
 
               <div className="order-total">
-                ₹{order.total}
+                ₹{order.total?.toFixed(2)}
               </div>
             </div>
 

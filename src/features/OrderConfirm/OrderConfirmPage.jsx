@@ -36,7 +36,6 @@ function OrderConfirmPage() {
 
       setStage(newStage);
 
-      // ✅ STORE REAL DELIVERY TIME
       if (newStage === 4 && !stored.deliveredAt) {
         stored.deliveredAt = new Date().toISOString();
         localStorage.setItem("currentOrder", JSON.stringify(stored));
@@ -54,7 +53,6 @@ function OrderConfirmPage() {
     return <div className="cart-container">No Order Found</div>;
   }
 
-  // ✅ REAL DELIVERY DATE LOGIC
   const deliveryDate = order.deliveredAt
     ? new Date(order.deliveredAt)
     : new Date(order.date);
@@ -196,29 +194,30 @@ function OrderConfirmPage() {
                 <>
                   <p>UPI (Paid)</p>
                   <p>Transaction ID: {order.transactionId}</p>
-                  <p>Paid ₹{order.total} successfully.</p>
+                  <p>Paid ₹{order.total?.toFixed(2)} successfully.</p>
                 </>
               ) : order.payment === "card" ? (
                 <>
                   <p>Card Payment (Paid)</p>
                   <p>Transaction ID: {order.transactionId}</p>
-                  <p>Paid ₹{order.total} successfully.</p>
+                  <p>Paid ₹{order.total?.toFixed(2)} successfully.</p>
                 </>
               ) : order.payment === "emi" ? (
                 <>
                   <p>EMI Payment</p>
                   <p>
-                    ₹{order.emiPlan?.monthly}/month × {order.emiPlan?.months}
+                    ₹{order.emiPlan?.monthly?.toFixed(2)}/month × {order.emiPlan?.months}
                   </p>
                   <p>Bank: {order.emiPlan?.bank}</p>
-                  <p>Total: ₹{order.emiPlan?.total}</p>
+                  <p>Total: ₹{order.emiPlan?.total?.toFixed(2)}</p>
                 </>
               ) : (
                 <>
                   <p>COD - Cash on Delivery</p>
-                  <p>Pay ₹{order.total} when your order is delivered.</p>
+                  <p>Pay ₹{order.total?.toFixed(2)} when your order is delivered.</p>
                 </>
               )}
+
             </div>
 
             <div>

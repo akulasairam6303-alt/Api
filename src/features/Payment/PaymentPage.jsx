@@ -44,7 +44,7 @@ function PaymentPage() {
         id: Date.now(),
         items: cartItems,
         address: selected,
-        total: finalTotal,
+        total: Number(finalTotal.toFixed(2)),
         payment: method,
         transactionId:
           extra?.upiId ||
@@ -122,7 +122,7 @@ function PaymentPage() {
 
           {selectedMethod === "upi" && (
             <UPIPayment
-              amount={finalTotal}
+              amount={Number(finalTotal.toFixed(2))}
               onSuccess={(res) =>
                 processPayment("upi", {
                   upiId: res?.razorpay_payment_id,
@@ -140,7 +140,7 @@ function PaymentPage() {
 
           {selectedMethod === "emi" && (
             <EmiPayment
-              amount={finalTotal}
+              amount={Number(finalTotal.toFixed(2))}
               loading={loading}
               onSuccess={(emiData) =>
                 processPayment("emi", emiData)
@@ -156,23 +156,23 @@ function PaymentPage() {
 
           <div className="price-row">
             <span>Price</span>
-            <span>₹{totalPrice}</span>
+            <span>₹{totalPrice.toFixed(2)}</span>
           </div>
 
           <div className="price-row green">
             <span>Discount</span>
-            <span>-₹{discount}</span>
+            <span>-₹{discount.toFixed(2)}</span>
           </div>
 
           <div className="price-row">
             <span>Platform Fee</span>
-            <span>₹{platformFee}</span>
+            <span>₹{platformFee.toFixed(2)}</span>
           </div>
 
           {selectedMethod === "cod" && (
             <div className="price-row">
               <span>COD Fee</span>
-              <span>₹{codFee}</span>
+              <span>₹{codFee.toFixed(2)}</span>
             </div>
           )}
 
@@ -180,7 +180,7 @@ function PaymentPage() {
 
           <div className="total">
             <span>Total</span>
-            <span>₹{finalTotal}</span>
+            <span>₹{finalTotal.toFixed(2)}</span>
           </div>
         </div>
 
