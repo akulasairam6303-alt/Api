@@ -125,7 +125,7 @@ function PaymentPage() {
               amount={Number(finalTotal.toFixed(2))}
               onSuccess={(res) =>
                 processPayment("upi", {
-                  upiId: res?.razorpay_payment_id,
+                   upiId: res?.upiId,
                 })
               }
             />

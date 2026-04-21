@@ -148,7 +148,7 @@ function AddressPage() {
 
           <div className="total">
             <span>Total Amount</span>
-            <span>₹{finalTotal}</span>
+            <span>₹{finalTotal?.toFixed(2)}</span>
           </div>
 
           <button

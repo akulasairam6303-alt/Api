@@ -55,6 +55,8 @@ function UPIPayment({ amount, onSuccess }) {
         method: "upi",
         amount,
         status: "success",
+        upiId: upiId,
+        app: selectedApp,
       };
 
       setLoading(false);
