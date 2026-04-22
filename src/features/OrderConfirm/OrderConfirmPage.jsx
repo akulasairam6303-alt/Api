@@ -3,13 +3,19 @@ import StepHeader from "../StepHeader/StepHeader";
 import "./OrderConfirm.css";
 import { useNavigate } from "react-router-dom";
 
-const DEMO_MODE = false;
+import {
+  getStage,
+  getStatusText,
+  getStatusClass,
+  formatAddress,
+  getDeliveryDate,
+  getDeliveryMessage
+} from "./OrderLogic";
 
 function OrderConfirmPage() {
   const [order, setOrder] = useState(null);
   const [stage, setStage] = useState(1);
 
-  
   const [redirecting, setRedirecting] = useState(true);
   const [countdown, setCountdown] = useState(4);
 
@@ -19,7 +25,6 @@ function OrderConfirmPage() {
     const stored = JSON.parse(localStorage.getItem("currentOrder"));
     setOrder(stored);
   }, []);
-
 
   useEffect(() => {
     if (!redirecting) return;
@@ -36,27 +41,12 @@ function OrderConfirmPage() {
     return () => clearTimeout(timer);
   }, [countdown, redirecting, navigate]);
 
-
   useEffect(() => {
     const updateStage = () => {
       const stored = JSON.parse(localStorage.getItem("currentOrder"));
       if (!stored) return;
 
-      const diff = Date.now() - new Date(stored.date).getTime();
-
-      let newStage;
-
-      if (DEMO_MODE) {
-        if (diff < 3000) newStage = 1;
-        else if (diff < 6000) newStage = 2;
-        else if (diff < 9000) newStage = 3;
-        else newStage = 4;
-      } else {
-        if (diff < 10000) newStage = 1;
-        else if (diff < 24 * 60 * 60 * 1000) newStage = 2;
-        else if (diff < 4 * 24 * 60 * 60 * 1000) newStage = 3;
-        else newStage = 4;
-      }
+      const newStage = getStage(stored.date);
 
       setStage(newStage);
 
@@ -76,56 +66,9 @@ function OrderConfirmPage() {
     return <div className="cart-container">No Order Found</div>;
   }
 
-  const deliveryDate = order.deliveredAt
-    ? new Date(order.deliveredAt)
-    : new Date(order.date);
+  const deliveryDate = getDeliveryDate(order.date, order.deliveredAt);
 
-  if (!order.deliveredAt) {
-    deliveryDate.setDate(deliveryDate.getDate() + 3);
-  }
-
-  const formatAddress = (addr) => {
-    if (!addr) return "";
-    const a = addr.address || addr;
-
-    return [
-      a.flat,
-      a.area,
-      a.city,
-      a.district,
-      a.state,
-      a.pincode && `- ${a.pincode}`
-    ]
-      .filter(Boolean)
-      .join(", ");
-  };
-
-  const getStatusText = () => {
-    if (stage === 1) return "Order Placed";
-    if (stage === 2) return "Preparing your order";
-    if (stage === 3) return "Out for delivery";
-    return "Delivered";
-  };
-
-  const getStatusClass = () => {
-    if (stage === 1) return "status gray";
-    if (stage === 2) return "status orange";
-    if (stage === 3) return "status blue";
-    return "status green";
-  };
-
-  const getDeliveryMessage = () => {
-    const now = new Date();
-    const diffTime = deliveryDate - now;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    if (stage === 4) return "Arrived";
-    if (diffDays <= 0) return "Arriving Today";
-    if (diffDays === 1) return "Arriving Tomorrow";
-    if (diffDays <= 5) return `Arriving in ${diffDays} days`;
-
-    return `Expected by ${deliveryDate.toDateString()}`;
-  };
+  const message = getDeliveryMessage(stage, deliveryDate);
 
   return (
     <div className="cart-container">
@@ -133,7 +76,6 @@ function OrderConfirmPage() {
 
       <div className="order-box">
 
-        
         {order.payment !== "cod" ? (
           <div className="success-banner">
             <div className="success-icon">✓</div>
@@ -171,15 +113,14 @@ function OrderConfirmPage() {
         <h2>Thank you for your order</h2>
         <p className="order-id">Order ID # {order.id}</p>
 
-        <p className={getStatusClass()}>
-          {getStatusText()}
+        <p className={getStatusClass(getStatusText(stage))}>
+          {getStatusText(stage)}
         </p>
 
         <p className="countdown">
-          {getDeliveryMessage()}
+          {message}
         </p>
 
-       
         <div className="tracker">
           <div className={`track ${stage >= 1 ? "done" : ""}`}>
             <div className="dot"></div>
@@ -208,7 +149,6 @@ function OrderConfirmPage() {
           </div>
         </div>
 
-    
         <div className="info-box">
           <p className="note">
             You’ll receive shipping updates as your order progresses.
@@ -237,15 +177,35 @@ function OrderConfirmPage() {
             <div>
               <h4>Payment Details</h4>
 
-              {order.payment === "cod" ? (
+              {order.payment === "upi" && (
+                <>
+                  <p>UPI</p>
+                  <p>UPI ID: {order.transactionId}</p>
+                  <p>Paid ₹{order.total?.toFixed(2)}</p>
+                </>
+              )}
+
+              {order.payment === "card" && (
+                <>
+                  <p>Card</p>
+                  <p>Transaction ID: {order.transactionId}</p>
+                  <p>Paid ₹{order.total?.toFixed(2)}</p>
+                </>
+              )}
+
+              {order.payment === "emi" && (
+                <>
+                  <p>EMI</p>
+                  <p>Transaction ID: {order.transactionId}</p>
+                  <p>{order.emiPlan?.months} months plan</p>
+                  <p>Paid ₹{order.total?.toFixed(2)}</p>
+                </>
+              )}
+
+              {order.payment === "cod" && (
                 <>
                   <p>Cash on Delivery</p>
                   <p>Pay ₹{order.total?.toFixed(2)} at delivery</p>
-                </>
-              ) : (
-                <>
-                  <p>Upi Id: {order.transactionId}</p>
-                  <p>Paid ₹{order.total?.toFixed(2)}</p>
                 </>
               )}
             </div>

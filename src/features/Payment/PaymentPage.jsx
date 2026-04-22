@@ -7,6 +7,7 @@ import StepHeader from "../StepHeader/StepHeader";
 import UPIPayment from "./UPIPayment";
 import CardPayment from "./CardPayment";
 import EmiPayment from "./EmiPayment";
+import { getDeliveryDate } from "../OrderConfirm/OrderLogic"; 
 import "./payment.css";
 
 function PaymentPage() {
@@ -31,8 +32,7 @@ function PaymentPage() {
 
   const finalTotal = totalPrice - discount + platformFee + codFee;
 
-  const deliveryDate = new Date();
-  deliveryDate.setDate(deliveryDate.getDate() + 3);
+  const deliveryDate = getDeliveryDate();
 
   const processPayment = (method, extra = {}) => {
     if (cartItems.length === 0 || !selected) return;

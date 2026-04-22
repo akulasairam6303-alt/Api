@@ -4,6 +4,7 @@ import { selectCartArray, selectCartTotalPrice } from "../cart/cartSelectors";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import StepHeader from "../StepHeader/StepHeader";
+import { getDeliveryDate } from "../OrderConfirm/OrderLogic";
 import "./address.css";
 
 function AddressPage() {
@@ -25,8 +26,7 @@ function AddressPage() {
   const platformFee = totalPrice > 500 ? 0 : 40;
   const finalTotal = totalPrice - discount + platformFee;
 
-  const deliveryDate = new Date();
-  deliveryDate.setDate(deliveryDate.getDate() + 3);
+ const deliveryDate = getDeliveryDate();
 
   const [showPopup, setShowPopup] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
