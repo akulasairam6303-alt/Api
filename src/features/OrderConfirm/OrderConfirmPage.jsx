@@ -36,7 +36,7 @@ function OrderConfirmPage() {
 
     const timer = setTimeout(() => {
       setCountdown((prev) => prev - 1);
-    }, 1000);
+    },20000);
 
     return () => clearTimeout(timer);
   }, [countdown, redirecting, navigate]);
