@@ -12,14 +12,35 @@ function CardPayment({ onSuccess, loading }) {
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" });
+    let { name, value } = e.target;
+
+    if (name === "number") {
+      value = value.replace(/\D/g, "").slice(0, 16);
+    }
+
+    if (name === "cvv") {
+      value = value.replace(/\D/g, "").slice(0, 3);
+    }
+
+    setData({ ...data, [name]: value });
+    setErrors({ ...errors, [name]: "" });
+  };
+
+  const handleExpiryChange = (e) => {
+    let value = e.target.value.replace(/\D/g, "");
+
+    if (value.length >= 3) {
+      value = value.slice(0, 2) + "/" + value.slice(2, 4);
+    }
+
+    setData({ ...data, expiry: value });
+    setErrors({ ...errors, expiry: "" });
   };
 
   const validate = () => {
     const newErrors = {};
 
-    if (!data.number || data.number.length < 16) {
+    if (data.number.length !== 16) {
       newErrors.number = "Enter valid 16-digit card number";
     }
 
@@ -27,22 +48,35 @@ function CardPayment({ onSuccess, loading }) {
       newErrors.name = "Enter valid card holder name";
     }
 
-    if (!data.expiry || !/^\d{2}\/\d{2}$/.test(data.expiry)) {
+    if (!/^\d{2}\/\d{2}$/.test(data.expiry)) {
       newErrors.expiry = "Enter valid expiry (MM/YY)";
+    } else {
+      const [month, year] = data.expiry.split("/").map(Number);
+
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear() % 100;
+      const currentMonth = currentDate.getMonth() + 1;
+
+      if (month < 1 || month > 12) {
+        newErrors.expiry = "Invalid month";
+      } else if (
+        year < currentYear ||
+        (year === currentYear && month < currentMonth)
+      ) {
+        newErrors.expiry = "Card has expired";
+      }
     }
 
-    if (!data.cvv || data.cvv.length < 3) {
-      newErrors.cvv = "Enter valid CVV";
+    if (!/^\d{3}$/.test(data.cvv)) {
+      newErrors.cvv = "CVV must be exactly 3 digits";
     }
 
     setErrors(newErrors);
-
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = () => {
     if (!validate()) return;
-
     onSuccess();
   };
 
@@ -79,7 +113,8 @@ function CardPayment({ onSuccess, loading }) {
             name="expiry"
             placeholder="MM/YY"
             value={data.expiry}
-            onChange={handleChange}
+            maxLength={5}
+            onChange={handleExpiryChange}
           />
           {errors.expiry && <p className="error">{errors.expiry}</p>}
         </div>
@@ -90,6 +125,7 @@ function CardPayment({ onSuccess, loading }) {
             name="cvv"
             placeholder="CVV"
             value={data.cvv}
+            maxLength={3}
             onChange={handleChange}
           />
           {errors.cvv && <p className="error">{errors.cvv}</p>}

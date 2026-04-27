@@ -26,7 +26,7 @@ function PaymentPage() {
   const [selectedMethod, setSelectedMethod] = useState("cod");
   const [loading, setLoading] = useState(false);
 
-  const discount = Math.round(totalPrice * 0.5);
+  const discount = Math.round(totalPrice * 0.3);
   const platformFee = totalPrice > 500 ? 0 : 40;
   const codFee = selectedMethod === "cod" && totalPrice <= 500 ? 10 : 0;
 
@@ -151,8 +151,8 @@ function PaymentPage() {
         </div>
 
         <div className="summary-section">
-          <h4>ESTIMATED DELIVERY</h4>
-          <p>{deliveryDate.toDateString()}</p>
+          <h4>ESTIMATED DELIVERY TIME</h4>
+          <p className="date">{deliveryDate.toDateString()}</p>
 
           <div className="price-row">
             <span>Price</span>
@@ -179,7 +179,7 @@ function PaymentPage() {
           <hr />
 
           <div className="total">
-            <span>Total</span>
+            <span>Total Price</span>
             <span>₹{finalTotal.toFixed(2)}</span>
           </div>
         </div>

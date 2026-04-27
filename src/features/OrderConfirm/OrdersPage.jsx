@@ -9,13 +9,13 @@ import {
   getCountdown,
   canCancel,
   getCancelRemaining
-} from "../OrderConfirm/OrderLogic";
+} from "../OrderConfirm/OrderLogic";     
 
 function OrdersPage() {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState([]);   
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("orders")) || [];
+    const stored = JSON.parse(localStorage.getItem("orders")) || [];  
     setOrders([...stored].reverse());
   }, []);
 
@@ -27,13 +27,13 @@ function OrdersPage() {
     );
 
     localStorage.setItem("orders", JSON.stringify(updated));
-    setOrders([...updated].reverse());
+    setOrders([...updated].reverse());   
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setOrders(prev => [...prev]);
-    }, 1000);
+    const interval = setInterval(() => {   
+      setOrders(prev => [...prev]);  
+    }, 1000);   
 
     return () => clearInterval(interval);
   }, []);
@@ -54,8 +54,8 @@ function OrdersPage() {
       {orders.map(order => {
         const stage = getStage(order.date);
         const status = order.cancelled
-          ? "Cancelled"
-          : getStatusText(stage);
+          ? "Cancelled"   
+          : getStatusText(stage);   
 
         return (
           <div key={order.id} className="order-card">
@@ -64,7 +64,7 @@ function OrdersPage() {
               <div>
                 <p className="order-id">Order ID: {order.id}</p>
                 <p className="order-date">
-                  {new Date(order.date).toLocaleString()}
+                  {new Date(order.date).toLocaleString()}  
                 </p>
 
                 <p className={getStatusClass(status)}>

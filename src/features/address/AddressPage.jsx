@@ -22,7 +22,7 @@ function AddressPage() {
   const cartItems = useSelector(selectCartArray);
   const totalPrice = useSelector(selectCartTotalPrice);
 
-  const discount = Math.round(totalPrice * 0.5);
+  const discount = Math.round(totalPrice * 0.3);
   const platformFee = totalPrice > 500 ? 0 : 40;
   const finalTotal = totalPrice - discount + platformFee;
 

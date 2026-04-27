@@ -21,33 +21,37 @@ function OrderConfirmPage() {
 
   const navigate = useNavigate();
 
+  // Load order
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("currentOrder"));
     setOrder(stored);
   }, []);
 
+  // ✅ FIXED TIMER (clean + predictable)
   useEffect(() => {
     if (!redirecting) return;
 
-    if (countdown === 0) {
-      navigate("/");
-      return;
-    }
+    const interval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          navigate("/");
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
 
-    const timer = setTimeout(() => {
-      setCountdown((prev) => prev - 1);
-    },20000);
+    return () => clearInterval(interval);
+  }, [redirecting, navigate]);
 
-    return () => clearTimeout(timer);
-  }, [countdown, redirecting, navigate]);
-
+  // Order stage tracking
   useEffect(() => {
     const updateStage = () => {
       const stored = JSON.parse(localStorage.getItem("currentOrder"));
       if (!stored) return;
 
       const newStage = getStage(stored.date);
-
       setStage(newStage);
 
       if (newStage === 4 && !stored.deliveredAt) {
@@ -67,7 +71,6 @@ function OrderConfirmPage() {
   }
 
   const deliveryDate = getDeliveryDate(order.date, order.deliveredAt);
-
   const message = getDeliveryMessage(stage, deliveryDate);
 
   return (
@@ -117,9 +120,7 @@ function OrderConfirmPage() {
           {getStatusText(stage)}
         </p>
 
-        <p className="countdown">
-          {message}
-        </p>
+        <p className="countdown">{message}</p>
 
         <div className="tracker">
           <div className={`track ${stage >= 1 ? "done" : ""}`}>
