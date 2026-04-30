@@ -27,7 +27,7 @@ function StepHeader({ currentStep }) {
             className={`step ${status}`}
             onClick={() => {
               if (stepNumber < currentStep) {
-                navigate(step.path);
+                navigate(step.path);   
               }
             }}
           >

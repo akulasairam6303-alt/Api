@@ -21,13 +21,13 @@ function OrderConfirmPage() {
 
   const navigate = useNavigate();
 
-  // Load order
+  
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("currentOrder"));
     setOrder(stored);
   }, []);
 
-  // ✅ FIXED TIMER (clean + predictable)
+  
   useEffect(() => {
     if (!redirecting) return;
 
@@ -45,16 +45,16 @@ function OrderConfirmPage() {
     return () => clearInterval(interval);
   }, [redirecting, navigate]);
 
-  // Order stage tracking
+  
   useEffect(() => {
     const updateStage = () => {
       const stored = JSON.parse(localStorage.getItem("currentOrder"));
       if (!stored) return;
 
-      const newStage = getStage(stored.date);
+      const newStage = getStage(stored.date);     
       setStage(newStage);
 
-      if (newStage === 4 && !stored.deliveredAt) {
+      if (newStage === 4 && !stored.deliveredAt) {  
         stored.deliveredAt = new Date().toISOString();
         localStorage.setItem("currentOrder", JSON.stringify(stored));
         setOrder(stored);
@@ -62,7 +62,7 @@ function OrderConfirmPage() {
     };
 
     updateStage();
-    const interval = setInterval(updateStage, 1000);
+    const interval = setInterval(updateStage, 10000);  
     return () => clearInterval(interval);
   }, []);
 
@@ -116,7 +116,7 @@ function OrderConfirmPage() {
         <h2>Thank you for your order</h2>
         <p className="order-id">Order ID # {order.id}</p>
 
-        <p className={getStatusClass(getStatusText(stage))}>
+        <p className={getStatusClass(getStatusText(stage))}>  
           {getStatusText(stage)}
         </p>
 

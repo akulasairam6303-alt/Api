@@ -7,7 +7,7 @@ import StepHeader from "../StepHeader/StepHeader";
 import UPIPayment from "./UPIPayment";
 import CardPayment from "./CardPayment";
 import EmiPayment from "./EmiPayment";
-import { getDeliveryDate } from "../OrderConfirm/OrderLogic"; 
+import { getDeliveryDate } from "../OrderConfirm/OrderLogic";
 import "./payment.css";
 
 function PaymentPage() {
@@ -21,7 +21,10 @@ function PaymentPage() {
     (state) => state.address
   );
 
-  const selected = addresses.find((a) => a.id === selectedAddressId);
+
+  const selected = addresses.find(
+    (a) => String(a.id) === String(selectedAddressId)
+  );
 
   const [selectedMethod, setSelectedMethod] = useState("cod");
   const [loading, setLoading] = useState(false);
@@ -31,38 +34,67 @@ function PaymentPage() {
   const codFee = selectedMethod === "cod" && totalPrice <= 500 ? 10 : 0;
 
   const finalTotal = totalPrice - discount + platformFee + codFee;
-
   const deliveryDate = getDeliveryDate();
 
   const processPayment = (method, extra = {}) => {
-    if (cartItems.length === 0 || !selected) return;
+    
+    console.log("PROCESS PAYMENT:", {
+      cartItems,
+      selected,
+      selectedAddressId,
+    });
+
+    if (loading) return;
+
+    if (cartItems.length === 0) {
+      alert("Cart is empty");
+      return;
+    }
+
+    if (!selected) {
+      alert("No address selected");
+      return;
+    }
 
     setLoading(true);
 
     setTimeout(() => {
-      const newOrder = {
-        id: Date.now(),
-        items: cartItems,
-        address: selected,
-        total: Number(finalTotal.toFixed(2)),
-        payment: method,
-        transactionId:
-          extra?.upiId ||
-          "TXN" + Math.floor(Math.random() * 1000000),
-        emiPlan: method === "emi" ? extra : null,
-        date: new Date().toISOString(),
-      };
+      try {
+        const newOrder = {
+          id: Date.now(),
+          items: [...cartItems],
 
-      const existingOrders =
-        JSON.parse(localStorage.getItem("orders")) || [];
+          
+          address: selected,
 
-      existingOrders.push(newOrder);
+          total: Number(finalTotal.toFixed(2)),
+          payment: method,
 
-      localStorage.setItem("orders", JSON.stringify(existingOrders));
-      localStorage.setItem("currentOrder", JSON.stringify(newOrder));
+          transactionId:
+            extra?.upiId ||
+            "TXN" + Math.floor(Math.random() * 1000000),
 
-      dispatch(clearCart());
-      navigate("/order-confirm");
+          emiPlan: method === "emi" ? extra : null,
+          date: new Date().toISOString(),
+        };
+
+        const existingOrders =
+          JSON.parse(localStorage.getItem("orders")) || [];
+
+        existingOrders.push(newOrder);
+
+        localStorage.setItem("orders", JSON.stringify(existingOrders));
+        localStorage.setItem("currentOrder", JSON.stringify(newOrder));
+
+        dispatch(clearCart());
+
+        navigate("/order-confirm");
+      } catch (err) {
+        console.error("ORDER ERROR:", err);
+        alert("Something went wrong");
+      } finally {
+        setLoading(false);
+      }
     }, 800);
   };
 
@@ -71,51 +103,40 @@ function PaymentPage() {
       <StepHeader currentStep={3} />
 
       <div className="payment-box">
-
         <div className="left">
           <h3>Choose Payment Mode</h3>
 
-          <div
-            className={`method ${selectedMethod === "cod" ? "active" : ""}`}
-            onClick={() => setSelectedMethod("cod")}
-          >
-            Cash On Delivery
-          </div>
-
-          <div
-            className={`method ${selectedMethod === "upi" ? "active" : ""}`}
-            onClick={() => setSelectedMethod("upi")}
-          >
-            UPI
-          </div>
-
-          <div
-            className={`method ${selectedMethod === "card" ? "active" : ""}`}
-            onClick={() => setSelectedMethod("card")}
-          >
-            Credit / Debit Cards
-          </div>
-
-          <div
-            className={`method ${selectedMethod === "emi" ? "active" : ""}`}
-            onClick={() => setSelectedMethod("emi")}
-          >
-            EMI Options
-          </div>
+          {["cod", "upi", "card", "emi"].map((method) => (
+            <div
+              key={method}
+              className={`method ${
+                selectedMethod === method ? "active" : ""
+              }`}
+              onClick={() => setSelectedMethod(method)}
+            >
+              {method.toUpperCase()}
+            </div>
+          ))}
         </div>
 
         <div className="middle">
-
           {selectedMethod === "cod" && (
             <>
               <h3>Cash On Delivery</h3>
-              <p className="note">₹10 fee applicable</p>
+
+              
+              <p className="note">
+                {totalPrice <= 500
+                  ? "₹10 fee applicable"
+                  : "No COD fee"}
+              </p>
 
               <button
                 className="continue"
+                disabled={!selected || cartItems.length === 0 || loading}
                 onClick={() => processPayment("cod")}
               >
-                Place Order
+                {loading ? "Processing..." : "Place Order"}
               </button>
             </>
           )}
@@ -125,7 +146,7 @@ function PaymentPage() {
               amount={Number(finalTotal.toFixed(2))}
               onSuccess={(res) =>
                 processPayment("upi", {
-                   upiId: res?.upiId,
+                  upiId: res?.upiId,
                 })
               }
             />
@@ -147,9 +168,9 @@ function PaymentPage() {
               }
             />
           )}
-
         </div>
 
+        
         <div className="summary-section">
           <h4>ESTIMATED DELIVERY TIME</h4>
           <p className="date">{deliveryDate.toDateString()}</p>
@@ -160,7 +181,7 @@ function PaymentPage() {
           </div>
 
           <div className="price-row green">
-            <span>Discount</span>
+            <span>Discount (30%)</span>
             <span>-₹{discount.toFixed(2)}</span>
           </div>
 
@@ -183,7 +204,6 @@ function PaymentPage() {
             <span>₹{finalTotal.toFixed(2)}</span>
           </div>
         </div>
-
       </div>
     </div>
   );

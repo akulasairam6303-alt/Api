@@ -22,8 +22,8 @@ function CardPayment({ onSuccess, loading }) {
       value = value.replace(/\D/g, "").slice(0, 3);
     }
 
-    setData({ ...data, [name]: value });
-    setErrors({ ...errors, [name]: "" });
+    setData(prev => ({ ...prev, [name]: value }));
+    setErrors(prev => ({ ...prev, [name]: "" }));
   };
 
   const handleExpiryChange = (e) => {
@@ -33,8 +33,8 @@ function CardPayment({ onSuccess, loading }) {
       value = value.slice(0, 2) + "/" + value.slice(2, 4);
     }
 
-    setData({ ...data, expiry: value });
-    setErrors({ ...errors, expiry: "" });
+    setData(prev => ({ ...prev, expiry: value }));
+    setErrors(prev => ({ ...prev, expiry: "" }));
   };
 
   const validate = () => {

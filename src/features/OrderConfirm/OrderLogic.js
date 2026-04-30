@@ -1,6 +1,6 @@
 const DEMO_MODE = false;
 
-export const getDeliveryMessage = (stage, deliveryDate) => {
+export const getDeliveryMessage = (stage, deliveryDate) => {  
   const now = new Date();
   const diffTime = deliveryDate - now;
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -10,7 +10,7 @@ export const getDeliveryMessage = (stage, deliveryDate) => {
   if (diffDays === 1) return "Arriving Tomorrow";
   if (diffDays <= 5) return `Arriving in ${diffDays} days`;
 
-  return `Expected by ${deliveryDate.toDateString()}`;
+  return `Expected by ${deliveryDate.toDateString()}`;  
 };
 
 export const getDeliveryDate = (date, deliveredAt) => {

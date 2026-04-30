@@ -10,7 +10,7 @@ const emiData = {
 };
 
 function EmiPayment({ amount, onSuccess, loading }) {
-  const banks = Object.keys(emiData);
+  const banks = Object.keys(emiData);  
   const plans = [3, 6, 9, 12];
 
   const [bank, setBank] = useState("HDFC");
@@ -78,7 +78,7 @@ function EmiPayment({ amount, onSuccess, loading }) {
         }
         disabled={loading}
       >
-        {loading ? "Processing..." : "Continue"}
+        {loading ? "Processing..." : "Pay with EMI"}
       </button>
     </div>
   );

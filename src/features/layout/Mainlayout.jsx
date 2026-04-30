@@ -27,7 +27,6 @@ function MainLayout() {
 
         <div className="icon-container">
 
-          {/* 🆕 ORDERS */}
           <Link to="/orders" className="icon">
             <FaBox />
           </Link>

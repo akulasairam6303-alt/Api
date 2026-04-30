@@ -10,7 +10,7 @@ function UPIPayment({ amount, onSuccess }) {
   const [successMsg, setSuccessMsg] = useState("");
 
   const validateUPI = (upi) => {
-    const regex = /^[a-zA-Z0-9.\-_]{2,}@[a-zA-Z]{2,}$/;
+    const regex = /^[a-zA-Z0-9]{2,}@[a-zA-Z]{2,}$/;
     return regex.test(upi);
   };
 
@@ -133,9 +133,9 @@ function UPIPayment({ amount, onSuccess }) {
       <button
         className="pay-btn"
         onClick={handlePay}
-        disabled={!verified || loading}
+        disabled={!verified || loading}  
       >
-        {loading ? "Processing..." : `Pay ₹${amount}`}
+        {loading ? "Processing..." : `Pay ₹${amount}`} 
       </button>
     </div>
   );

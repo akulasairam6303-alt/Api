@@ -105,7 +105,7 @@ function OrdersPage() {
 
               <div>
                 <h4>Payment</h4>
-                <p>{order.payment?.toUpperCase()}</p>
+                <p>{order.payment?.toUpperCase?.()}</p>
               </div>
             </div>
 
