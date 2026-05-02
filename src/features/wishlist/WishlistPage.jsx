@@ -11,7 +11,8 @@ function WishlistPage() {
 
   return (
     <div className="wishlist-container">
-      <button className="back-btn" onClick={() => navigate("/")}>
+
+      <button className="back-btn" onClick={() => navigate("/app")}>
         Back
       </button>
 
@@ -23,6 +24,13 @@ function WishlistPage() {
         <div className="wishlist-list">
           {wishlistItems.map((item) => (
             <div key={item.id} className="wishlist-card">
+
+              <img
+                src={item.thumbnail}
+                alt={item.title}
+                className="wishlist-img"
+              />
+
               <div className="wishlist-info">
                 <h4>{item.title}</h4>
                 <p className="price">₹ {item.price}</p>
@@ -46,6 +54,7 @@ function WishlistPage() {
                   Remove
                 </button>
               </div>
+
             </div>
           ))}
         </div>

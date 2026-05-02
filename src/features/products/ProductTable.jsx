@@ -123,8 +123,8 @@ function ProductTable() {
     <div className="table-container">
 
       <div className="back-nav">
-        <button onClick={() => navigate("/")}>
-          Back to Homepage
+        <button onClick={() => navigate("/app")}>
+          Back to ProductPage
         </button>
       </div>
 

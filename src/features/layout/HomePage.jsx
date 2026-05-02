@@ -5,8 +5,11 @@ import { addToCart } from "../cart/cartSlice";
 import { addToWishlist } from "../wishlist/wishlistSlice";
 import useDebounce from "./useDebounce";
 import ProductSkeleton from "../products/ProductSkeleton";
+import { Link, useNavigate } from "react-router-dom";
+import { FaShoppingCart, FaHeart, FaBox } from "react-icons/fa";
+import { clearCart } from "../cart/cartSlice";
+import { clearWishlist } from "../wishlist/wishlistSlice";
 import "./Home.css";
-import { useNavigate } from "react-router-dom"; 
 
 const ITEMS_PER_PAGE = 12;
 
@@ -19,9 +22,15 @@ const priceRanges = [
 
 function HomePage() {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const { items, loading } = useSelector(state => state.products);
+
+  const cartCount = useSelector(state =>
+    state.cart.items.reduce((total, item) => total + item.quantity, 0)
+  );
+
+  const wishlistCount = useSelector(state => state.wishlist.items.length);
 
   const [searchText, setSearchText] = useState("");
   const debouncedSearch = useDebounce(searchText, 500);
@@ -29,6 +38,16 @@ function HomePage() {
   const [activeRanges, setActiveRanges] = useState([]);
   const [page, setPage] = useState(1);
 
+  const isLoggedIn = !!localStorage.getItem("token");
+
+  const handleLogout = () => {
+  dispatch(clearCart());
+  dispatch(clearWishlist());
+  localStorage.removeItem("cart");
+  localStorage.removeItem("wishlist");
+  localStorage.removeItem("token");
+  navigate("/");
+};
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
@@ -97,22 +116,48 @@ function HomePage() {
 
       <div className="content">
 
-        
-        <div className="table-nav" style={{ marginBottom: "10px" }}>
-          <button onClick={() => navigate("/products-table")}>
-            View Table
-          </button>
-        </div>
+        <div className="top-bar">
 
-        <div className="searchbar">
           <input
+            className="searchbar"
             placeholder="Search products..."
             value={searchText}
-            onChange={e => {
+            onChange={(e) => {
               setPage(1);
               setSearchText(e.target.value);
             }}
           />
+
+          <div className="icon-container">
+
+            <Link to="/orders" className="icon">
+              <FaBox />
+            </Link>
+
+            <Link to="/cart" className="icon">
+              <FaShoppingCart />
+              <span className="badge">{cartCount}</span>
+            </Link>
+
+            <Link to="/wishlist" className="icon">
+              <FaHeart />
+              <span className="badge">{wishlistCount}</span>
+            </Link>
+
+          </div>
+
+          <div className="table-nav">
+            <button onClick={() => navigate("/products-table")}>
+              View Table
+            </button>
+          </div>
+
+          {isLoggedIn && (
+            <button className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          )}
+
         </div>
 
         {loading && <p>Loading...</p>}
@@ -120,33 +165,31 @@ function HomePage() {
         <div className="grid">
           {loading
             ? [...Array(ITEMS_PER_PAGE)].map((_, i) => (
-              <ProductSkeleton key={i} />
-            ))
+                <ProductSkeleton key={i} />
+              ))
             : paginatedProducts.map(product => (
-              <div key={product.id} className="card">
-                <img src={product.thumbnail} alt={product.title} />
+                <div key={product.id} className="card">
+                  <img src={product.thumbnail} alt={product.title} />
 
-                <h4>{product.title}</h4>
+                  <h4>{product.title}</h4>
 
-                <p>₹{product.price}</p>
+                  <p>₹{product.price}</p>
 
-                <div className="card-actions">
-                  <button onClick={() => dispatch(addToCart(product))}>
-                    Add to Cart
-                  </button>
+                  <div className="card-actions">
+                    <button onClick={() => dispatch(addToCart(product))}>
+                      Add to Cart
+                    </button>
 
-                  <button onClick={() => dispatch(addToWishlist(product))}>
-                    Wishlist
-                  </button>
+                    <button onClick={() => dispatch(addToWishlist(product))}>
+                      Wishlist
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
         </div>
 
         <div className="pagination">
-          <button disabled={page === 1} onClick={() => setPage(p => p - 1)}>
-            Prev
-          </button>
+          <button disabled={page === 1} onClick={() => setPage(p => p - 1)}>Prev</button>
 
           {[...Array(totalPages)].map((_, i) => (
             <button
@@ -158,12 +201,7 @@ function HomePage() {
             </button>
           ))}
 
-          <button
-            disabled={page === totalPages}
-            onClick={() => setPage(p => p + 1)}
-          >
-            Next
-          </button>
+          <button disabled={page === totalPages} onClick={() => setPage(p => p + 1)}>Next</button>
         </div>
 
       </div>

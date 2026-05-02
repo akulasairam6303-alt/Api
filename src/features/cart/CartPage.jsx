@@ -26,7 +26,7 @@ function CartPage() {
       <StepHeader currentStep={1} />
 
       <div className="nav-buttons">
-        <button className="back-btn" onClick={() => navigate("/app")}>
+        <button className="back-btn" onClick={() => navigate("/home")}>
           Back to HomePage
         </button>
 

@@ -88,7 +88,7 @@ function LandingPage() {
                         electronics at unbeatable prices.
                     </p>
 
-                    <button className="shop-btn" onClick={() => navigate("/app")}>
+                    <button className="shop-btn" onClick={() => navigate("/home")}>
                         Shop Now
                     </button>
                 </div>
