@@ -65,13 +65,13 @@ function AddressPage() {
 
           <div className="address-header">
             <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              <button className="back-btn" onClick={() => navigate("/cart")}>
+              <button className="back-btn" onClick={() => navigate("/app/cart")}>
                 BACK TO CART
               </button>
               <h3>Select Delivery Address</h3>
             </div>
 
-            <button onClick={() => navigate("/add-address")}>
+            <button onClick={() => navigate("/app/add-address")}>
               ADD NEW ADDRESS
             </button>
           </div>

@@ -88,7 +88,7 @@ function PaymentPage() {
 
         dispatch(clearCart());
 
-        navigate("/order-confirm");
+        navigate("/app/order-confirmation");
       } catch (err) {
         console.error("ORDER ERROR:", err);
         alert("Something went wrong");

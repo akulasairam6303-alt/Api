@@ -16,19 +16,23 @@ function CartPage() {
   const cartItems = useSelector(selectCartArray);
   const total = useSelector(selectCartTotalPrice);
 
+  const handleContinue = () => {
+    navigate("/address");
+  };
+
   return (
     <div className="cart-container">
 
       <StepHeader currentStep={1} />
 
       <div className="nav-buttons">
-        <button className="back-btn" onClick={() => navigate("/")}>
+        <button className="back-btn" onClick={() => navigate("/app")}>
           Back to HomePage
         </button>
 
         <button
           className="back-btn"
-          onClick={() => navigate("/Products-table")}
+          onClick={() => navigate("/products-table")}
         >
           Back to Products Table
         </button>
@@ -74,7 +78,7 @@ function CartPage() {
 
             <button
               className="continue-btn"
-              onClick={() => navigate("/address")}
+              onClick={handleContinue}
             >
               Continue
             </button>

@@ -2,6 +2,7 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { FaShoppingCart, FaHeart, FaBox } from "react-icons/fa";
 import { logout } from "../auth/authSlice";
+import { resetCart } from "../cart/cartSlice";
 import "./layout.css";
 
 function MainLayout() {
@@ -15,9 +16,13 @@ function MainLayout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const isLoggedIn = !!localStorage.getItem("token");
+
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/login");
+    dispatch(resetCart());
+    localStorage.removeItem("token");
+    navigate("/", { replace: true });
   };
 
   return (
@@ -41,9 +46,11 @@ function MainLayout() {
             <span className="badge">{wishlistCount}</span>
           </Link>
 
-          <button className="logout-btn" onClick={handleLogout}>
-            Logout
-          </button>
+          {isLoggedIn && (
+            <button className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          )}
 
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signupUser } from "./authSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import Popup from "./Popup";
 import "./auth.css";
@@ -9,6 +9,7 @@ import "./auth.css";
 function Signup() {       
   const dispatch = useDispatch();   
   const navigate = useNavigate();  
+  const location = useLocation();
 
   const { loading, error } = useSelector(state => state.auth);
 
@@ -50,10 +51,15 @@ function Signup() {
 
     dispatch(signupUser(form)).then(res => {
       if (res.meta.requestStatus === "fulfilled") {
+
+        // ✅ store token
+        localStorage.setItem("token", res.payload?.token || "dummy-token");
+
         setPopup({
           message: "Signup successful",
           type: "success"
         });
+
       } else {
         setPopup({
           message: res.payload || "Signup failed",
@@ -63,6 +69,15 @@ function Signup() {
     });
   };
 
+  const handlePopupClose = () => {
+    setPopup({ message: "", type: "" });
+
+    if (popup.type === "success") {
+      const redirectTo = location.state?.redirectTo || "/app";
+      navigate(redirectTo, { replace: true });
+    }
+  };
+
   return (
     <div className="authPage">
       <form className="authBox" onSubmit={handleSubmit}>
@@ -70,59 +85,32 @@ function Signup() {
 
         <div className="inputGroup">
           <FaUser className="inputIcon" />
-          <input
-            name="firstName"
-            placeholder="First Name"
-            onChange={handleChange}
-          />
+          <input name="firstName" placeholder="First Name" onChange={handleChange} />
         </div>
 
         <div className="inputGroup">
           <FaUser className="inputIcon" />
-          <input
-            name="lastName"
-            placeholder="Last Name"
-            onChange={handleChange}
-          />
+          <input name="lastName" placeholder="Last Name" onChange={handleChange} />
         </div>
 
         <div className="inputGroup">
           <FaUser className="inputIcon" />
-          <input
-            name="username"
-            placeholder="Username"
-            onChange={handleChange}
-          />
+          <input name="username" placeholder="Username" onChange={handleChange} />
         </div>
 
         <div className="inputGroup">
           <FaEnvelope className="inputIcon" />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            onChange={handleChange}
-          />
+          <input type="email" name="email" placeholder="Email" onChange={handleChange} />
         </div>
 
         <div className="inputGroup">
           <FaLock className="inputIcon" />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleChange}
-          />
+          <input type="password" name="password" placeholder="Password" onChange={handleChange} />
         </div>
 
         <div className="inputGroup">
           <FaLock className="inputIcon" />
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            onChange={handleChange}
-          />
+          <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={handleChange} />
         </div>
 
         {(localError || error) && (
@@ -133,7 +121,7 @@ function Signup() {
           {loading ? "Creating..." : "Create Account"}
         </button>
 
-        <p className="link" onClick={() => navigate("/login")}>
+        <p className="link" onClick={() => navigate("/login", { state: location.state })}>
           Already have account? Login
         </p>
       </form>
@@ -141,13 +129,7 @@ function Signup() {
       <Popup
         message={popup.message}
         type={popup.type}
-        onClose={() => {
-          setPopup({ message: "", type: "" });
-
-          if (popup.type === "success") {
-            navigate("/login");
-          }
-        }}
+        onClose={handlePopupClose}
       />
     </div>
   );

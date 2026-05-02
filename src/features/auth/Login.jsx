@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "./authSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import Popup from "./Popup";
 import "./auth.css";
@@ -9,6 +9,7 @@ import "./auth.css";
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { loading, error } = useSelector(state => state.auth);   
 
@@ -39,11 +40,16 @@ function Login() {
     setLocalError(null);
 
     dispatch(loginUser(form)).then(res => {
-      if (res.meta.requestStatus === "fulfilled") {    
+      if (res.meta.requestStatus === "fulfilled") {
+
+        // ✅ store token
+        localStorage.setItem("token", res.payload?.token || "dummy-token");
+
         setPopup({
           message: "Login successful",
           type: "success"
         });
+
       } else {
         setPopup({
           message: res.payload || "Login failed",
@@ -51,6 +57,15 @@ function Login() {
         });
       }
     });
+  };
+
+  const handlePopupClose = () => {
+    setPopup({ message: "", type: "" });
+
+    if (popup.type === "success") {
+      const redirectTo = location.state?.redirectTo || "/app";
+      navigate(redirectTo, { replace: true });
+    }
   };
 
   return (
@@ -86,7 +101,7 @@ function Login() {
           {loading ? "Logging in..." : "Login"}
         </button>
 
-        <p className="link" onClick={() => navigate("/signup")}>
+        <p className="link" onClick={() => navigate("/signup", { state: location.state })}>
           Don't have account? Signup
         </p>
       </form>
@@ -94,13 +109,7 @@ function Login() {
       <Popup
         message={popup.message}
         type={popup.type}
-        onClose={() => {
-          setPopup({ message: "", type: "" });
-
-          if (popup.type === "success") {
-            navigate("/");
-          }
-        }}
+        onClose={handlePopupClose}
       />
     </div>
   );
