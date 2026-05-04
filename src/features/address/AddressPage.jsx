@@ -71,7 +71,7 @@ function AddressPage() {
               <h3>Select Delivery Address</h3>
             </div>
 
-            <button onClick={() => navigate("/app/add-address")}>
+            <button onClick={() => navigate("/add-address")}>
               ADD NEW ADDRESS
             </button>
           </div>

@@ -44,7 +44,7 @@
   flex: 1;
 }
 
-/* Button */
+
 .card-box button {
   width: 100%;
   padding: 12px;
@@ -58,17 +58,15 @@
   transition: background 0.2s ease, transform 0.1s ease;
 }
 
-/* Hover */
 .card-box button:hover {
   background: #3a1653;
 }
 
-/* Click effect */
 .card-box button:active {
   transform: scale(0.98);
 }
 
-/* Disabled state */
+
 .card-box button:disabled {
   background: #aaa;
   cursor: not-allowed;

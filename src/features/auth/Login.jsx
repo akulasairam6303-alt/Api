@@ -11,7 +11,7 @@ function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { loading, error } = useSelector(state => state.auth);   
+  const { loading, error } = useSelector(state => state.auth);
 
   const [form, setForm] = useState({
     email: "",
@@ -42,12 +42,19 @@ function Login() {
     dispatch(loginUser(form)).then(res => {
       if (res.meta.requestStatus === "fulfilled") {
 
-        localStorage.setItem("token", res.payload?.token || "dummy-token");
+  const userData = {
+    name: res.payload?.name || res.payload?.username || form.email.split("@")[0],
+    email: form.email
+  };
 
-        setPopup({
-          message: "Login successful",
-          type: "success"
-        });
+  localStorage.setItem("token", res.payload?.token || "dummy-token");
+  localStorage.setItem("user", JSON.stringify(userData));
+
+  setPopup({
+    message: "Login successful",
+    type: "success"
+  });
+
 
       } else {
         setPopup({
@@ -62,7 +69,7 @@ function Login() {
     setPopup({ message: "", type: "" });
 
     if (popup.type === "success") {
-      const redirectTo = location.state?.redirectTo || "/app";
+      const redirectTo = location.state?.redirectTo || "/";
       navigate(redirectTo, { replace: true });
     }
   };
@@ -100,7 +107,10 @@ function Login() {
           {loading ? "Logging in..." : "Login"}
         </button>
 
-        <p className="link" onClick={() => navigate("/signup", { state: location.state })}>
+        <p
+          className="link"
+          onClick={() => navigate("/signup", { state: location.state })}
+        >
           Don't have account? Signup
         </p>
       </form>

@@ -4,6 +4,7 @@ import { fetchProducts } from "../products/productSlice";
 import { addToCart } from "../cart/cartSlice";
 import { addToWishlist } from "../wishlist/wishlistSlice";
 import useDebounce from "./useDebounce";
+import { logout } from "../../utils/logout";
 import ProductSkeleton from "../products/ProductSkeleton";
 import { Link, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaHeart, FaBox } from "react-icons/fa";
@@ -41,13 +42,10 @@ function HomePage() {
   const isLoggedIn = !!localStorage.getItem("token");
 
   const handleLogout = () => {
-  dispatch(clearCart());
-  dispatch(clearWishlist());
-  localStorage.removeItem("cart");
-  localStorage.removeItem("wishlist");
-  localStorage.removeItem("token");
-  navigate("/");
+    logout(dispatch, navigate);
 };
+
+
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
@@ -163,29 +161,33 @@ function HomePage() {
         {loading && <p>Loading...</p>}
 
         <div className="grid">
-          {loading
-            ? [...Array(ITEMS_PER_PAGE)].map((_, i) => (
-                <ProductSkeleton key={i} />
-              ))
-            : paginatedProducts.map(product => (
-                <div key={product.id} className="card">
-                  <img src={product.thumbnail} alt={product.title} />
+          {paginatedProducts.map(product => (
+            <div key={product.id} className="card">
 
-                  <h4>{product.title}</h4>
+              
+              <div className="img-box">
+                <img src={product.thumbnail} alt={product.title} />
+              </div>
 
-                  <p>₹{product.price}</p>
+              
+              <div className="card-info">
+                <h4>{product.title}</h4>
+                <p>₹{product.price}</p>
+              </div>
 
-                  <div className="card-actions">
-                    <button onClick={() => dispatch(addToCart(product))}>
-                      Add to Cart
-                    </button>
+              
+              <div className="card-actions">
+                <button onClick={() => dispatch(addToCart(product))}>
+                  Add to Cart
+                </button>
 
-                    <button onClick={() => dispatch(addToWishlist(product))}>
-                      Wishlist
-                    </button>
-                  </div>
-                </div>
-              ))}
+                <button onClick={() => dispatch(addToWishlist(product))}>
+                  Wishlist
+                </button>
+              </div>
+
+            </div>
+          ))}
         </div>
 
         <div className="pagination">
