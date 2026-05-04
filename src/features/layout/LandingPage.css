@@ -1,115 +1,234 @@
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: sans-serif;
+  font-family: "Poppins", sans-serif;
 }
+
 
 .landing-navbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 20px;
   padding: 15px 40px;
-  background: white;
-  border-bottom: 1px solid #eee;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .logo {
   font-size: 22px;
   font-weight: bold;
-  color: #6a0dad;
+  background: linear-gradient(45deg, #7c3aed, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #555;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.location svg {
+  color: #7c3aed;
+}
+
+.location:hover {
+  color: #7c3aed;
 }
 
 .search-bar {
-  width: 40%;
+  flex: 1;
+  max-width: 500px;
   padding: 10px 16px;
   border-radius: 25px;
-  border: 1px solid #ccc;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  outline: none;
 }
+
 
 .nav-actions {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
 }
 
 .seller-btn {
-  background: #6a0dad;
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
   border: none;
   cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.seller-btn:hover {
+  transform: translateY(-2px);
 }
 
 .login-btn {
-  background: transparent;
+  background: #f3e8ff;
+  color: #7c3aed;
+  padding: 6px 14px;
+  border-radius: 20px;
   border: none;
   cursor: pointer;
+  transition: 0.2s ease;
 }
+
+.login-btn:hover {
+  background: #e9d5ff;
+}
+
+
+.icon-container {
+  display: flex;
+  gap: 15px;
+}
+
+.icon {
+  position: relative;
+  font-size: 20px;
+  color: #374151;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.icon:hover {
+  color: #7c3aed;
+  transform: scale(1.1);
+}
+
+
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: #ef4444;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
 
 .category-bar {
   display: flex;
-  gap: 20px;
+  gap: 15px;
   padding: 10px 40px;
-  background: #f7f7f7;
+  background: #f9fafb;
+  border-top: 1px solid #eee;
 }
+
+.category-bar span {
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: #e5e7eb;
+  cursor: pointer;
+  transition: 0.2s ease;
+  color: #374151;
+}
+
+.category-bar span:hover {
+  background: #d1d5db;
+}
+
+.category-bar span:first-child {
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
+  color: white;
+}
+
 
 .banner {
+  background: #f3f4f6;
+  padding: 60px 80px;
+  margin: 20px;
+  border-radius: 20px;
   position: relative;
-  height: 500px;
-  overflow: hidden;
 }
 
-.banner-img {
+.banner-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.banner-image {
+  width: 420px;
+  height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; 
 }
 
-.overlay {
-  position: absolute;
-  top: 50%;
-  left: 80px;
-  transform: translateY(-50%);
+.banner-text {
   max-width: 500px;
 }
 
 .subtitle {
-  color: #444;
+  color: #6b7280;
+  font-size: 16px;
 }
 
 .title {
-  font-size: 48px;
-  color: #5a0dad;
+  font-size: 52px;
+  font-weight: 800;
   margin: 20px 0;
-  font-weight: bold;
+  background: linear-gradient(45deg, #7c3aed, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .description {
-  color: #555;
+  color: #4b5563;
   margin-bottom: 20px;
 }
 
+
 .shop-btn {
-  background: #6a0dad;
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
   color: white;
-  padding: 12px 28px;
+  padding: 14px 28px;
+  border-radius: 30px;
   border: none;
-  border-radius: 25px;
   cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s ease;
 }
 
+.shop-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* RIGHT IMAGE */
+.banner-image img {
+  height: 420px;
+  object-fit: contain;
+}
+
+/* ARROWS */
 .arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0,0,0,0.4);
-  color: white;
+  font-size: 36px;
   border: none;
-  font-size: 28px;
-  padding: 8px 14px;
+  background: transparent;
+  color: #7c3aed;
   cursor: pointer;
-  border-radius: 50%;
 }
 
 .arrow.left {

@@ -1,103 +1,130 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { FaShoppingCart, FaHeart, FaBox, FaMapMarkerAlt } from "react-icons/fa";
 import "./LandingPage.css";
 
 function LandingPage() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const slides = [
-  {
-    image: "/images/image1.jpg",
-    title: "Shop Smart, Live Better",
-    subtitle: "Trendy, reliable, and innovative products."
-  },
-  {
-    image: "/images/image2.jpg",
-    title: "Discover New Styles",
-    subtitle: "Upgrade your wardrobe with latest fashion."
-  },
-  {
-    image: "/images/image3.jpg",
-    title: "Best Deals Everyday",
-    subtitle: "Unbeatable prices on top products."
-  }
-];
-    const [index, setIndex] = useState(0);
+  const cartCount = useSelector(state =>
+    state.cart.items.reduce((total, item) => total + item.quantity, 0)
+  );
 
+  const wishlistCount = useSelector(state => state.wishlist.items.length);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setIndex((prev) => (prev + 1) % slides.length);
-        }, 4000);
-        return () => clearInterval(interval);
-    }, [slides.length]);
+  const slides = [
+    {
+      image: "/images/image1.jpg",
+      title: "Shop Smart, Live Better",
+      subtitle: "Trendy, reliable, and innovative products."
+    },
+    {
+      image: "/images/image2.jpg",
+      title: "Discover New Styles",
+      subtitle: "Upgrade your wardrobe with latest fashion."
+    },
+    {
+      image: "/images/image3.jpg",
+      title: "Best Deals Everyday",
+      subtitle: "Unbeatable prices on top products."
+    }
+  ];
 
-    const prev = () => {
-        setIndex((prev) => (prev - 1 + slides.length) % slides.length);
-    };
+  const [index, setIndex] = useState(0);
 
-    const next = () => {
-        setIndex((prev) => (prev + 1) % slides.length);
-    };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex(prev => (prev + 1) % slides.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
-    return (
-        <>
-            <div className="landing-navbar">
-                <div className="logo">ECOMMERCE</div>
+  const prev = () => {
+    setIndex(prev => (prev - 1 + slides.length) % slides.length);
+  };
 
-                <input
-                    className="search-bar"
-                    placeholder="Explore brands, products, and deals..."
-                />
+  const next = () => {
+    setIndex(prev => (prev + 1) % slides.length);
+  };
 
-                <div className="nav-actions">
-                    <button className="seller-btn">Seller Dashboard</button>
-                    <button className="login-btn" onClick={() => navigate("/login")}>
-                        Login
-                    </button>
-                </div>
-            </div>
+  return (
+    <>
+      <div className="landing-navbar">
+        <div className="logo">ECOMMERCE</div>
 
-            <div className="category-bar">
-                <span>Accessories</span>
-                <span>Appliances</span>
-                <span>Electronics</span>
-                <span>Fashion</span>
-                <span>Food</span>
-                <span>Grocery</span>
-                <span>New Arrivals</span>
-            </div>
+        <div className="location">
+          <FaMapMarkerAlt />
+          <span>Turn On Your Location</span>
+        </div>
 
-            <div className="banner">
-                <img
-                    src={slides[index].image}
-                    alt="banner"
-                    className="banner-img"
-                    onError={(e) => {
-                        e.target.src = "https://via.placeholder.com/1600x500?text=Image+Failed";
-                    }}
-                />
+        <input className="search-bar" placeholder="Explore products..." />
 
-                <div className="overlay">
-                    <p className="subtitle">{slides[index].subtitle}</p>
+        <div className="nav-actions">
+          <button className="seller-btn">Seller Dashboard</button>
 
-                    <h1 className="title">{slides[index].title}</h1>
+          <div className="icon-container">
+            <Link to="/orders" className="icon"><FaBox /></Link>
+            <Link to="/cart" className="icon">
+              <FaShoppingCart />
+              <span className="badge">{cartCount}</span>
+            </Link>
+            <Link to="/wishlist" className="icon">
+              <FaHeart />
+              <span className="badge">{wishlistCount}</span>
+            </Link>
+          </div>
 
-                    <p className="description">
-                        Choose from a wide range of fashion essentials and cutting-edge
-                        electronics at unbeatable prices.
-                    </p>
+          <button className="login-btn" onClick={() => navigate("/login")}>
+            Login
+          </button>
+        </div>
+      </div>
 
-                    <button className="shop-btn" onClick={() => navigate("/home")}>
-                        Shop Now
-                    </button>
-                </div>
+      <div className="category-bar">
+        <span>Accessories</span>
+        <span>Appliances</span>
+        <span>Electronics</span>
+        <span>Fashion</span>
+        <span>Food</span>
+        <span>Grocery</span>
+        <span>New Arrivals</span>
+      </div>
 
-                <button className="arrow left" onClick={prev}>‹</button>
-                <button className="arrow right" onClick={next}>›</button>
-            </div>
-        </>
-    );
+      <div className="banner">
+
+        <div className="banner-content">
+
+          <div className="banner-text">
+            <p className="subtitle">{slides[index].subtitle}</p>
+
+            <h1 className="title">{slides[index].title}</h1>
+
+            <p className="description">
+              Choose from a wide range of fashion essentials and cutting-edge electronics.
+            </p>
+
+            <button
+              className="shop-btn"
+              onClick={() => navigate("/home")}
+            >
+              SHOP NOW
+            </button>
+          </div>
+
+          <div className="banner-image">
+            <img src={slides[index].image} alt="model" />
+          </div>
+
+        </div>
+
+        <button className="arrow left" onClick={prev}>‹</button>
+        <button className="arrow right" onClick={next}>›</button>
+
+      </div>
+    </>
+  );
 }
 
 export default LandingPage;

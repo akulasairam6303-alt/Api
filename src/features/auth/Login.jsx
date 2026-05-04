@@ -42,7 +42,6 @@ function Login() {
     dispatch(loginUser(form)).then(res => {
       if (res.meta.requestStatus === "fulfilled") {
 
-        // ✅ store token
         localStorage.setItem("token", res.payload?.token || "dummy-token");
 
         setPopup({
