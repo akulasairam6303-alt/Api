@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import StepHeader from "../StepHeader/StepHeader";
 import "./OrderConfirm.css";
 import { useNavigate } from "react-router-dom";
+import { loadCurrentOrder, saveCurrentOrder } from "../utils/orderStorage";
 
 import {
   getStage,
@@ -21,13 +22,12 @@ function OrderConfirmPage() {
 
   const navigate = useNavigate();
 
-  
+
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("currentOrder"));
+    const stored = loadCurrentOrder();
     setOrder(stored);
   }, []);
 
-  
   useEffect(() => {
     if (!redirecting) return;
 
@@ -45,24 +45,26 @@ function OrderConfirmPage() {
     return () => clearInterval(interval);
   }, [redirecting, navigate]);
 
-  
+
   useEffect(() => {
     const updateStage = () => {
-      const stored = JSON.parse(localStorage.getItem("currentOrder"));
+      const stored = loadCurrentOrder();   
       if (!stored) return;
 
-      const newStage = getStage(stored.date);     
+      const newStage = getStage(stored.date);
       setStage(newStage);
 
-      if (newStage === 4 && !stored.deliveredAt) {  
+      if (newStage === 4 && !stored.deliveredAt) {
         stored.deliveredAt = new Date().toISOString();
-        localStorage.setItem("currentOrder", JSON.stringify(stored));
+
+        saveCurrentOrder(stored);   
         setOrder(stored);
       }
     };
 
     updateStage();
-    const interval = setInterval(updateStage, 10000);  
+
+    const interval = setInterval(updateStage, 10000);
     return () => clearInterval(interval);
   }, []);
 
@@ -116,7 +118,7 @@ function OrderConfirmPage() {
         <h2>Thank you for your order</h2>
         <p className="order-id">Order ID # {order.id}</p>
 
-        <p className={getStatusClass(getStatusText(stage))}>  
+        <p className={getStatusClass(getStatusText(stage))}>
           {getStatusText(stage)}
         </p>
 

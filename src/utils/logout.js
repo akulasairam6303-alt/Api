@@ -7,5 +7,5 @@ export const logout = (dispatch, navigate) => {
     localStorage.removeItem("cart");
     localStorage.removeItem("wishlist");
 
-    navigate("/login");
+    navigate("/");
 };

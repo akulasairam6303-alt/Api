@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
-const AUTH_KEY = "auth_user";
+import { loadAuth, saveAuth, clearAuth } from "../utils/authStorage";
 
 const API = axios.create({
   baseURL: "https://ecommerce-backend-umber-seven.vercel.app",
@@ -10,22 +9,6 @@ const API = axios.create({
   }
 });
 
-const loadUser = () => {
-  try {
-    const data = localStorage.getItem(AUTH_KEY);
-    return data ? JSON.parse(data) : null;
-  } catch {
-    return null;
-  }
-};
-
-const saveUser = (user) => {
-  localStorage.setItem(AUTH_KEY, JSON.stringify(user));
-};
-
-const clearUser = () => {
-  localStorage.removeItem(AUTH_KEY);
-};
 
 
 export const signupUser = createAsyncThunk(
@@ -46,7 +29,6 @@ export const signupUser = createAsyncThunk(
   }
 );
 
-
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (credentials, { rejectWithValue }) => {
@@ -66,10 +48,11 @@ export const loginUser = createAsyncThunk(
 );
 
 
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: loadUser(),
+    user: loadAuth(),   
     loading: false,
     error: null,
     success: null
@@ -80,7 +63,7 @@ const authSlice = createSlice({
       state.user = null;
       state.error = null;
       state.success = null;
-      clearUser();
+      clearAuth();   // 
     },
 
     clearMessages: (state) => {
@@ -108,6 +91,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
+  
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -123,7 +107,8 @@ const authSlice = createSlice({
         };
 
         state.user = userData;
-        saveUser(userData);
+
+        saveAuth(userData);  
 
         state.success = "Login successful";
       })

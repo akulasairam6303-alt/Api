@@ -3,7 +3,7 @@ import {
   loadCartFromStorage,
   saveCartToStorage,
   clearCartFromStorage
-} from "./cartStorage";
+} from "../../utils/cartStorage";
 
 const initialState = {
   items: loadCartFromStorage()

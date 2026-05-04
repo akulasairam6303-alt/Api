@@ -6,9 +6,9 @@ import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import Popup from "./Popup";
 import "./auth.css";
 
-function Signup() {       
-  const dispatch = useDispatch();   
-  const navigate = useNavigate();  
+function Signup() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const { loading, error } = useSelector(state => state.auth);
@@ -51,15 +51,10 @@ function Signup() {
 
     dispatch(signupUser(form)).then(res => {
       if (res.meta.requestStatus === "fulfilled") {
-
-        // ✅ store token
-        localStorage.setItem("token", res.payload?.token || "dummy-token");
-
         setPopup({
           message: "Signup successful",
           type: "success"
         });
-
       } else {
         setPopup({
           message: res.payload || "Signup failed",
@@ -121,7 +116,10 @@ function Signup() {
           {loading ? "Creating..." : "Create Account"}
         </button>
 
-        <p className="link" onClick={() => navigate("/login", { state: location.state })}>
+        <p
+          className="link"
+          onClick={() => navigate("/login", { state: location.state })}
+        >
           Already have account? Login
         </p>
       </form>

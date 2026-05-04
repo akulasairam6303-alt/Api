@@ -95,6 +95,11 @@
 .user-trigger {
   cursor: pointer;
   font-weight: 500;
+  margin-left: 10px;
+}
+
+.user-trigger:hover {
+  text-decoration: underline;
 }
 
 .dropdown {

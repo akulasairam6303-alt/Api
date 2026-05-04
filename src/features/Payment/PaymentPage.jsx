@@ -7,6 +7,7 @@ import StepHeader from "../StepHeader/StepHeader";
 import UPIPayment from "./UPIPayment";
 import CardPayment from "./CardPayment";
 import EmiPayment from "./EmiPayment";
+import { addOrder, saveCurrentOrder } from "../utils/orderStorage";
 import { getDeliveryDate } from "../OrderConfirm/OrderLogic";
 import "./payment.css";
 
@@ -37,7 +38,7 @@ function PaymentPage() {
   const deliveryDate = getDeliveryDate();
 
   const processPayment = (method, extra = {}) => {
-    
+
     console.log("PROCESS PAYMENT:", {
       cartItems,
       selected,
@@ -64,7 +65,7 @@ function PaymentPage() {
           id: Date.now(),
           items: [...cartItems],
 
-          
+
           address: selected,
 
           total: Number(finalTotal.toFixed(2)),
@@ -78,13 +79,8 @@ function PaymentPage() {
           date: new Date().toISOString(),
         };
 
-        const existingOrders =
-          JSON.parse(localStorage.getItem("orders")) || [];
-
-        existingOrders.push(newOrder);
-
-        localStorage.setItem("orders", JSON.stringify(existingOrders));
-        localStorage.setItem("currentOrder", JSON.stringify(newOrder));
+        addOrder(newOrder);
+        saveCurrentOrder(newOrder);
 
         dispatch(clearCart());
 
@@ -109,9 +105,8 @@ function PaymentPage() {
           {["cod", "upi", "card", "emi"].map((method) => (
             <div
               key={method}
-              className={`method ${
-                selectedMethod === method ? "active" : ""
-              }`}
+              className={`method ${selectedMethod === method ? "active" : ""
+                }`}
               onClick={() => setSelectedMethod(method)}
             >
               {method.toUpperCase()}
@@ -124,7 +119,7 @@ function PaymentPage() {
             <>
               <h3>Cash On Delivery</h3>
 
-              
+
               <p className="note">
                 {totalPrice <= 500
                   ? "₹10 fee applicable"
@@ -170,7 +165,7 @@ function PaymentPage() {
           )}
         </div>
 
-        
+
         <div className="summary-section">
           <h4>ESTIMATED DELIVERY TIME</h4>
           <p className="date">{deliveryDate.toDateString()}</p>

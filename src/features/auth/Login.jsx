@@ -41,21 +41,10 @@ function Login() {
 
     dispatch(loginUser(form)).then(res => {
       if (res.meta.requestStatus === "fulfilled") {
-
-  const userData = {
-    name: res.payload?.name || res.payload?.username || form.email.split("@")[0],
-    email: form.email
-  };
-
-  localStorage.setItem("token", res.payload?.token || "dummy-token");
-  localStorage.setItem("user", JSON.stringify(userData));
-
-  setPopup({
-    message: "Login successful",
-    type: "success"
-  });
-
-
+        setPopup({
+          message: "Login successful",
+          type: "success"
+        });
       } else {
         setPopup({
           message: res.payload || "Login failed",

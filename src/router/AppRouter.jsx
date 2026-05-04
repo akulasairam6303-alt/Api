@@ -5,43 +5,38 @@ import Login from "../features/auth/Login";
 import Signup from "../features/auth/Signup";
 import ProtectedRoute from "../router/ProtectedRoute";
 
-const LandingPage = lazy(() => import("../features/layout/LandingPage"));
-const HomePage = lazy(() => import("../features/layout/HomePage"));
-const CartPage = lazy(() => import("../features/cart/CartPage"));
-const WishlistPage = lazy(() => import("../features/wishlist/WishlistPage"));
-const AddressPage = lazy(() => import("../features/address/AddressPage"));
+const Home = lazy(() => import("../features/layout/HomePage"));
+const Products = lazy(() => import("../features/products/ProductPage"));
+const Cart = lazy(() => import("../features/cart/CartPage"));
+const Wishlist = lazy(() => import("../features/wishlist/WishlistPage"));
+const Address = lazy(() => import("../features/address/AddressPage"));
 const ProductTable = lazy(() => import("../features/products/ProductTable"));
-const AddAddressPage = lazy(() => import("../features/address/AddAddress"));
-const PaymentPage = lazy(() => import("../features/payment/PaymentPage"));
-const OrderConfirmationPage = lazy(() => import("../features/OrderConfirm/OrderConfirmPage"));
-const OrdersPage = lazy(() => import("../features/OrderConfirm/OrdersPage"));
+const AddAddress = lazy(() => import("../features/address/AddAddress"));
+const Payment = lazy(() => import("../features/payment/PaymentPage"));
+const OrderConfirm = lazy(() => import("../features/OrderConfirm/OrderConfirmPage"));
+const Orders = lazy(() => import("../features/OrderConfirm/OrdersPage"));
 
 function AppRouter() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
 
-        {/* PUBLIC */}
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Products />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* PUBLIC PAGES */}
-        <Route path="/products-table" element={<ProductTable />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/wishlist" element={<WishlistPage />} />
-
-        {/* PROTECTED */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/address" element={<AddressPage />} />
-          <Route path="/add-address" element={<AddAddressPage />} />
-          <Route path="/payment" element={<PaymentPage />} />
-          <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
-          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/address" element={<Address />} />
+          <Route path="/add-address" element={<AddAddress />} />
+          <Route path="/payment" element={<Payment />} />
+          <Route path="/order-confirmation" element={<OrderConfirm />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/products-table" element={<ProductTable />} />
         </Route>
 
-        {/* FALLBACK */}
         <Route path="*" element={<Navigate to="/" replace />} />
 
       </Routes>
