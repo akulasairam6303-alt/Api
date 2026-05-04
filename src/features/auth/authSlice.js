@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { loadAuth, saveAuth, clearAuth } from "../utils/authStorage";
+import { loadAuth, saveAuth, clearAuth } from "../../utils/authStorage";
 
 const API = axios.create({
   baseURL: "https://ecommerce-backend-umber-seven.vercel.app",
@@ -8,8 +8,6 @@ const API = axios.create({
     "Content-Type": "application/json"
   }
 });
-
-
 
 export const signupUser = createAsyncThunk(
   "auth/signupUser",
@@ -19,12 +17,9 @@ export const signupUser = createAsyncThunk(
         ...formData,
         joinAsSeller: true
       });
-
       return res.data;
     } catch (err) {
-      return rejectWithValue(
-        err.response?.data?.message || "Signup failed"
-      );
+      return rejectWithValue(err.response?.data?.message || "Signup failed");
     }
   }
 );
@@ -33,26 +28,18 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (credentials, { rejectWithValue }) => {
     try {
-      const res = await API.post(
-        "/api/auth/seller/login",
-        credentials
-      );
-
+      const res = await API.post("/api/auth/seller/login", credentials);
       return res.data;
     } catch (err) {
-      return rejectWithValue(
-        err.response?.data?.message || "Invalid credentials"
-      );
+      return rejectWithValue(err.response?.data?.message || "Invalid credentials");
     }
   }
 );
 
-
-
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: loadAuth(),   
+    user: loadAuth()?.user || null,
     loading: false,
     error: null,
     success: null
@@ -63,9 +50,8 @@ const authSlice = createSlice({
       state.user = null;
       state.error = null;
       state.success = null;
-      clearAuth();   // 
+      clearAuth();
     },
-
     clearMessages: (state) => {
       state.error = null;
       state.success = null;
@@ -74,45 +60,39 @@ const authSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-
       .addCase(signupUser.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.success = null;
       })
-
       .addCase(signupUser.fulfilled, (state) => {
         state.loading = false;
         state.success = "Signup successful";
       })
-
       .addCase(signupUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-
-  
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.success = null;
       })
-
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
+        
+        // FIX: The token is inside action.payload.data.token
+        const user = action.payload.data;
+        const token = action.payload.data.token; 
 
-        const userData = {
-          token: action.payload.token || null,
-          user: action.payload.user || action.payload
-        };
+        state.user = user;
 
-        state.user = userData;
-
-        saveAuth(userData);  
+        // Save to storage
+        saveAuth({ user, token });
+        if (token) {
+            localStorage.setItem("token", token);
+        }
 
         state.success = "Login successful";
       })
-
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;

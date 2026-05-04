@@ -90,15 +90,13 @@
 .user-menu {
   position: relative;
   display: inline-block;
-}
-
-.user-trigger {
   cursor: pointer;
-  font-weight: 500;
   margin-left: 10px;
+  font-weight: 500;
 }
 
-.user-trigger:hover {
+
+.user-menu:hover {
   text-decoration: underline;
 }
 

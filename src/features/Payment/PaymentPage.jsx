@@ -7,7 +7,7 @@ import StepHeader from "../StepHeader/StepHeader";
 import UPIPayment from "./UPIPayment";
 import CardPayment from "./CardPayment";
 import EmiPayment from "./EmiPayment";
-import { addOrder, saveCurrentOrder } from "../utils/orderStorage";
+import { addOrder, saveCurrentOrder } from "../../utils/orderStorage";
 import { getDeliveryDate } from "../OrderConfirm/OrderLogic";
 import "./payment.css";
 

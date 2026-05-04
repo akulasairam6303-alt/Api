@@ -2,18 +2,22 @@
 const AUTH_KEY = "auth_user";
 
 export const loadAuth = () => {
-  try {
     const data = localStorage.getItem(AUTH_KEY);
+    try {
     return data ? JSON.parse(data) : null;
-  } catch {
+  } catch (e){
     return null;
   }
 };
 
 export const saveAuth = (authData) => {
   localStorage.setItem(AUTH_KEY, JSON.stringify(authData));
+  if (authData.token) {
+        localStorage.setItem("token", authData.token);
+  }
 };
 
 export const clearAuth = () => {
   localStorage.removeItem(AUTH_KEY);
+  localStorage.removeItem("token");
 };

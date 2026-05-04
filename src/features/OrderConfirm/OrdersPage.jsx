@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { loadOrders, updateOrder } from "../utils/orderStorage";
+import { loadOrders, updateOrder } from "../../utils/orderStorage";
 import "../OrderConfirm/orders.css";
-
 import {
   getStage,
   getStatusText,
@@ -20,17 +19,17 @@ function OrdersPage() {
     setOrders([...stored].reverse());
   }, []);
 
-  const handleCancel = (id) => {
-    const updated = updateOrder(id, { cancelled: true });
-    setOrders([...updated].reverse());
-  };
   useEffect(() => {
     const interval = setInterval(() => {
       setOrders(prev => [...prev]);
     }, 1000);
-
     return () => clearInterval(interval);
   }, []);
+
+  const handleCancel = (id) => {
+    const updated = updateOrder(id, { cancelled: true });
+    setOrders([...updated].reverse());
+  };
 
   if (orders.length === 0) {
     return (
@@ -44,34 +43,25 @@ function OrdersPage() {
   return (
     <div className="orders-container">
       <h2>Your Orders</h2>
-
       {orders.map(order => {
         const stage = getStage(order.date);
-        const status = order.cancelled
-          ? "Cancelled"
-          : getStatusText(stage);
+        const status = order.cancelled ? "Cancelled" : getStatusText(stage);
 
         return (
           <div key={order.id} className="order-card">
-
             <div className="order-header">
               <div>
                 <p className="order-id">Order ID: {order.id}</p>
                 <p className="order-date">
                   {new Date(order.date).toLocaleString()}
                 </p>
-
                 <p className={getStatusClass(status)}>
                   {status}
                 </p>
-
                 <p className="countdown">
-                  {order.cancelled
-                    ? "Cancelled"
-                    : getCountdown(order.date, stage)}
+                  {order.cancelled ? "Cancelled" : getCountdown(order.date, stage)}
                 </p>
               </div>
-
               <div className="order-total">
                 ₹{order.total?.toFixed(2)}
               </div>
@@ -96,7 +86,6 @@ function OrdersPage() {
                 <p>{formatAddress(order.address)}</p>
                 <p>{order.address?.phone}</p>
               </div>
-
               <div>
                 <h4>Payment</h4>
                 <p>{order.payment?.toUpperCase?.()}</p>
@@ -105,24 +94,18 @@ function OrdersPage() {
 
             {!order.cancelled && status !== "Delivered" && (
               <div className="order-actions">
-
                 <button
                   className="cancel-btn"
                   disabled={!canCancel(order.date)}
                   onClick={() => handleCancel(order.id)}
                 >
-                  {canCancel(order.date)
-                    ? "Cancel Order"
-                    : "Cannot Cancel"}
+                  {canCancel(order.date) ? "Cancel Order" : "Cannot Cancel"}
                 </button>
-
                 <p className="cancel-timer">
                   {getCancelRemaining(order.date)}
                 </p>
-
               </div>
             )}
-
           </div>
         );
       })}

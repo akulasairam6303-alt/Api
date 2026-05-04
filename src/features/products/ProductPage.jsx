@@ -4,7 +4,7 @@ import { fetchProducts } from "./productSlice";
 import { addToCart } from "../cart/cartSlice";
 import { addToWishlist } from "../wishlist/wishlistSlice";
 import useDebounce from "./useDebounce";
-import { logout } from "../../utils/logout";
+import { logout } from "../auth/authSlice";
 import ProductSkeleton from "./ProductSkeleton";
 import { Link, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaHeart, FaBox } from "react-icons/fa";
@@ -21,7 +21,7 @@ const priceRanges = [
   { label: "1000+", min: 1001, max: Infinity }
 ];
 
-function HomePage() {
+function ProductPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -39,10 +39,13 @@ function HomePage() {
   const [activeRanges, setActiveRanges] = useState([]);
   const [page, setPage] = useState(1);
 
-  const isLoggedIn = !!localStorage.getItem("token");
+  const user = useSelector(state => state.auth.user);
+  const isLoggedIn = !!user;
 
-  const handleLogout = () => {
-    logout(dispatch, navigate);
+
+const handleLogout = () => {
+  dispatch(logout());
+  navigate("/");
 };
 
 
@@ -164,18 +167,18 @@ function HomePage() {
           {paginatedProducts.map(product => (
             <div key={product.id} className="card">
 
-              
+
               <div className="img-box">
                 <img src={product.thumbnail} alt={product.title} />
               </div>
 
-              
+
               <div className="card-info">
                 <h4>{product.title}</h4>
                 <p>₹{product.price}</p>
               </div>
 
-              
+
               <div className="card-actions">
                 <button onClick={() => dispatch(addToCart(product))}>
                   Add to Cart
@@ -211,4 +214,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default ProductPage;

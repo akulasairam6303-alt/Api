@@ -1,18 +1,20 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 function ProtectedRoute() {
-  const isLoggedIn = !!localStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const location = useLocation();
 
-  return isLoggedIn
-    ? <Outlet />
-    : (
+  if (!token) {
+    return (
       <Navigate
         to="/login"
-        state={{ redirectTo: location.pathname }}
+        state={{ from: location.pathname }}
         replace
       />
     );
+  }
+
+  return <Outlet />;
 }
 
 export default ProtectedRoute;

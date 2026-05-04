@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import StepHeader from "../StepHeader/StepHeader";
 import "./OrderConfirm.css";
 import { useNavigate } from "react-router-dom";
-import { loadCurrentOrder, saveCurrentOrder } from "../utils/orderStorage";
+import { loadCurrentOrder, saveCurrentOrder } from "../../utils/orderStorage";
 
 import {
   getStage,
