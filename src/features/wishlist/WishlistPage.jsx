@@ -12,7 +12,7 @@ function WishlistPage() {
   return (
     <div className="wishlist-container">
 
-      <button className="back-btn" onClick={() => navigate("/app")}>
+      <button className="back-btn" onClick={() => navigate("/products")}>
         Back
       </button>
 

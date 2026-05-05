@@ -21,8 +21,8 @@ function AppRouter() {
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
 
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Products />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/products" element={<Products />} />
 
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
@@ -41,7 +41,7 @@ function AppRouter() {
 
         </Route>
 
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/home" replace />} />
 
       </Routes>
     </Suspense>

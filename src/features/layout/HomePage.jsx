@@ -1,26 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import { FaShoppingCart, FaHeart, FaBox, FaMapMarkerAlt } from "react-icons/fa";
 import { logout } from "../auth/authSlice";
 import "../layout/HomePage.css";
 
-function HomePage() {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
 
-    const [showMenu, setShowMenu] = useState(false);
-    const [index, setIndex] = useState(0);
-
-    const cartCount = useSelector(state =>
-        state.cart.items.reduce((total, item) => total + item.quantity, 0)
-    );
-    const wishlistCount = useSelector(state => state.wishlist.items.length);
-    const user = useSelector(state => state.auth.user);
-    const isAuthenticated = !!user;
-
-    const slides = [
+ const slides = [
         {
             image: "/images/image1.jpg",
             title: "Shop Smart, Live Better",
@@ -38,6 +24,22 @@ function HomePage() {
         }
     ];
 
+function HomePage() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const [showMenu, setShowMenu] = useState(false);
+    const [index, setIndex] = useState(0);
+
+    const cartCount = useSelector(state =>
+        state.cart.items.reduce((total, item) => total + item.quantity, 0)
+    );
+    const wishlistCount = useSelector(state => state.wishlist.items.length);
+
+    const user = useSelector(state => state.auth.user);  
+    const isAuthenticated = !!user;
+
+
     useEffect(() => {
         const interval = setInterval(() => {
             setIndex(prev => (prev + 1) % slides.length);
@@ -48,7 +50,7 @@ function HomePage() {
     const handleLogout = () => {
         dispatch(logout());
         setShowMenu(false);
-        navigate("/");
+        navigate("/home");
     };
 
     const protectedNav = (path) => {
@@ -59,7 +61,7 @@ function HomePage() {
         }
     };
 
-    const prev = () => setIndex(prev => (prev - 1 + slides.length) % slides.length);
+    const prev = () => setIndex(prev => (prev - 1 + slides.length) % slides.length);   
     const next = () => setIndex(prev => (prev + 1) % slides.length);
 
     return (
@@ -84,7 +86,7 @@ function HomePage() {
                             <FaBox />
                         </div>
 
-                        <div className="icon" onClick={() => protectedNav("/cart")}>
+                        <div className="icon" onClick={() => navigate("/cart")}>
                             <FaShoppingCart />
                             {isAuthenticated && cartCount > 0 && (
                                 <span className="badge">{cartCount}</span>
@@ -138,7 +140,7 @@ function HomePage() {
                         <p className="description">
                             Choose from a wide range of fashion essentials and cutting-edge electronics.
                         </p>
-                        <button className="shop-btn" onClick={() => navigate("/home")}>
+                        <button className="shop-btn" onClick={() => navigate("/products")}>
                             SHOP NOW
                         </button>
                     </div>

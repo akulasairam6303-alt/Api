@@ -9,6 +9,14 @@ const API = axios.create({
   }
 });
 
+API.interceptors.request.use((config) => {   
+  const auth = loadAuth();
+  if (auth?.token) {
+    config.headers.Authorization = `Bearer ${auth.token}`;
+  }
+  return config;
+});
+
 export const signupUser = createAsyncThunk(
   "auth/signupUser",
   async (formData, { rejectWithValue }) => {
@@ -19,7 +27,9 @@ export const signupUser = createAsyncThunk(
       });
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Signup failed");
+      return rejectWithValue(
+        err.response?.data?.message || "Signup failed"
+      );
     }
   }
 );
@@ -31,23 +41,28 @@ export const loginUser = createAsyncThunk(
       const res = await API.post("/api/auth/seller/login", credentials);
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Invalid credentials");
+      return rejectWithValue(
+        err.response?.data?.message || "Invalid credentials"
+      );
     }
   }
 );
 
+const storedAuth = loadAuth();
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: loadAuth()?.user || null,
+    user: storedAuth?.user || null,
+    token: storedAuth?.token || null,
     loading: false,
     error: null,
     success: null
   },
-
   reducers: {
     logout: (state) => {
       state.user = null;
+      state.token = null;
       state.error = null;
       state.success = null;
       clearAuth();
@@ -57,7 +72,6 @@ const authSlice = createSlice({
       state.success = null;
     }
   },
-
   extraReducers: (builder) => {
     builder
       .addCase(signupUser.pending, (state) => {
@@ -78,18 +92,14 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        
-        // FIX: The token is inside action.payload.data.token
+
         const user = action.payload.data;
-        const token = action.payload.data.token; 
+        const token = action.payload.data.token;
 
         state.user = user;
+        state.token = token;
 
-        // Save to storage
         saveAuth({ user, token });
-        if (token) {
-            localStorage.setItem("token", token);
-        }
 
         state.success = "Login successful";
       })

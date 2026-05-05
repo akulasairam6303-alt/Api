@@ -6,7 +6,7 @@ import { addToWishlist } from "../wishlist/wishlistSlice";
 import useDebounce from "./useDebounce";
 import { logout } from "../auth/authSlice";
 import ProductSkeleton from "./ProductSkeleton";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaHeart, FaBox } from "react-icons/fa";
 import { clearCart } from "../cart/cartSlice";
 import { clearWishlist } from "../wishlist/wishlistSlice";
@@ -26,6 +26,8 @@ function ProductPage() {
   const navigate = useNavigate();
 
   const { items, loading } = useSelector(state => state.products);
+  const user = useSelector(state => state.auth.user);
+  const isAuthenticated = !!user;
 
   const cartCount = useSelector(state =>
     state.cart.items.reduce((total, item) => total + item.quantity, 0)
@@ -39,15 +41,28 @@ function ProductPage() {
   const [activeRanges, setActiveRanges] = useState([]);
   const [page, setPage] = useState(1);
 
-  const user = useSelector(state => state.auth.user);
-  const isLoggedIn = !!user;
+  const protectedNav = (path) => {
+    if (!isAuthenticated) {
+      navigate("/login", { state: { from: path } });
+      return;
+    }
+    navigate(path);
+  };
 
+  const handleWishlist = (product) => {
+    if (!isAuthenticated) {
+      navigate("/login", { state: { from: "/products" } });
+      return;
+    }
+    dispatch(addToWishlist(product));
+  };
 
-const handleLogout = () => {
-  dispatch(logout());
-  navigate("/");
-};
-
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(clearCart());
+    dispatch(clearWishlist());
+    navigate("/");
+  };
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -131,19 +146,23 @@ const handleLogout = () => {
 
           <div className="icon-container">
 
-            <Link to="/orders" className="icon">
+            <div className="icon" onClick={() => protectedNav("/orders")}>
               <FaBox />
-            </Link>
+            </div>
 
-            <Link to="/cart" className="icon">
+            <div className="icon" onClick={() => navigate("/cart")}>
               <FaShoppingCart />
-              <span className="badge">{cartCount}</span>
-            </Link>
+              {isAuthenticated && cartCount > 0 && (
+                <span className="badge">{cartCount}</span>
+              )}
+            </div>
 
-            <Link to="/wishlist" className="icon">
+            <div className="icon" onClick={() => protectedNav("/wishlist")}>
               <FaHeart />
-              <span className="badge">{wishlistCount}</span>
-            </Link>
+              {isAuthenticated && wishlistCount > 0 && (
+                <span className="badge">{wishlistCount}</span>
+              )}
+            </div>
 
           </div>
 
@@ -153,7 +172,7 @@ const handleLogout = () => {
             </button>
           </div>
 
-          {isLoggedIn && (
+          {isAuthenticated && (
             <button className="logout-btn" onClick={handleLogout}>
               Logout
             </button>
@@ -167,24 +186,21 @@ const handleLogout = () => {
           {paginatedProducts.map(product => (
             <div key={product.id} className="card">
 
-
               <div className="img-box">
                 <img src={product.thumbnail} alt={product.title} />
               </div>
-
 
               <div className="card-info">
                 <h4>{product.title}</h4>
                 <p>₹{product.price}</p>
               </div>
 
-
               <div className="card-actions">
                 <button onClick={() => dispatch(addToCart(product))}>
                   Add to Cart
                 </button>
 
-                <button onClick={() => dispatch(addToWishlist(product))}>
+                <button onClick={() => handleWishlist(product)}>
                   Wishlist
                 </button>
               </div>
