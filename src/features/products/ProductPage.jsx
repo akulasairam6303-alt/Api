@@ -128,6 +128,13 @@ function ProductPage() {
         <button className="clear-filter" onClick={clearFilters}>
           Clear Filters
         </button>
+        <br></br> <br></br>
+
+        <button className="homepage" onClick={() => navigate("/home")}>
+          Go To Homepage
+        </button>
+
+
       </div>
 
       <div className="content">

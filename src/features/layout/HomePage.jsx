@@ -7,23 +7,23 @@ import { clearCart } from "../cart/cartSlice";
 import "../layout/HomePage.css";
 
 
- const slides = [
-        {
-            image: "/images/image1.jpg",
-            title: "Shop Smart, Live Better",
-            subtitle: "Trendy, reliable, and innovative products."
-        },
-        {
-            image: "/images/image2.jpg",
-            title: "Discover New Styles",
-            subtitle: "Upgrade your wardrobe with latest fashion."
-        },
-        {
-            image: "/images/image3.jpg",
-            title: "Best Deals Everyday",
-            subtitle: "Unbeatable prices on top products."
-        }
-    ];
+const slides = [
+    {
+        image: "/images/image1.jpg",
+        title: "Shop Smart, Live Better",
+        subtitle: "Trendy, reliable, and innovative products."
+    },
+    {
+        image: "/images/image2.jpg",
+        title: "Discover New Styles",
+        subtitle: "Upgrade your wardrobe with latest fashion."
+    },
+    {
+        image: "/images/image3.jpg",
+        title: "Best Deals Everyday",
+        subtitle: "Unbeatable prices on top products."
+    }
+];
 
 function HomePage() {
     const navigate = useNavigate();
@@ -37,7 +37,7 @@ function HomePage() {
     );
     const wishlistCount = useSelector(state => state.wishlist.items.length);
 
-    const user = useSelector(state => state.auth.user);  
+    const user = useSelector(state => state.auth.user);
     const isAuthenticated = !!user;
 
 
@@ -49,11 +49,11 @@ function HomePage() {
     }, [slides.length]);
 
     const handleLogout = () => {
-    dispatch(logout());
-    dispatch(clearCart());
-    setShowMenu(false);
-    navigate("/home");
-};
+        dispatch(logout());
+        dispatch(clearCart());
+        setShowMenu(false);
+        navigate("/home");
+    };
 
     const protectedNav = (path) => {
         if (isAuthenticated) {
@@ -63,7 +63,7 @@ function HomePage() {
         }
     };
 
-    const prev = () => setIndex(prev => (prev - 1 + slides.length) % slides.length);   
+    const prev = () => setIndex(prev => (prev - 1 + slides.length) % slides.length);
     const next = () => setIndex(prev => (prev + 1) % slides.length);
 
     return (
@@ -106,9 +106,8 @@ function HomePage() {
                     {isAuthenticated ? (
                         <div className="user-menu">
                             <div className="user-greeting" onClick={() => setShowMenu(prev => !prev)}>
-                                Hello, {user?.name || "User"}
+                               Hello, {user?.name || "User"}
                             </div>
-
                             {showMenu && (
                                 <div className="dropdown">
                                     <div onClick={() => { navigate("/profile"); setShowMenu(false); }}>Profile</div>
