@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FaShoppingCart, FaHeart, FaBox, FaMapMarkerAlt } from "react-icons/fa";
 import { logout } from "../auth/authSlice";
+import { clearCart } from "../cart/cartSlice";
 import "../layout/HomePage.css";
 
 
@@ -48,10 +49,11 @@ function HomePage() {
     }, [slides.length]);
 
     const handleLogout = () => {
-        dispatch(logout());
-        setShowMenu(false);
-        navigate("/home");
-    };
+    dispatch(logout());
+    dispatch(clearCart());
+    setShowMenu(false);
+    navigate("/home");
+};
 
     const protectedNav = (path) => {
         if (isAuthenticated) {
@@ -88,14 +90,14 @@ function HomePage() {
 
                         <div className="icon" onClick={() => navigate("/cart")}>
                             <FaShoppingCart />
-                            {isAuthenticated && cartCount > 0 && (
+                            {cartCount > 0 && (
                                 <span className="badge">{cartCount}</span>
                             )}
                         </div>
 
                         <div className="icon" onClick={() => protectedNav("/wishlist")}>
                             <FaHeart />
-                            {isAuthenticated && wishlistCount > 0 && (
+                            {wishlistCount > 0 && (
                                 <span className="badge">{wishlistCount}</span>
                             )}
                         </div>

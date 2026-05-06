@@ -152,14 +152,14 @@ function ProductPage() {
 
             <div className="icon" onClick={() => navigate("/cart")}>
               <FaShoppingCart />
-              {isAuthenticated && cartCount > 0 && (
+              {cartCount > 0 && (
                 <span className="badge">{cartCount}</span>
               )}
             </div>
 
             <div className="icon" onClick={() => protectedNav("/wishlist")}>
               <FaHeart />
-              {isAuthenticated && wishlistCount > 0 && (
+              {wishlistCount > 0 && (
                 <span className="badge">{wishlistCount}</span>
               )}
             </div>
