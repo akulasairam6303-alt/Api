@@ -1,11 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { FaShoppingCart, FaHeart, FaBox, FaMapMarkerAlt } from "react-icons/fa";
+
+import {
+    FaShoppingCart,
+    FaHeart,
+    FaBox,
+    FaMapMarkerAlt,
+    FaHeadphones,
+    FaBlender,
+    FaLaptop,
+    FaTshirt,
+    FaHamburger,
+    FaShoppingBasket,
+    FaStar,
+    FaBookOpen
+} from "react-icons/fa";
+
 import { logout } from "../auth/authSlice";
 import { clearCart } from "../cart/cartSlice";
 import "../layout/HomePage.css";
-
 
 const slides = [
     {
@@ -25,28 +39,68 @@ const slides = [
     }
 ];
 
+const categories = [
+    {
+        name: "Accessories",
+        icon: <FaHeadphones />
+    },
+    {
+        name: "Appliances",
+        icon: <FaBlender />
+    },
+    {
+        name: "Electronics",
+        icon: <FaLaptop />
+    },
+    {
+        name: "Fashion",
+        icon: <FaTshirt />
+    },
+    {
+        name: "Food",
+        icon: <FaHamburger />
+    },
+    {
+        name: "Grocery",
+        icon: <FaShoppingBasket />
+    },
+    {
+        name: "New Arrivals",
+        icon: <FaStar />
+    },
+    {
+        name: "Travel Book",
+        icon: <FaBookOpen />
+    }
+];
+
 function HomePage() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const [showMenu, setShowMenu] = useState(false);
     const [index, setIndex] = useState(0);
+    const [activeCategory, setActiveCategory] = useState("Accessories");
 
     const cartCount = useSelector(state =>
         state.cart.items.reduce((total, item) => total + item.quantity, 0)
     );
-    const wishlistCount = useSelector(state => state.wishlist.items.length);
+
+    const wishlistCount = useSelector(
+        state => state.wishlist.items.length
+    );
 
     const user = useSelector(state => state.auth.user);
-    const isAuthenticated = !!user;
 
+    const isAuthenticated = !!user;
 
     useEffect(() => {
         const interval = setInterval(() => {
             setIndex(prev => (prev + 1) % slides.length);
         }, 4000);
+
         return () => clearInterval(interval);
-    }, [slides.length]);
+    }, []);
 
     const handleLogout = () => {
         dispatch(logout());
@@ -63,13 +117,22 @@ function HomePage() {
         }
     };
 
-    const prev = () => setIndex(prev => (prev - 1 + slides.length) % slides.length);
-    const next = () => setIndex(prev => (prev + 1) % slides.length);
+    const prev = () => {
+        setIndex(prev => (prev - 1 + slides.length) % slides.length);
+    };
+
+    const next = () => {
+        setIndex(prev => (prev + 1) % slides.length);
+    };
 
     return (
         <>
             <div className="landing-navbar">
-                <div className="logo" onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>
+                <div
+                    className="logo"
+                    onClick={() => navigate("/")}
+                    style={{ cursor: "pointer" }}
+                >
                     ECOMMERCE
                 </div>
 
@@ -78,45 +141,84 @@ function HomePage() {
                     <span>Turn On Your Location</span>
                 </div>
 
-                <input className="search-bar" placeholder="Explore products..." />
+                <input
+                    className="search-bar"
+                    placeholder="Explore products..."
+                />
 
                 <div className="nav-actions">
-                    <button className="seller-btn">Seller Dashboard</button>
+                    <button className="seller-btn">
+                        Seller Dashboard
+                    </button>
 
                     <div className="icon-container">
-                        <div className="icon" onClick={() => protectedNav("/orders")}>
+                        <div
+                            className="icon"
+                            onClick={() => protectedNav("/orders")}
+                        >
                             <FaBox />
                         </div>
 
-                        <div className="icon" onClick={() => navigate("/cart")}>
+                        <div
+                            className="icon"
+                            onClick={() => navigate("/cart")}
+                        >
                             <FaShoppingCart />
+
                             {cartCount > 0 && (
-                                <span className="badge">{cartCount}</span>
+                                <span className="badge">
+                                    {cartCount}
+                                </span>
                             )}
                         </div>
 
-                        <div className="icon" onClick={() => protectedNav("/wishlist")}>
+                        <div
+                            className="icon"
+                            onClick={() => protectedNav("/wishlist")}
+                        >
                             <FaHeart />
+
                             {wishlistCount > 0 && (
-                                <span className="badge">{wishlistCount}</span>
+                                <span className="badge">
+                                    {wishlistCount}
+                                </span>
                             )}
                         </div>
                     </div>
 
                     {isAuthenticated ? (
                         <div className="user-menu">
-                            <div className="user-greeting" onClick={() => setShowMenu(prev => !prev)}>
-                               Hello, {user?.name || "User"}
+                            <div
+                                className="user-greeting"
+                                onClick={() =>
+                                    setShowMenu(prev => !prev)
+                                }
+                            >
+                                Hello, {user?.name || "User"}
                             </div>
+
                             {showMenu && (
                                 <div className="dropdown">
-                                    <div onClick={() => { navigate("/profile"); setShowMenu(false); }}>Profile</div>
-                                    <div onClick={handleLogout}>Logout</div>
+                                    <div
+                                        onClick={() => {
+                                            navigate("/profile");
+                                            setShowMenu(false);
+                                        }}
+                                    >
+                                        Profile
+                                    </div>
+
+                                    <div onClick={handleLogout}>
+                                        Logout
+                                    </div>
                                 </div>
                             )}
                         </div>
                     ) : (
-                        <button className="login-btn" onClick={() => navigate("/login")}>
+                        <button
+                            className="login-btn"
+                            onClick={() => navigate("/login")}
+                        >
                             Login
                         </button>
                     )}
@@ -124,35 +226,71 @@ function HomePage() {
             </div>
 
             <div className="category-bar">
-                <span>Accessories</span>
-                <span>Appliances</span>
-                <span>Electronics</span>
-                <span>Fashion</span>
-                <span>Food</span>
-                <span>Grocery</span>
-                <span>New Arrivals</span>
+                {categories.map((category) => (
+                    <div
+                        key={category.name}
+                        className={
+                            activeCategory === category.name
+                                ? "category-item active-category"
+                                : "category-item"
+                        }
+                        onClick={() =>
+                            setActiveCategory(category.name)
+                        }
+                    >
+                        <div className="category-icon">
+                            {category.icon}
+                        </div>
+
+                        <span>{category.name}</span>
+                    </div>
+                ))}
             </div>
 
             <div className="banner">
                 <div className="banner-content">
                     <div className="banner-text">
-                        <p className="subtitle">{slides[index].subtitle}</p>
-                        <h1 className="title">{slides[index].title}</h1>
+                        <p className="subtitle">
+                            {slides[index].subtitle}
+                        </p>
+
+                        <h1 className="title">
+                            {slides[index].title}
+                        </h1>
+
                         <p className="description">
                             Choose from a wide range of fashion essentials and cutting-edge electronics.
                         </p>
-                        <button className="shop-btn" onClick={() => navigate("/products")}>
+
+                        <button
+                            className="shop-btn"
+                            onClick={() => navigate("/products")}
+                        >
                             SHOP NOW
                         </button>
                     </div>
 
                     <div className="banner-image">
-                        <img src={slides[index].image} alt="slide" />
+                        <img
+                            src={slides[index].image}
+                            alt="slide"
+                        />
                     </div>
                 </div>
 
-                <button className="arrow left" onClick={prev}>‹</button>
-                <button className="arrow right" onClick={next}>›</button>
+                <button
+                    className="arrow left"
+                    onClick={prev}
+                >
+                    ‹
+                </button>
+
+                <button
+                    className="arrow right"
+                    onClick={next}
+                >
+                    ›
+                </button>
             </div>
         </>
     );

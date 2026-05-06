@@ -153,33 +153,32 @@
   border-radius: 50%;
 }
 
-
 .category-bar {
-  display: flex;
-  gap: 15px;
-  padding: 10px 40px;
-  background: #f9fafb;
-  border-top: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 24px;
+    background: white;
+    overflow-x: auto;
 }
 
 .category-bar span {
-  padding: 8px 16px;
-  border-radius: 20px;
-  background: #e5e7eb;
-  cursor: pointer;
-  transition: 0.2s ease;
-  color: #374151;
+    cursor: pointer;
+    padding: 8px 14px;
+    transition: 0.3s;
+    font-size: 15px;
+    white-space: nowrap;
 }
 
 .category-bar span:hover {
-  background: #d1d5db;
+    color: #ff6600;
 }
 
-.category-bar span:first-child {
-  background: linear-gradient(135deg, #7c3aed, #ec4899);
-  color: white;
+.active-category {
+    color: #ff6600;
+    font-weight: bold;
+    border-bottom: 2px solid #ff6600;
 }
-
 
 .banner {
   background: #f3f4f6;
