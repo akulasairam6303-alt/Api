@@ -1,7 +1,6 @@
 import {
     useState,
-    useEffect,
-    useRef
+    useEffect
 } from "react";
 
 import {
@@ -18,14 +17,13 @@ function CategorySection({
     activeCategory
 }) {
 
-    const carouselRef = useRef(null);
-
-    const isPaused = useRef(false);
-
     const navigate = useNavigate();
 
     const [products, setProducts] =
         useState([]);
+
+    const [currentIndex, setCurrentIndex] =
+        useState(0);
 
     useEffect(() => {
 
@@ -34,72 +32,51 @@ function CategorySection({
         )
             .then(res => res.json())
             .then(data => {
+
                 setProducts(data.products);
+
+                setCurrentIndex(0);
+
             });
 
     }, [activeCategory]);
 
     useEffect(() => {
 
-        const carousel =
-            carouselRef.current;
+        if (products.length === 0)
+            return;
 
-        if (
-            !carousel ||
-            products.length === 0
-        ) return;
+        const interval = setInterval(() => {
 
-        let animationFrame;
-
-        const speed = 0.8;
-
-        const autoScroll = () => {
-
-            if (!isPaused.current) {
-
-                carousel.scrollLeft += speed;
-
-                if (
-                    carousel.scrollLeft >=
-                    carousel.scrollWidth / 2
-                ) {
-
-                    carousel.scrollLeft = 0;
-                }
-            }
-
-            animationFrame =
-                requestAnimationFrame(
-                    autoScroll
-                );
-        };
-
-        animationFrame =
-            requestAnimationFrame(
-                autoScroll
+            setCurrentIndex(prev =>
+                prev >= products.length - 1
+                    ? 0
+                    : prev + 1
             );
+
+        }, 2500);
 
         return () =>
-            cancelAnimationFrame(
-                animationFrame
-            );
+            clearInterval(interval);
 
     }, [products]);
 
-    const scrollLeft = () => {
+    const nextSlide = () => {
 
-        carouselRef.current.scrollBy({
-            left: -320,
-            behavior: "smooth"
-        });
+        setCurrentIndex(prev =>
+            prev >= products.length - 1
+                ? 0
+                : prev + 1
+        );
     };
 
-    const scrollRight = () => {
+    const prevSlide = () => {
 
-        carouselRef.current.scrollBy({
-            left: 320,
-            behavior: "smooth"
-        });
+        setCurrentIndex(prev =>
+            prev <= 0
+                ? products.length - 1
+                : prev - 1
+        );
     };
 
     return (
@@ -135,98 +112,92 @@ function CategorySection({
 
             <div className="deal-right">
 
-                <div
-                    className="products-carousel"
-                    ref={carouselRef}
-                    onMouseEnter={() => {
-                        isPaused.current = true;
-                    }}
-                    onMouseLeave={() => {
-                        isPaused.current = false;
-                    }}
-                    onTouchStart={() => {
-                        isPaused.current = true;
-                    }}
-                    onTouchEnd={() => {
-                        isPaused.current = false;
-                    }}
-                >
-
-                    {[...products, ...products]
-                        .map(
-                            (
-                                product,
-                                index
-                            ) => (
-
-                                <div
-                                    className="product-card"
-                                    key={`${product.id}-${index}`}
-                                >
-
-                                    <span className="discount-tag">
-
-                                        {Math.round(
-                                            product.discountPercentage
-                                        )}% OFF
-
-                                    </span>
-
-                                    <img
-                                        src={product.thumbnail}
-                                        alt={product.title}
-                                    />
-
-                                    <h4>
-                                        {product.title}
-                                    </h4>
-
-                                    <p className="brand">
-                                        {product.brand}
-                                    </p>
-
-                                    <div className="product-price">
-                                        $
-                                        {product.price}
-                                    </div>
-
-                                    <div className="rating-row">
-
-                                        {[...Array(5)]
-                                            .map(
-                                                (
-                                                    _,
-                                                    index
-                                                ) => (
-
-                                                    <FaStar
-                                                        key={index}
-                                                    />
-
-                                                )
-                                            )}
-
-                                    </div>
-
-                                </div>
-
-                            )
-                        )}
-
-                </div>
-
-                <div className="carousel-top">
+                <div className="carousel-container">
 
                     <button
                         className="carousel-arrow left-arrow"
-                        onClick={scrollLeft}
+                        onClick={prevSlide}
                     >
                         <FaChevronLeft />
                     </button>
 
+                    <div className="carousel-wrapper">
+
+                        <div
+                            className="products-track"
+                            style={{
+                                transform: `translateX(-${currentIndex * 238}px)`
+                            }}
+                        >
+
+                            {[...products, ...products]
+                                .map(
+                                    (
+                                        product,
+                                        index
+                                    ) => (
+
+                                        <div
+                                            className="product-card"
+                                            key={`${product.id}-${index}`}
+                                        >
+
+                                            <span className="discount-tag">
+
+                                                {Math.round(
+                                                    product.discountPercentage
+                                                )}% OFF
+
+                                            </span>
+
+                                            <img
+                                                src={product.thumbnail}
+                                                alt={product.title}
+                                            />
+
+                                            <h4>
+                                                {product.title}
+                                            </h4>
+
+                                            <p className="brand">
+                                                {product.brand}
+                                            </p>
+
+                                            <div className="product-price">
+                                                $
+                                                {product.price}
+                                            </div>
+
+                                            <div className="rating-row">
+
+                                                {[...Array(5)]
+                                                    .map(
+                                                        (
+                                                            _,
+                                                            index
+                                                        ) => (
+
+                                                            <FaStar
+                                                                key={index}
+                                                            />
+
+                                                        )
+                                                    )}
+
+                                            </div>
+
+                                        </div>
+
+                                    )
+                                )}
+
+                        </div>
+
+                    </div>
+
                     <button
                         className="carousel-arrow right-arrow"
-                        onClick={scrollRight}
+                        onClick={nextSlide}
                     >
                         <FaChevronRight />
                     </button>
