@@ -299,9 +299,20 @@ function HomePage() {
                                 ? "category-pill active-pill"
                                 : "category-pill"
                         }
-                        onClick={() =>
-                            setActiveCategory(category.slug)
-                        }
+                        onClick={() => {
+
+                            setActiveCategory(
+                                category.slug
+                            );
+
+                            document
+                                .getElementById(
+                                    "category-section"
+                                )
+                                ?.scrollIntoView({
+                                    behavior: "smooth"
+                                });
+                        }}
                     >
 
                         <span className="pill-icon">
@@ -374,9 +385,13 @@ function HomePage() {
 
             </div>
 
-            <CategorySection
-                activeCategory={activeCategory}
-            />
+            <div id="category-section">
+
+                <CategorySection
+                    activeCategory={activeCategory}
+                />
+
+            </div>
 
         </>
     );
