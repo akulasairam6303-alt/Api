@@ -1,0 +1,253 @@
+.deal-section {
+  display: flex;
+  gap: 30px;
+  padding: 30px;
+  margin: 20px;
+  background: #f8f5fc;
+  border-radius: 26px;
+  overflow: hidden;
+}
+
+.deal-left {
+  width: 280px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.deal-badge {
+  display: inline-flex;
+  width: fit-content;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.deal-left h2 {
+  font-size: 32px;
+  color: #111827;
+  margin-bottom: 14px;
+  line-height: 1.2;
+}
+
+.deal-left p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #6b7280;
+  margin-bottom: 24px;
+}
+
+.deal-btn {
+  width: fit-content;
+  border: none;
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
+  color: white;
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.deal-btn:hover {
+  transform: translateY(-2px);
+}
+
+.deal-right {
+  flex: 1;
+  overflow: hidden;
+}
+
+
+.pill-icon {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.products-carousel {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.products-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.product-card {
+  min-width: 220px;
+  background: #f3ecfb;
+  border-radius: 22px;
+  padding: 16px;
+  position: relative;
+  flex-shrink: 0;
+  transition: 0.25s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+}
+
+.discount-tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: #a855f7;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.product-card img {
+  width: 100%;
+  height: 170px;
+  object-fit: contain;
+  margin-bottom: 14px;
+}
+
+.product-card h4 {
+  font-size: 14px;
+  color: #111827;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.brand {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 10px;
+}
+
+.product-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 10px;
+}
+
+.rating-row {
+  display: flex;
+  gap: 4px;
+  color: #a855f7;
+  font-size: 12px;
+}
+
+.carousel-top {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.carousel-arrow {
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: white;
+  color: #7c3aed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.25s ease;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+.carousel-arrow:hover {
+  background: linear-gradient(
+    135deg,
+    #7c3aed,
+    #ec4899
+  );
+  color: white;
+  transform: translateY(-2px);
+}
+
+.left-arrow {
+  margin-right: 2px;
+}
+
+.right-arrow {
+  margin-left: 2px;
+}
+
+@media (max-width: 1024px) {
+  .deal-section {
+    flex-direction: column;
+  }
+
+  .deal-left {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .deal-section {
+    margin: 12px;
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .deal-left h2 {
+    font-size: 28px;
+  }
+
+  .category-pill {
+    padding: 9px 14px;
+    font-size: 12px;
+  }
+
+  .product-card {
+    min-width: 190px;
+  }
+
+  .product-card img {
+    height: 140px;
+  }
+}
+
+@media (max-width: 480px) {
+  .deal-section {
+    padding: 16px;
+  }
+
+  .deal-left h2 {
+    font-size: 24px;
+  }
+
+  .deal-left p {
+    font-size: 13px;
+  }
+
+  .deal-btn {
+    width: 100%;
+  }
+
+  .product-card {
+    min-width: 170px;
+    padding: 14px;
+  }
+
+  .product-card img {
+    height: 120px;
+  }
+
+  .product-card h4 {
+    font-size: 13px;
+  }
+
+  .product-price {
+    font-size: 16px;
+  }
+}
