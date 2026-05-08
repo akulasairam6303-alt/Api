@@ -364,7 +364,7 @@ body {
   margin-left: 4px;
 }
 
-@media (max-width: 992px) {
+@media(max-width:992px) {
   .landing-navbar {
     gap: 14px;
   }
@@ -383,7 +383,7 @@ body {
   }
 }
 
-@media (max-width: 768px) {
+@media(max-width:768px) {
   .landing-navbar {
     flex-direction: column;
     align-items: stretch;
@@ -480,7 +480,7 @@ body {
   }
 }
 
-@media (max-width: 480px) {
+@media(max-width:480px) {
   .landing-navbar {
     padding: 12px;
     gap: 12px;

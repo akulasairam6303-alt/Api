@@ -1,47 +1,29 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
-import {
-    FaShoppingCart,
-    FaHeart,
-    FaBox,
-    FaMapMarkerAlt
-} from "react-icons/fa";
-
-import {
-    HiOutlineSparkles,
-    HiOutlineHome,
-    HiOutlineShoppingBag
-} from "react-icons/hi";
-
+import { FaShoppingCart, FaHeart, FaBox, FaMapMarkerAlt } from "react-icons/fa";
+import { HiOutlineSparkles, HiOutlineHome, HiOutlineShoppingBag } from "react-icons/hi";
 import { TbPerfume } from "react-icons/tb";
-
 import { logout } from "../auth/authSlice";
 import { clearCart } from "../cart/cartSlice";
-
 import CategorySection from "../layout/CategorySection";
-
 import "../layout/HomePage.css";
 
 const slides = [
     {
         image: "/images/image1.jpg",
         title: "Shop Smart, Live Better",
-        subtitle:
-            "Trendy, reliable, and innovative products."
+        subtitle: "Trendy, reliable, and innovative products."
     },
     {
         image: "/images/image2.jpg",
         title: "Discover New Styles",
-        subtitle:
-            "Upgrade your wardrobe with latest fashion."
+        subtitle: "Upgrade your wardrobe with latest fashion."
     },
     {
         image: "/images/image3.jpg",
         title: "Best Deals Everyday",
-        subtitle:
-            "Unbeatable prices on top products."
+        subtitle: "Unbeatable prices on top products."
     }
 ];
 
@@ -69,21 +51,13 @@ const categories = [
 ];
 
 function HomePage() {
-
     const navigate = useNavigate();
-
     const dispatch = useDispatch();
 
-    const [showMenu, setShowMenu] =
-        useState(false);
-
+    const [showMenu, setShowMenu] = useState(false);
     const [index, setIndex] = useState(1);
-
-    const [transition, setTransition] =
-        useState(true);
-
-    const [activeCategory, setActiveCategory] =
-        useState("beauty");
+    const [transition, setTransition] = useState(true);
+    const [activeCategory, setActiveCategory] = useState("beauty");
 
     const extendedSlides = [
         slides[slides.length - 1],
@@ -93,8 +67,7 @@ function HomePage() {
 
     const cartCount = useSelector(state =>
         state.cart.items.reduce(
-            (total, item) =>
-                total + item.quantity,
+            (total, item) => total + item.quantity,
             0
         )
     );
@@ -110,97 +83,63 @@ function HomePage() {
     const isAuthenticated = !!user;
 
     useEffect(() => {
-
         const interval = setInterval(() => {
-
             setIndex(prev => prev + 1);
-
         }, 4000);
 
         return () => clearInterval(interval);
-
     }, []);
 
     useEffect(() => {
-
-        if (
-            index ===
-            extendedSlides.length - 1
-        ) {
-
+        if (index === extendedSlides.length - 1) {
             setTimeout(() => {
-
                 setTransition(false);
-
                 setIndex(1);
-
             }, 800);
         }
 
         if (index === 0) {
-
             setTimeout(() => {
-
                 setTransition(false);
-
                 setIndex(slides.length);
-
             }, 800);
         }
-
     }, [index]);
 
     useEffect(() => {
-
         if (!transition) {
-
             setTimeout(() => {
-
                 setTransition(true);
-
             }, 50);
         }
-
     }, [transition]);
 
     const handleLogout = () => {
-
         dispatch(logout());
-
         dispatch(clearCart());
-
         setShowMenu(false);
-
         navigate("/home");
     };
 
     const protectedNav = path => {
-
         if (isAuthenticated) {
-
             navigate(path);
-
         } else {
-
             navigate("/login");
         }
     };
 
     const prev = () => {
-
         setIndex(prev => prev - 1);
     };
 
     const next = () => {
-
         setIndex(prev => prev + 1);
     };
 
     return (
         <>
-
             <div className="landing-navbar">
-
                 <div
                     className="logo"
                     onClick={() => navigate("/")}
@@ -209,13 +148,8 @@ function HomePage() {
                 </div>
 
                 <div className="location">
-
                     <FaMapMarkerAlt />
-
-                    <span>
-                        Turn On Your Location
-                    </span>
-
+                    <span>Turn On Your Location</span>
                 </div>
 
                 <input
@@ -224,119 +158,82 @@ function HomePage() {
                 />
 
                 <div className="nav-actions">
-
                     <button className="seller-btn">
                         Seller Dashboard
                     </button>
 
                     <div className="icon-container">
-
                         <div
                             className="icon"
-                            onClick={() =>
-                                protectedNav("/orders")
-                            }
+                            onClick={() => protectedNav("/orders")}
                         >
                             <FaBox />
                         </div>
 
                         <div
                             className="icon"
-                            onClick={() =>
-                                navigate("/cart")
-                            }
+                            onClick={() => navigate("/cart")}
                         >
-
                             <FaShoppingCart />
-
                             {cartCount > 0 && (
                                 <span className="badge">
                                     {cartCount}
                                 </span>
                             )}
-
                         </div>
 
                         <div
                             className="icon"
-                            onClick={() =>
-                                protectedNav("/wishlist")
-                            }
+                            onClick={() => protectedNav("/wishlist")}
                         >
-
                             <FaHeart />
-
                             {wishlistCount > 0 && (
                                 <span className="badge">
                                     {wishlistCount}
                                 </span>
                             )}
-
                         </div>
-
                     </div>
 
                     {isAuthenticated ? (
-
                         <div className="user-menu">
-
                             <div
                                 className="user-greeting"
-                                onClick={() =>
-                                    setShowMenu(prev => !prev)
-                                }
+                                onClick={() => setShowMenu(prev => !prev)}
                             >
                                 Hello, {user?.name || "User"}
                             </div>
 
                             {showMenu && (
-
                                 <div className="dropdown">
-
                                     <div
                                         onClick={() => {
-
                                             navigate("/profile");
-
                                             setShowMenu(false);
                                         }}
                                     >
                                         Profile
                                     </div>
 
-                                    <div
-                                        onClick={handleLogout}
-                                    >
+                                    <div onClick={handleLogout}>
                                         Logout
                                     </div>
-
                                 </div>
-
                             )}
-
                         </div>
-
                     ) : (
-
                         <button
                             className="login-btn"
-                            onClick={() =>
-                                navigate("/login")
-                            }
+                            onClick={() => navigate("/login")}
                         >
                             Login
                         </button>
-
                     )}
-
                 </div>
-
             </div>
 
             <div className="category-pills">
-
                 {categories.map(category => (
-
                     <button
                         key={category.slug}
                         className={
@@ -345,35 +242,25 @@ function HomePage() {
                                 : "category-pill"
                         }
                         onClick={() => {
-
-                            setActiveCategory(
-                                category.slug
-                            );
+                            setActiveCategory(category.slug);
 
                             document
-                                .getElementById(
-                                    "category-section"
-                                )
+                                .getElementById("category-section")
                                 ?.scrollIntoView({
                                     behavior: "smooth"
                                 });
                         }}
                     >
-
                         <span className="pill-icon">
                             {category.icon}
                         </span>
 
                         {category.label}
-
                     </button>
-
                 ))}
-
             </div>
 
             <div className="banner">
-
                 <div
                     className="slider"
                     style={{
@@ -383,60 +270,42 @@ function HomePage() {
                             : "none"
                     }}
                 >
+                    {extendedSlides.map((slide, i) => (
+                        <div
+                            className="slide"
+                            key={i}
+                        >
+                            <div className="banner-content">
+                                <div className="banner-text">
+                                    <p className="subtitle">
+                                        {slide.subtitle}
+                                    </p>
 
-                    {extendedSlides.map(
-                        (slide, i) => (
+                                    <h1 className="title">
+                                        {slide.title}
+                                    </h1>
 
-                            <div
-                                className="slide"
-                                key={i}
-                            >
+                                    <p className="description">
+                                        Choose from a wide range of fashion essentials and cutting-edge electronics.
+                                    </p>
 
-                                <div className="banner-content">
-
-                                    <div className="banner-text">
-
-                                        <p className="subtitle">
-                                            {slide.subtitle}
-                                        </p>
-
-                                        <h1 className="title">
-                                            {slide.title}
-                                        </h1>
-
-                                        <p className="description">
-                                            Choose from a wide range
-                                            of fashion essentials and
-                                            cutting-edge electronics.
-                                        </p>
-
-                                        <button
-                                            className="shop-btn"
-                                            onClick={() =>
-                                                navigate("/products")
-                                            }
-                                        >
-                                            SHOP NOW
-                                        </button>
-
-                                    </div>
-
-                                    <div className="banner-image">
-
-                                        <img
-                                            src={slide.image}
-                                            alt="slide"
-                                        />
-
-                                    </div>
-
+                                    <button
+                                        className="shop-btn"
+                                        onClick={() => navigate("/products")}
+                                    >
+                                        SHOP NOW
+                                    </button>
                                 </div>
 
+                                <div className="banner-image">
+                                    <img
+                                        src={slide.image}
+                                        alt="slide"
+                                    />
+                                </div>
                             </div>
-
-                        )
-                    )}
-
+                        </div>
+                    ))}
                 </div>
 
                 <button
@@ -452,18 +321,14 @@ function HomePage() {
                 >
                     ›
                 </button>
-
             </div>
 
             <div id="category-section">
-
                 <CategorySection
                     key={activeCategory}
                     activeCategory={activeCategory}
                 />
-
             </div>
-
         </>
     );
 }
