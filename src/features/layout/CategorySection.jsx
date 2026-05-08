@@ -170,19 +170,11 @@ function CategorySection({
 
                                             <div className="rating-row">
 
-                                                {[...Array(5)]
-                                                    .map(
-                                                        (
-                                                            _,
-                                                            index
-                                                        ) => (
+                                                <FaStar className="filled-star" />
 
-                                                            <FaStar
-                                                                key={index}
-                                                            />
-
-                                                        )
-                                                    )}
+                                                <span className="rating-value">
+                                                    {product.rating}
+                                                </span>
 
                                             </div>
 
@@ -207,6 +199,7 @@ function CategorySection({
             </div>
 
         </div>
+
     );
 }
 

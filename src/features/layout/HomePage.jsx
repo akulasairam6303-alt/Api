@@ -327,45 +327,64 @@ function HomePage() {
 
             </div>
 
+            {/* SLIDER */}
+
             <div className="banner">
 
-                <div className="banner-content">
+                <div
+                    className="slider"
+                    style={{
+                        transform: `translateX(-${index * 100}%)`
+                    }}
+                >
 
-                    <div className="banner-text">
+                    {slides.map((slide, i) => (
 
-                        <p className="subtitle">
-                            {slides[index].subtitle}
-                        </p>
+                        <div className="slide" key={i}>
 
-                        <h1 className="title">
-                            {slides[index].title}
-                        </h1>
+                            <div className="banner-content">
 
-                        <p className="description">
-                            Choose from a wide range
-                            of fashion essentials and
-                            cutting-edge electronics.
-                        </p>
+                                <div className="banner-text">
 
-                        <button
-                            className="shop-btn"
-                            onClick={() =>
-                                navigate("/products")
-                            }
-                        >
-                            SHOP NOW
-                        </button>
+                                    <p className="subtitle">
+                                        {slide.subtitle}
+                                    </p>
 
-                    </div>
+                                    <h1 className="title">
+                                        {slide.title}
+                                    </h1>
 
-                    <div className="banner-image">
+                                    <p className="description">
+                                        Choose from a wide range
+                                        of fashion essentials and
+                                        cutting-edge electronics.
+                                    </p>
 
-                        <img
-                            src={slides[index].image}
-                            alt="slide"
-                        />
+                                    <button
+                                        className="shop-btn"
+                                        onClick={() =>
+                                            navigate("/products")
+                                        }
+                                    >
+                                        SHOP NOW
+                                    </button>
 
-                    </div>
+                                </div>
+
+                                <div className="banner-image">
+
+                                    <img
+                                        src={slide.image}
+                                        alt="slide"
+                                    />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    ))}
 
                 </div>
 
@@ -388,6 +407,7 @@ function HomePage() {
             <div id="category-section">
 
                 <CategorySection
+                    key={activeCategory}
                     activeCategory={activeCategory}
                 />
 
