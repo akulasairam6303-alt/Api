@@ -30,8 +30,8 @@ function CategorySection({
         fetch(
             `https://dummyjson.com/products/category/${activeCategory}`
         )
-            .then(res => res.json())
-            .then(data => {
+            .then((res) => res.json())
+            .then((data) => {
 
                 setProducts(data.products);
 
@@ -48,7 +48,7 @@ function CategorySection({
 
         const interval = setInterval(() => {
 
-            setCurrentIndex(prev =>
+            setCurrentIndex((prev) =>
                 prev >= products.length - 1
                     ? 0
                     : prev + 1
@@ -63,20 +63,22 @@ function CategorySection({
 
     const nextSlide = () => {
 
-        setCurrentIndex(prev =>
+        setCurrentIndex((prev) =>
             prev >= products.length - 1
                 ? 0
                 : prev + 1
         );
+
     };
 
     const prevSlide = () => {
 
-        setCurrentIndex(prev =>
+        setCurrentIndex((prev) =>
             prev <= 0
                 ? products.length - 1
                 : prev - 1
         );
+
     };
 
     return (
@@ -126,62 +128,63 @@ function CategorySection({
                         <div
                             className="products-track"
                             style={{
-                                transform: `translateX(-${currentIndex * 238}px)`
+                                transform: `translateX(-${currentIndex * 293}px)`
                             }}
                         >
 
-                            {[...products, ...products]
-                                .map(
-                                    (
-                                        product,
-                                        index
-                                    ) => (
+                            {[...products, ...products].map(
+                                (
+                                    product,
+                                    index
+                                ) => (
 
-                                        <div
-                                            className="product-card"
-                                            key={`${product.id}-${index}`}
-                                        >
+                                    <div
+                                        className="product-card"
+                                        key={`${product.id}-${index}`}
+                                    >
 
-                                            <span className="discount-tag">
+                                        <span className="discount-tag">
 
-                                                {Math.round(
-                                                    product.discountPercentage
-                                                )}% OFF
+                                            {Math.round(
+                                                product.discountPercentage
+                                            )}% OFF
 
-                                            </span>
+                                        </span>
 
-                                            <img
-                                                src={product.thumbnail}
-                                                alt={product.title}
-                                            />
+                                        <img
+                                            src={product.thumbnail}
+                                            alt={product.title}
+                                        />
 
-                                            <h4>
-                                                {product.title}
-                                            </h4>
+                                        <h4>
+                                            {product.title}
+                                        </h4>
 
-                                            <p className="brand">
-                                                {product.brand}
-                                            </p>
+                                        <p className="brand">
+                                            {product.brand}
+                                        </p>
 
-                                            <div className="product-price">
-                                                $
-                                                {product.price}
-                                            </div>
+                                        <div className="product-price">
 
-                                            <div className="rating-row">
-
-                                                <FaStar className="filled-star" />
-
-                                                <span className="rating-value">
-                                                    {product.rating}
-                                                </span>
-
-                                            </div>
+                                            $
+                                            {product.price}
 
                                         </div>
 
-                                    )
-                                )}
+                                        <div className="rating-row">
+
+                                            <FaStar className="filled-star" />
+
+                                            <span className="rating-value">
+                                                {product.rating}
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                )
+                            )}
 
                         </div>
 
@@ -201,6 +204,7 @@ function CategorySection({
         </div>
 
     );
+
 }
 
 export default CategorySection;

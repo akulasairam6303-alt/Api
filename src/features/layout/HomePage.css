@@ -145,31 +145,53 @@ body {
 .icon-container {
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: center;
+  gap: 12px;
 }
 
 .icon {
   position: relative;
-  font-size: 21px;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 18px;
   color: #374151;
   cursor: pointer;
   transition: 0.25s ease;
 }
 
+.icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
 .icon:hover {
   color: #7c3aed;
-  transform: scale(1.08);
+  background: #f3f4f6;
+  transform: scale(1.05);
 }
 
 .badge {
   position: absolute;
-  top: -7px;
-  right: -10px;
+  top: 2px;
+  right: 2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
   background: #ef4444;
-  color: white;
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 50%;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 .category-pills {
@@ -243,50 +265,63 @@ body {
 
 .slide {
   min-width: 100%;
-  flex-shrink: 0;
-  padding: 50px clamp(20px, 5vw, 70px);
+  width: 100%;
+  overflow: hidden;
+  padding: 16px 10px 30px;
 }
 
 .banner-content {
   width: 100%;
+  max-width: 100%;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
-  gap: clamp(20px, 5vw, 60px);
+  gap: 14px;
+  text-align: center;
+  overflow: hidden;
 }
 
 .banner-text {
-  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .subtitle {
   color: #6b7280;
-  font-size: clamp(13px, 2vw, 18px);
-  line-height: 1.7;
+  font-size: 11px;
+  line-height: 1.4;
   margin-bottom: 10px;
 }
 
 .title {
-  font-size: clamp(28px, 5vw, 58px);
-  line-height: 1.15;
+  width: 100%;
+  font-size: 22px;
+  line-height: 1.2;
   font-weight: 800;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   background: linear-gradient(45deg, #7c3aed, #ec4899);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  word-break: break-word;
 }
 
 .description {
+  width: 100%;
   color: #4b5563;
-  line-height: 1.8;
-  margin-bottom: 24px;
-  font-size: clamp(13px, 1.8vw, 16px);
+  line-height: 1.5;
+  margin-bottom: 16px;
+  font-size: 11px;
+  word-break: break-word;
 }
 
 .shop-btn {
+  width: 100%;
+  max-width: 220px;
   background: linear-gradient(135deg, #7c3aed, #ec4899);
   color: white;
-  padding: 14px 28px;
+  padding: 10px;
   border-radius: 999px;
   border: none;
   cursor: pointer;
@@ -299,15 +334,14 @@ body {
 }
 
 .banner-image {
-  flex: 1;
+  width: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
 }
 
 .banner-image img {
   width: 100%;
-  max-width: 420px;
+  max-width: 140px;
   height: auto;
   object-fit: contain;
 }
@@ -316,13 +350,13 @@ body {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 42px;
-  height: 42px;
+  width: 24px;
+  height: 24px;
   border: none;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.85);
   color: #7c3aed;
-  font-size: 24px;
+  font-size: 12px;
   cursor: pointer;
   transition: 0.25s ease;
   z-index: 10;
@@ -333,11 +367,11 @@ body {
 }
 
 .arrow.left {
-  left: 14px;
+  left: 2px;
 }
 
 .arrow.right {
-  right: 14px;
+  right: 2px;
 }
 
 .rating-row {
@@ -345,6 +379,7 @@ body {
   align-items: center;
   gap: 4px;
   margin-top: 6px;
+  justify-content: center;
 }
 
 .filled-star {
@@ -364,140 +399,36 @@ body {
   margin-left: 4px;
 }
 
-@media(max-width:992px) {
-  .landing-navbar {
-    gap: 14px;
-  }
-
-  .search-bar {
-    order: 10;
-    width: 100%;
-  }
-
-  .banner-content {
-    gap: 30px;
-  }
-
-  .banner-image img {
-    max-width: 320px;
-  }
-}
-
-@media(max-width:768px) {
+@media (max-width: 320px) {
   .landing-navbar {
     flex-direction: column;
     align-items: stretch;
-    padding: 14px;
-    gap: 14px;
+    padding: 8px;
+    gap: 10px;
   }
 
   .logo {
     text-align: center;
+    font-size: 18px;
   }
 
   .location {
     justify-content: center;
+    font-size: 10px;
   }
 
   .search-bar {
     width: 100%;
     min-width: 100%;
+    height: 38px;
+    font-size: 11px;
+    padding: 0 10px;
   }
 
   .nav-actions {
     width: 100%;
     justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .seller-btn,
-  .login-btn {
-    padding: 8px 12px;
-    font-size: 12px;
-  }
-
-  .icon-container {
-    gap: 12px;
-  }
-
-  .icon {
-    font-size: 19px;
-  }
-
-  .category-pills {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    padding: 10px 12px;
-  }
-
-  .category-pill {
-    flex-direction: column;
-    gap: 4px;
-    min-height: 72px;
-    padding: 8px 4px;
-    border-radius: 14px;
-    font-size: 10px;
-    text-align: center;
-  }
-
-  .pill-icon {
-    width: 16px;
-    height: 16px;
-  }
-
-  .slide {
-    padding: 30px 20px 40px;
-  }
-
-  .banner-content {
-    flex-direction: column-reverse;
-    text-align: center;
-    gap: 20px;
-  }
-
-  .banner-image img {
-    max-width: 240px;
-  }
-
-  .shop-btn {
-    width: 100%;
-  }
-
-  .arrow {
-    width: 34px;
-    height: 34px;
-    font-size: 18px;
-  }
-
-  .arrow.left {
-    left: 6px;
-  }
-
-  .arrow.right {
-    right: 6px;
-  }
-}
-
-@media(max-width:480px) {
-  .landing-navbar {
-    padding: 12px;
-    gap: 12px;
-  }
-
-  .logo {
-    font-size: 22px;
-  }
-
-  .location {
-    font-size: 12px;
-  }
-
-  .search-bar {
-    height: 42px;
-    padding: 0 14px;
-    font-size: 13px;
+    gap: 6px;
   }
 
   .seller-btn {
@@ -505,60 +436,197 @@ body {
   }
 
   .login-btn {
-    font-size: 11px;
-    padding: 8px 12px;
-  }
-
-  .user-greeting {
-    font-size: 12px;
+    padding: 6px 10px;
+    font-size: 10px;
   }
 
   .icon-container {
-    gap: 10px;
+    gap: 8px;
   }
 
   .icon {
-    font-size: 18px;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    font-size: 15px;
+  }
+
+  .icon svg {
+    width: 15px;
+    height: 15px;
   }
 
   .badge {
+    min-width: 14px;
+    height: 14px;
     font-size: 8px;
-    padding: 2px 5px;
   }
 
   .category-pills {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 6px;
-    padding: 8px 10px;
+    padding: 8px;
   }
 
   .category-pill {
-    min-height: 64px;
-    padding: 6px 2px;
+    width: 100%;
+    min-height: 56px;
+    padding: 6px;
+    border-radius: 10px;
+    flex-direction: column;
+    font-size: 8px;
+    text-align: center;
+  }
+
+  .pill-icon {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+@media (min-width: 321px) and (max-width: 380px) {
+  .landing-navbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px;
+  }
+
+  .search-bar {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .seller-btn {
+    display: none;
+  }
+
+  .category-pills {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .category-pill {
+    flex-direction: column;
+    min-height: 62px;
     font-size: 9px;
     border-radius: 12px;
   }
 
-  .pill-icon {
-    width: 14px;
-    height: 14px;
+  .banner-image img {
+    max-width: 160px;
   }
 
-  .slide {
-    padding: 24px 14px 34px;
+  .title {
+    font-size: 26px;
+  }
+
+  .description {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 381px) and (max-width: 768px) {
+  .landing-navbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px;
+  }
+
+  .search-bar {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .seller-btn {
+    display: none;
+  }
+
+  .category-pills {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .category-pill {
+    flex-direction: column;
+    text-align: center;
+    min-height: 70px;
   }
 
   .banner-image img {
-    max-width: 180px;
+    max-width: 220px;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+
+  .description {
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 769px) {
+  .slide {
+    padding: 40px 30px;
+  }
+
+  .banner-content {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+    gap: 30px;
+  }
+
+  .banner-text {
+    flex: 1;
+  }
+
+  .banner-image {
+    flex: 1;
+  }
+
+  .banner-image img {
+    max-width: 320px;
+  }
+
+  .title {
+    font-size: 48px;
+  }
+
+  .description {
+    font-size: 15px;
   }
 
   .shop-btn {
-    font-size: 13px;
-    padding: 12px;
+    width: auto;
+    padding: 14px 28px;
   }
 
   .arrow {
-    width: 30px;
-    height: 30px;
-    font-size: 16px;
+    width: 42px;
+    height: 42px;
+    font-size: 24px;
+  }
+
+  .arrow.left {
+    left: 14px;
+  }
+
+  .arrow.right {
+    right: 14px;
+  }
+
+  .rating-row {
+    justify-content: flex-start;
+  }
+}
+
+@media (min-width: 1025px) {
+  .banner-content {
+    max-width: 1300px;
+    margin: auto;
   }
 }
