@@ -165,8 +165,7 @@ function CategorySection({
                                         </p>
 
                                         <div className="product-price">
-
-                                            $
+                                            ₹
                                             {product.price}
 
                                         </div>

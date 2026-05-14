@@ -4,6 +4,7 @@
   margin: 30px auto;
   padding: 0 16px;
   font-family: Arial, sans-serif;
+  box-sizing: border-box;
 }
 
 .checkout-container {
@@ -14,11 +15,13 @@
   min-height: 100vh;
   justify-content: center;
   position: relative;
+  box-sizing: border-box;
 }
 
 .address-section {
   flex: 2;
   max-width: 700px;
+  width: 100%;
 }
 
 .back-btn {
@@ -31,16 +34,19 @@
   font-size: 12px;
   font-weight: 500;
   white-space: nowrap;
+  min-height: 38px;
 }
 
 .summary-section {
   flex: 1;
   max-width: 350px;
+  width: 100%;
   background: #fff;
   padding: 20px;
   border-radius: 10px;
   border: 1px solid #e2e2e2;
   height: fit-content;
+  box-sizing: border-box;
 }
 
 .address-header {
@@ -48,11 +54,13 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
+  gap: 10px;
 }
 
 .address-header h3 {
   font-size: 18px;
   font-weight: 600;
+  line-height: 1.3;
 }
 
 .address-header button {
@@ -63,6 +71,8 @@
   border-radius: 6px;
   cursor: pointer;
   font-size: 12px;
+  min-height: 38px;
+  white-space: nowrap;
 }
 
 .address-card {
@@ -73,6 +83,8 @@
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 12px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .address-card.selected {
@@ -83,16 +95,19 @@
   display: flex;
   align-items: flex-start;
   padding-top: 4px;
+  flex-shrink: 0;
 }
 
 .address-content {
   flex: 1;
+  overflow: hidden;
 }
 
 .name-row {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .address-type {
@@ -108,12 +123,15 @@
   margin: 4px 0;
   font-size: 14px;
   color: #444;
+  line-height: 1.5;
+  word-break: break-word;
 }
 
 .address-actions {
   margin-top: 10px;
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .address-actions button {
@@ -122,6 +140,7 @@
   font-size: 12px;
   cursor: pointer;
   border: none;
+  min-height: 38px;
 }
 
 .address-actions button:first-child {
@@ -144,12 +163,14 @@
   font-size: 13px;
   margin-bottom: 10px;
   color: #555;
+  line-height: 1.4;
 }
 
 .price-row {
   display: flex;
   justify-content: space-between;
   margin: 10px 0;
+  gap: 10px;
 }
 
 .price-row span {
@@ -165,17 +186,19 @@
   justify-content: space-between;
   font-weight: 600;
   margin-top: 10px;
+  gap: 10px;
 }
 
 .continue {
   width: 100%;
   margin-top: 15px;
-  padding: 10px;
+  padding: 12px;
   border: none;
   background: linear-gradient(90deg, #5a2d82, #3a1c5c);
   color: #fff;
   border-radius: 8px;
   cursor: pointer;
+  min-height: 44px;
 }
 
 .continue:disabled {
@@ -194,6 +217,8 @@
   align-items: flex-start;
   justify-content: center;
   z-index: 1000;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
 .popup-box {
@@ -201,19 +226,23 @@
   width: 100%;
   max-width: 500px;
   padding: 20px;
-  margin-top: 200px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  margin-top: 120px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  border-radius: 10px;
 }
 
 .popup-box p {
   font-size: 16px;
   margin-bottom: 20px;
+  line-height: 1.5;
 }
 
 .popup-actions {
   display: flex;
   justify-content: flex-end;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .no-btn {
@@ -230,4 +259,202 @@
   color: red;
   font-weight: 500;
   cursor: pointer;
+}
+
+@media (max-width: 320px) {
+  .cart-container {
+    padding: 0 10px;
+    margin: 20px auto;
+  }
+
+  .checkout-container {
+    flex-direction: column;
+    padding: 10px;
+    gap: 14px;
+  }
+
+  .address-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .address-header h3 {
+    font-size: 16px;
+  }
+
+  .address-header button {
+    width: 100%;
+  }
+
+  .address-card {
+    flex-direction: column;
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .radio-box {
+    padding-top: 0;
+  }
+
+  .name-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .address-content p {
+    font-size: 13px;
+  }
+
+  .address-actions {
+    flex-direction: column;
+  }
+
+  .address-actions button {
+    width: 100%;
+  }
+
+  .summary-section {
+    padding: 14px;
+  }
+
+  .price-row span,
+  .total span {
+    font-size: 13px;
+  }
+
+  .popup-box {
+    margin-top: 80px;
+    padding: 16px;
+  }
+
+  .popup-box p {
+    font-size: 14px;
+  }
+
+  .popup-actions {
+    justify-content: space-between;
+    gap: 10px;
+  }
+}
+
+@media (min-width: 321px) and (max-width: 380px) {
+  .checkout-container {
+    flex-direction: column;
+    padding: 12px;
+    gap: 16px;
+  }
+
+  .address-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .address-header button {
+    width: 100%;
+  }
+
+  .address-card {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .name-row {
+    flex-wrap: wrap;
+  }
+
+  .address-actions {
+    flex-direction: column;
+  }
+
+  .address-actions button {
+    width: 100%;
+  }
+
+  .summary-section {
+    max-width: 100%;
+  }
+
+  .continue {
+    width: 100%;
+  }
+
+  .popup-box {
+    margin-top: 90px;
+  }
+}
+
+@media (min-width: 381px) and (max-width: 768px) {
+  .checkout-container {
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .address-section,
+  .summary-section {
+    max-width: 100%;
+  }
+
+  .address-card {
+    padding: 14px;
+  }
+
+  .address-actions {
+    flex-wrap: wrap;
+  }
+
+  .summary-section {
+    padding: 18px;
+  }
+
+  .continue {
+    width: 100%;
+  }
+
+  .popup-box {
+    margin-top: 100px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .checkout-container {
+    gap: 18px;
+    padding: 18px;
+    align-items: flex-start;
+  }
+
+  .address-section {
+    flex: 1.6;
+  }
+
+  .summary-section {
+    flex: 1;
+    max-width: 320px;
+    position: sticky;
+    top: 20px;
+  }
+
+  .address-card {
+    padding: 16px;
+  }
+
+  .popup-box {
+    margin-top: 140px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .checkout-container {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .summary-section {
+    position: sticky;
+    top: 20px;
+  }
+
+  .popup-box {
+    margin-top: 180px;
+  }
 }

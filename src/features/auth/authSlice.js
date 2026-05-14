@@ -3,7 +3,7 @@ import axios from "axios";
 import { loadAuth, saveAuth, clearAuth } from "../../utils/authStorage";
 
 const API = axios.create({
-  baseURL: "https://ecommerce-backend-umber-seven.vercel.app",
+  baseURL: "http://65.0.29.192:5000",
   headers: {
     "Content-Type": "application/json"
   }

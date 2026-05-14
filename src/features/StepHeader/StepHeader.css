@@ -4,6 +4,8 @@
   justify-content: center;
   margin-bottom: 25px;
   gap: 28px;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
 .step {
@@ -30,6 +32,7 @@
   justify-content: center;
   font-size: 14px;
   font-weight: 600;
+  flex-shrink: 0;
 }
 
 .step.active .step-circle {
@@ -45,8 +48,123 @@
 .step-label {
   margin-left: 8px;
   font-size: 14px;
+  white-space: nowrap;
 }
 
 .step.completed {
   cursor: pointer;
+}
+
+@media (max-width: 320px) {
+  .step-header {
+    gap: 12px;
+    margin-bottom: 18px;
+    justify-content: flex-start;
+  }
+
+  .step {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .step:not(:last-child)::after {
+    width: 24px;
+    margin: 0 6px;
+  }
+
+  .step-circle {
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+  }
+
+  .step-label {
+    font-size: 11px;
+    margin-left: 6px;
+  }
+}
+
+@media (min-width: 321px) and (max-width: 380px) {
+  .step-header {
+    gap: 14px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+
+  .step:not(:last-child)::after {
+    width: 28px;
+    margin: 0 6px;
+  }
+
+  .step-circle {
+    width: 26px;
+    height: 26px;
+    font-size: 12px;
+  }
+
+  .step-label {
+    font-size: 12px;
+    margin-left: 6px;
+  }
+}
+
+@media (min-width: 381px) and (max-width: 768px) {
+  .step-header {
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+
+  .step:not(:last-child)::after {
+    width: 36px;
+  }
+
+  .step-circle {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+
+  .step-label {
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .step-header {
+    gap: 24px;
+  }
+
+  .step:not(:last-child)::after {
+    width: 42px;
+  }
+
+  .step-circle {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+
+  .step-label {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .step-header {
+    gap: 28px;
+  }
+
+  .step:not(:last-child)::after {
+    width: 50px;
+  }
+
+  .step-circle {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .step-label {
+    font-size: 15px;
+  }
 }
