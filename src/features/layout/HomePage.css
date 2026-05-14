@@ -363,7 +363,8 @@ body {
 }
 
 .arrow:hover {
-  background: white;
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
+  color: white;
 }
 
 .arrow.left {
