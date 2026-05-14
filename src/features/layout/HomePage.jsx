@@ -7,6 +7,7 @@ import { TbPerfume } from "react-icons/tb";
 import { logout } from "../auth/authSlice";
 import { clearCart } from "../cart/cartSlice";
 import CategorySection from "../layout/CategorySection";
+import BestSeller from "../layout/BestSeller";
 import "../layout/HomePage.css";
 
 const slides = [
@@ -329,6 +330,7 @@ function HomePage() {
                     activeCategory={activeCategory}
                 />
             </div>
+            <BestSeller />
         </>
     );
 }
