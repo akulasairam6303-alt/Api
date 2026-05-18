@@ -56,6 +56,21 @@ body {
   color: #7c3aed;
 }
 
+.location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  cursor: pointer;
+
+  color: #111827;
+  font-weight: 500;
+}
+
+.location:hover {
+  color: #7c3aed;
+}
+
 .search-bar {
   flex: 1;
   min-width: 220px;

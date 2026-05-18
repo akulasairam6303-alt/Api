@@ -54,6 +54,7 @@ const categories = [
 function HomePage() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [location, setLocation] =useState("");
 
     const [showMenu, setShowMenu] = useState(false);
     const [index, setIndex] = useState(1);
@@ -138,6 +139,58 @@ function HomePage() {
         setIndex(prev => prev + 1);
     };
 
+    const getLocation = () => {
+
+    if (!navigator.geolocation) {
+
+        alert("Geolocation not supported");
+
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+
+        async (position) => {
+
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            try {
+
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+                );
+
+                const data = await response.json();
+
+                const city =
+                    data.address.city ||
+                    data.address.town ||
+                    data.address.village ||
+                    "Unknown Location";
+
+                setLocation(city);
+
+            } catch (error) {
+
+                console.log(error);
+
+                setLocation("Location Error");
+
+            }
+
+        },
+
+        () => {
+
+            alert("Please allow location access");
+
+        }
+
+    );
+
+};
+
     return (
         <>
             <div className="landing-navbar">
@@ -148,9 +201,17 @@ function HomePage() {
                     ECOMMERCE
                 </div>
 
-                <div className="location">
+                <div
+                    className="location"
+                    onClick={getLocation}
+                >
                     <FaMapMarkerAlt />
-                    <span>Turn On Your Location</span>
+
+                    <span>
+                        {location
+                            ? location
+                            : "Turn On Your Location"}
+                    </span>
                 </div>
 
                 <input

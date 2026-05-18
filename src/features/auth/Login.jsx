@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "./authSlice";
+import { loginUser } from "../auth/authSlice";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import Popup from "./Popup";

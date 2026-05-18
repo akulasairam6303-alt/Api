@@ -16,6 +16,10 @@ body {
   background: #f9fafb;
 }
 
+/* =========================
+   DEAL SECTION
+========================= */
+
 .deal-section {
   display: flex;
   gap: 30px;
@@ -51,7 +55,6 @@ body {
   color: #111827;
   margin-bottom: 14px;
   line-height: 1.2;
-  word-break: break-word;
 }
 
 .deal-left p {
@@ -76,6 +79,10 @@ body {
 .deal-btn:hover {
   transform: translateY(-2px);
 }
+
+/* =========================
+   RIGHT SECTION
+========================= */
 
 .deal-right {
   flex: 1;
@@ -102,6 +109,10 @@ body {
   transition: transform 0.6s ease;
   width: max-content;
 }
+
+/* =========================
+   ARROWS
+========================= */
 
 .carousel-arrow {
   position: absolute;
@@ -135,17 +146,30 @@ body {
   right: 6px;
 }
 
+/* =========================
+   PRODUCT CARD
+========================= */
+
 .product-card {
   width: 220px;
   min-width: 220px;
   max-width: 220px;
+
   background: #f3ecfb;
   border-radius: 22px;
   padding: 16px;
+
   position: relative;
-  flex-shrink: 0;
-  transition: 0.25s ease;
   overflow: hidden;
+  flex-shrink: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+  text-align: left;
+
+  transition: 0.25s ease;
 }
 
 .product-card:hover {
@@ -157,12 +181,16 @@ body {
   position: absolute;
   top: 12px;
   left: 12px;
+
   background: #a855f7;
   color: white;
+
   padding: 4px 8px;
   border-radius: 20px;
+
   font-size: 10px;
   font-weight: 600;
+
   z-index: 2;
 }
 
@@ -170,21 +198,35 @@ body {
   width: 100%;
   height: 170px;
   object-fit: contain;
+
   display: block;
-  margin: 0 auto 14px;
+
+  /* FIXED */
+  margin: 0 0 14px 0;
+}
+
+.product-card h4,
+.brand,
+.product-price,
+.rating-row {
+  width: 100%;
+  text-align: left;
 }
 
 .product-card h4 {
   font-size: 14px;
   color: #111827;
+
   margin-bottom: 6px;
+
   line-height: 1.5;
-  word-break: break-word;
+  min-height: 42px;
 }
 
 .brand {
   font-size: 12px;
   color: #6b7280;
+
   margin-bottom: 10px;
 }
 
@@ -192,62 +234,76 @@ body {
   font-size: 18px;
   font-weight: 700;
   color: #111827;
-  margin-bottom: 10px;
+
+  margin-bottom: 4px;
 }
+
+/* =========================
+   RATING
+========================= */
 
 .rating-row {
   display: flex;
+
+  justify-content: flex-start;
   align-items: center;
+
   gap: 4px;
-  margin-top: 6px;
+
+  margin-top: 4px;
 }
 
 .filled-star {
   color: #facc15;
   font-size: 13px;
+  line-height: 1;
 }
 
 .rating-value {
   font-size: 12px;
   font-weight: 600;
   color: #6b7280;
+  line-height: 1;
 }
 
+/* =========================
+   MOBILE 320px
+========================= */
+
 @media (max-width: 320px) {
+
   .deal-section {
     flex-direction: column;
+
     gap: 16px;
+
     margin: 6px;
     padding: 12px;
+
     border-radius: 14px;
   }
 
+  /* ONLY LEFT SECTION CENTERED */
   .deal-left {
     width: 100%;
+
     align-items: center;
     text-align: center;
   }
 
-  .deal-badge {
-    font-size: 9px;
-    padding: 4px 10px;
-    margin-bottom: 10px;
-  }
-
   .deal-left h2 {
     font-size: 20px;
-    margin-bottom: 10px;
   }
 
   .deal-left p {
     font-size: 11px;
     line-height: 1.5;
-    margin-bottom: 14px;
   }
 
   .deal-btn {
     width: 100%;
     padding: 9px;
+
     font-size: 11px;
   }
 
@@ -258,40 +314,29 @@ body {
   .carousel-arrow {
     width: 26px;
     height: 26px;
+
     font-size: 10px;
-  }
-
-  .left-arrow {
-    left: 2px;
-  }
-
-  .right-arrow {
-    right: 2px;
   }
 
   .product-card {
     width: 135px;
     min-width: 135px;
     max-width: 135px;
-    padding: 10px;
-    border-radius: 14px;
-  }
 
-  .discount-tag {
-    top: 8px;
-    left: 8px;
-    font-size: 8px;
-    padding: 3px 6px;
+    padding: 10px;
+
+    /* FORCE LEFT */
+    align-items: flex-start;
+    text-align: left;
   }
 
   .product-card img {
     height: 90px;
-    margin-bottom: 10px;
   }
 
   .product-card h4 {
     font-size: 11px;
-    line-height: 1.4;
+    min-height: 32px;
   }
 
   .brand {
@@ -303,25 +348,34 @@ body {
   }
 
   .filled-star {
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .rating-value {
-    font-size: 8px;
+    font-size: 9px;
   }
 }
 
+/* =========================
+   MOBILE 321px - 380px
+========================= */
+
 @media (min-width: 321px) and (max-width: 380px) {
+
   .deal-section {
     flex-direction: column;
+
     gap: 18px;
+
     margin: 8px;
     padding: 14px;
+
     border-radius: 16px;
   }
 
   .deal-left {
     width: 100%;
+
     align-items: center;
     text-align: center;
   }
@@ -332,11 +386,11 @@ body {
 
   .deal-left p {
     font-size: 12px;
-    line-height: 1.5;
   }
 
   .deal-btn {
     width: 100%;
+
     font-size: 12px;
     padding: 10px;
   }
@@ -348,23 +402,19 @@ body {
   .carousel-arrow {
     width: 30px;
     height: 30px;
+
     font-size: 11px;
-  }
-
-  .left-arrow {
-    left: 2px;
-  }
-
-  .right-arrow {
-    right: 2px;
   }
 
   .product-card {
     width: 150px;
     min-width: 150px;
     max-width: 150px;
+
     padding: 12px;
-    border-radius: 16px;
+
+    align-items: flex-start;
+    text-align: left;
   }
 
   .product-card img {
@@ -373,6 +423,7 @@ body {
 
   .product-card h4 {
     font-size: 12px;
+    min-height: 36px;
   }
 
   .brand {
@@ -392,17 +443,24 @@ body {
   }
 }
 
+/* MOBILE 381px - 768px */
+
 @media (min-width: 381px) and (max-width: 768px) {
+
   .deal-section {
     flex-direction: column;
+
     gap: 20px;
+
     margin: 12px;
     padding: 20px;
+
     border-radius: 20px;
   }
 
   .deal-left {
     width: 100%;
+
     align-items: center;
     text-align: center;
   }
@@ -413,7 +471,6 @@ body {
 
   .deal-left p {
     font-size: 13px;
-    line-height: 1.6;
   }
 
   .deal-btn {
@@ -428,23 +485,19 @@ body {
   .carousel-arrow {
     width: 36px;
     height: 36px;
+
     font-size: 13px;
-  }
-
-  .left-arrow {
-    left: 4px;
-  }
-
-  .right-arrow {
-    right: 4px;
   }
 
   .product-card {
     width: 180px;
     min-width: 180px;
     max-width: 180px;
+
     padding: 14px;
-    border-radius: 18px;
+
+    align-items: flex-start;
+    text-align: left;
   }
 
   .product-card img {
@@ -453,6 +506,7 @@ body {
 
   .product-card h4 {
     font-size: 13px;
+    min-height: 40px;
   }
 
   .product-price {
@@ -468,9 +522,15 @@ body {
   }
 }
 
+/* =========================
+   LAPTOP
+========================= */
+
 @media (min-width: 769px) and (max-width: 1024px) {
+
   .deal-section {
     gap: 24px;
+
     padding: 24px;
     margin: 16px;
   }
@@ -481,10 +541,6 @@ body {
 
   .deal-left h2 {
     font-size: 28px;
-  }
-
-  .deal-left p {
-    font-size: 13px;
   }
 
   .product-card {
@@ -498,20 +554,24 @@ body {
   }
 }
 
+/* =========================
+   DESKTOP
+========================= */
+
 @media (min-width: 1025px) and (max-width: 1440px) {
+
   .deal-section {
     max-width: 1350px;
     margin: 20px auto;
   }
-
-  .product-card {
-    width: 220px;
-    min-width: 220px;
-    max-width: 220px;
-  }
 }
 
+/* =========================
+   LARGE SCREEN
+========================= */
+
 @media (min-width: 1441px) {
+
   .deal-section {
     max-width: 1450px;
     margin: 24px auto;
@@ -526,4 +586,28 @@ body {
   .product-card img {
     height: 190px;
   }
+}
+
+@media (max-width: 768px) {
+
+  .product-card {
+    display: block !important;
+    text-align: left !important;
+  }
+
+  .product-price,
+  .rating-row,
+  .brand,
+  .product-card h4 {
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  .rating-row {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4px;
+  }
+
 }

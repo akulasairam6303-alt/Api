@@ -128,7 +128,17 @@ function CategorySection({
                         <div
                             className="products-track"
                             style={{
-                                transform: `translateX(-${currentIndex * 293}px)`
+                                transform: `translateX(-${currentIndex *
+                                    (window.innerWidth <= 320
+                                        ? 145
+                                        : window.innerWidth <= 380
+                                            ? 162
+                                            : window.innerWidth <= 768
+                                                ? 194
+                                                : window.innerWidth <= 1024
+                                                    ? 218
+                                                    : 238)
+                                    }px)`
                             }}
                         >
 
